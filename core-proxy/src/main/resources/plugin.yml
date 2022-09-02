@@ -1,0 +1,4 @@
+name: core-proxy
+version: 1.0
+author: MarcinOpalka
+main: pl.kithard.proxy.ProxyPlugin

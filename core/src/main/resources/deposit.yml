@@ -1,0 +1,59 @@
+deposit-items:
+  ENCHANTED_GOLDEN_APPLE:
+    name: "Koxy"
+    item:
+      type: "322:1:1"
+      name: ""
+      lore: []
+      glow: false
+    limit: 2
+    slot: 20
+    message: "&8[&3&l!&8] &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7koxow do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}"
+    withdraw-all: true
+  GOLDEN_APPLE:
+    name: "Refile"
+    item:
+      type: "322:1:0"
+      name: ""
+      lore: []
+      glow: false
+    limit: 12
+    slot: 21
+    message: "&8[&3&l!&8] &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7refow do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}"
+    withdraw-all: true
+  ENDER_PEARL:
+    name: "Perly"
+    item:
+      type: "368:1:0"
+      name: ""
+      lore: []
+      glow: false
+    limit: 4
+    slot: 22
+    message: "&8[&3&l!&8] &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7perel do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}"
+    withdraw-all: true
+  SNOWBALL:
+    name: "Sniezki"
+    item:
+      type: "332:1:0"
+      name: ""
+      lore: []
+      glow: false
+    limit: 16
+    slot: 24
+    message: "&8[&3&l!&8] &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7snieżek do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}"
+    withdraw-all: true
+  THROW_TNT:
+    name: "Rzucane TNT"
+    item:
+      type: "46:1:0"
+      name: "&8» &c&lRzucane TNT &8«"
+      lore:
+        - ""
+        - " &7Kliknij aby wyrzucic"
+        - " &7Odpalone &cTNT &7w powietrze!"
+      glow: true
+    limit: 4
+    slot: 23
+    message: "&8[&3&l!&8] &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7rzucakow do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}"
+    withdraw-all: false

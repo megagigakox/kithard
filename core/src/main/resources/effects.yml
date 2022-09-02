@@ -1,0 +1,157 @@
+effects:
+  HASTE1:
+    icon:
+      type: "DIAMOND_PICKAXE"
+      amount: 1
+      name: "&3&lHASTE 1"
+      lore:
+        - ""
+        - " &8» &7Koszt: &f{COST} &7blokow emeraldow."
+        - " &8» &7Czas trwania: &f{TIME}s."
+        - ""
+        - " &8» &7Po zakupie nadana zostanie:"
+        - "  &8- &bSzybkie kopanie 1"
+        - ""
+        - " &aKliknij tutaj aby zakupic efekt!"
+    time: 120
+    cost: 5
+    slot: 10
+    effects:
+      - "FAST_DIGGING:0"
+  HASTE2:
+    icon:
+      type: "DIAMOND_PICKAXE"
+      amount: 2
+      name: "&3&lHASTE 2"
+      lore:
+        - ""
+        - " &8» &7Koszt: &f{COST} &7blokow emeraldow."
+        - " &8» &7Czas trwania: &f{TIME}s."
+        - ""
+        - " &8» &7Po zakupie nadana zostanie:"
+        - "  &8- &bSzybkie kopanie 2"
+        - ""
+        - " &aKliknij tutaj aby zakupic efekt!"
+    time: 120
+    cost: 10
+    slot: 19
+    effects:
+      - "FAST_DIGGING:1"
+  HASTE_KIT:
+    icon:
+      type: "GOLD_PICKAXE"
+      amount: 1
+      name: "&3&lZESTAW KOPACZA"
+      lore:
+        - ""
+        - " &8» &7Koszt: &f{COST} &7blokow emeraldow."
+        - " &8» &7Czas trwania: &f{TIME}s."
+        - ""
+        - " &8» &7Po zakupie nadana zostanie:"
+        - "  &8- &bSzybkie kopanie 2"
+        - "  &8- &bSzybkosc 2"
+        - ""
+        - " &aKliknij tutaj aby zakupic efekt!"
+    time: 120
+    cost: 26
+    slot: 28
+    effects:
+      - "FAST_DIGGING:1"
+      - "SPEED:1"
+  STRENGTH1:
+    icon:
+      type: "DIAMOND_SWORD"
+      amount: 1
+      name: "&3&lSTRENGTH 1"
+      lore:
+        - ""
+        - " &8» &7Koszt: &f{COST} &7blokow emeraldow."
+        - " &8» &7Czas trwania: &f{TIME}s."
+        - ""
+        - " &8» &7Po zakupie nadana zostanie:"
+        - "  &8- &bSila 1"
+        - ""
+        - " &aKliknij tutaj aby zakupic efekt!"
+    time: 150
+    cost: 24
+    slot: 16
+    effects:
+      - "INCREASE_DAMAGE:0"
+  STRENGTH2:
+    icon:
+      type: "DIAMOND_SWORD"
+      amount: 2
+      name: "&3&lSTRENGTH 2"
+      lore:
+        - ""
+        - " &8» &7Koszt: &f{COST} &7blokow emeraldow."
+        - " &8» &7Czas trwania: &f{TIME}s."
+        - ""
+        - " &8» &7Po zakupie nadana zostanie:"
+        - "  &8- &bSila 2"
+        - ""
+        - " &aKliknij tutaj aby zakupic efekt!"
+    time: 150
+    cost: 48
+    slot: 25
+    effects:
+      - "INCREASE_DAMAGE:1"
+  STRENGTH_KIT:
+    icon:
+      type: "GOLD_SWORD"
+      amount: 1
+      name: "&3&lZESTAW KLEPACZA"
+      lore:
+        - ""
+        - " &8» &7Koszt: &f{COST} &7blokow emeraldow."
+        - " &8» &7Czas trwania: &f{TIME}s."
+        - ""
+        - " &8» &7Po zakupie nadane zostana:"
+        - "  &8- &bSila 2"
+        - "  &8- &bSzybkosc 2"
+        - ""
+        - " &aKliknij tutaj aby zakupic efekt!"
+    time: 150
+    cost: 64
+    slot: 34
+    effects:
+      - "INCREASE_DAMAGE:1"
+      - "SPEED:1"
+  SPEED_2:
+    icon:
+      type: "SUGAR"
+      amount: 2
+      name: "&3&lSPPED 2"
+      lore:
+        - ""
+        - " &8» &7Koszt: &f{COST} &7blokow emeraldow."
+        - " &8» &7Czas trwania: &f{TIME}s."
+        - ""
+        - " &8» &7Po zakupie nadane zostana:"
+        - "  &8- &bSzybkosc 2"
+        - ""
+        - " &aKliknij tutaj aby zakupic efekt!"
+    time: 150
+    cost: 16
+    slot: 13
+    effects:
+      - "SPEED:1"
+  JUMP_BOOST_2:
+    icon:
+      type: "GOLD_BOOTS"
+      amount: 2
+      name: "&3&lJUMP BOOST 2"
+      lore:
+        - ""
+        - " &8» &7Koszt: &f{COST} &7blokow emeraldow."
+        - " &8» &7Czas trwania: &f{TIME}s."
+        - ""
+        - " &8» &7Po zakupie nadane zostana:"
+        - "  &8- &bWysokie skakanie 2"
+        - ""
+        - " &aKliknij tutaj aby zakupic efekt!"
+    time: 30
+    cost: 32
+    slot: 22
+    effects:
+      - "JUMP:1"

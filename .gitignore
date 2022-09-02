@@ -1,0 +1,6 @@
+# Project exclude paths
+/api/target/
+/core/target/
+/core-proxy/target/
+/discord-bot/target/
+/queue/target/

@@ -1,0 +1,11 @@
+
+services:
+  vip:
+    messages:
+      - ""
+      - " &8» &7Gracz &b{PLAYER} &7zakupil range &e&lVIP &7na zawsze!"
+      - " &8» &eDziekujemy za wsparcie serwera!"
+      - ""
+    commands:
+      - "lp user {PLAYER} parent set vip"
+    items: []

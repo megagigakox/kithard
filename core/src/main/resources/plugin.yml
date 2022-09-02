@@ -1,0 +1,12 @@
+name: core
+main: pl.kithard.core.CorePlugin
+version: 1.0
+api-version: 1.8
+author: OpalkaMarcin
+
+depend:
+  - 'HolographicDisplays'
+  - 'LuckPerms'
+
+softdepend:
+  - 'BungeeTabListPlus'

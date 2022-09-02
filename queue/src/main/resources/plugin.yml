@@ -1,0 +1,4 @@
+name: queue
+version: 1.0
+author: MarcinOpalka
+main: pl.kithard.queue.QueuePlugin
