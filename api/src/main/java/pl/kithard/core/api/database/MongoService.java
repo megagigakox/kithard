@@ -1,13 +1,16 @@
-package pl.kithard.core.api;
+package pl.kithard.core.api.database;
 
 import com.google.gson.Gson;
-import com.mongodb.MongoClient;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import org.bson.Document;
-import pl.kithard.core.api.entity.DatabaseEntity;
+import pl.kithard.core.api.database.entity.DatabaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +27,7 @@ public class MongoService {
     private final Gson gson;
 
     public MongoService(String connectionUrl, Gson gson) {
-        this.mongoClient = new MongoClient(new MongoClientURI(connectionUrl));
+        this.mongoClient = MongoClients.create(connectionUrl);
         this.gson = gson;
     }
 

@@ -1,4 +1,4 @@
-package pl.kithard.core.api.entry;
+package pl.kithard.core.api.database.entry;
 
 public class DatabaseEntry {
 

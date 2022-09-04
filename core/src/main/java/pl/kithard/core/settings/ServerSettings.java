@@ -1,7 +1,7 @@
 package pl.kithard.core.settings;
 
 import com.google.gson.annotations.SerializedName;
-import pl.kithard.core.api.entity.DatabaseEntity;
+import pl.kithard.core.api.database.entity.DatabaseEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -24,7 +24,7 @@ import pl.kithard.core.recipe.CustomRecipe;
 import pl.kithard.core.util.InventoryUtil;
 import pl.kithard.core.util.LocationUtil;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 import java.util.concurrent.TimeUnit;
 

@@ -19,10 +19,6 @@ public class PlayerCombat {
         return this.lastAttackTime > System.currentTimeMillis();
     }
 
-    public boolean wasFight() {
-        return this.lastAttackPlayer != null;
-    }
-
     public Player getLastAttackPlayer() {
         return lastAttackPlayer;
     }

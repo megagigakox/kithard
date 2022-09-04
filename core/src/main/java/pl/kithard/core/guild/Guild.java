@@ -12,13 +12,12 @@ import pl.kithard.core.guild.log.GuildLogType;
 import pl.kithard.core.guild.permission.GuildPermissionScheme;
 import pl.kithard.core.guild.regen.RegenBlock;
 import pl.kithard.core.player.CorePlayer;
-import pl.kithard.core.api.entity.DatabaseEntity;
-import pl.kithard.core.api.entry.DatabaseEntry;
+import pl.kithard.core.api.database.entity.DatabaseEntity;
+import pl.kithard.core.api.database.entry.DatabaseEntry;
 import pl.kithard.core.util.MathUtil;
 import pl.kithard.core.util.TextUtil;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @DatabaseEntity(database = "core", collection = "guilds")

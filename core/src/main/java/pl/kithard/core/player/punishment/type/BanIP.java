@@ -1,7 +1,7 @@
 package pl.kithard.core.player.punishment.type;
 
 import com.google.gson.annotations.SerializedName;
-import pl.kithard.core.api.entity.DatabaseEntity;
+import pl.kithard.core.api.database.entity.DatabaseEntity;
 
 @DatabaseEntity(database = "core", collection = "punishments-banip")
 public class BanIP {

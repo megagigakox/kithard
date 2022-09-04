@@ -1,4 +1,4 @@
-package pl.kithard.core.util;
+package pl.kithard.core.api.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

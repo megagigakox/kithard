@@ -24,7 +24,7 @@ public class EnderChestCommand {
     )
     public void handle(Player player, String[] args) {
         if (args.length < 1) {
-            new EnderChestGui(plugin).open(player);
+            new EnderChestGui(plugin).open(player, player);
         }
         else if (player.hasPermission("kithard.commands.enderchest.other")) {
             Player other = this.plugin.getServer().getPlayer(args[0]);
@@ -32,7 +32,7 @@ public class EnderChestCommand {
                 return;
             }
 
-            new EnderChestGui(plugin).open(other);
+            new EnderChestGui(plugin).open(other, player);
         }
     }
 }

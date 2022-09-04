@@ -6,7 +6,7 @@ import pl.kithard.core.player.punishment.type.Ban;
 import pl.kithard.core.player.punishment.type.BanIP;
 import pl.kithard.core.player.punishment.type.Mute;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 public class PunishmentFactory {
 

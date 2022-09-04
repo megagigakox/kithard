@@ -20,7 +20,7 @@ public class EnderChestGui {
         this.plugin = plugin;
     }
 
-    public void open(Player p) {
+    public void open(Player p, Player viewer) {
         Gui gui = Gui.gui()
                 .title(TextUtil.component("&7Wybor enderchesta:"))
                 .rows(3)
@@ -63,7 +63,7 @@ public class EnderChestGui {
                     if (p.hasPermission(enderChest.getPermission())) {
                         enderChest.openInventory(p);
                     } else {
-                        p.closeInventory();
+                        viewer.closeInventory();
                         TextUtil.insufficientPermission(p, enderChest.getPermission());
                     }
                 } else {
@@ -71,19 +71,19 @@ public class EnderChestGui {
                             .onComplete((player, text) -> {
                                 enderChest.setLore(text);
                                 corePlayer.setNeedSave(true);
-                                open(p);
+                                open(p, viewer);
                                 return AnvilGUI.Response.close();
                             })
                             .text("Wprowadz opis")
                             .title("Wprowadz opis")
                             .plugin(plugin)
-                            .open(p);
+                            .open(viewer);
                 }
             }));
         }
 
         gui.setDefaultClickAction(event -> event.setCancelled(true));
-        gui.open(p);
+        gui.open(viewer);
     }
 
 }

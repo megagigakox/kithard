@@ -59,35 +59,30 @@ public class PlayerDamageListener implements Listener {
             }
         }
 
-        CorePlayer attackedPlayer = this.plugin.getCorePlayerCache().findByPlayer(attacked);
-        CorePlayer attackerPlayer = this.plugin.getCorePlayerCache().findByPlayer(attacker);
-
-        PlayerCombat attackedCombat = attackedPlayer.getCombat();
-        PlayerCombat attackerCombat = attackerPlayer.getCombat();
+        PlayerCombat attackedCombat = this.plugin.getCorePlayerCache().findByPlayer(attacked).getCombat();
+        PlayerCombat attackerCombat = this.plugin.getCorePlayerCache().findByPlayer(attacker).getCombat();
 
         attackedCombat.setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
         attackerCombat.setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
 
-        if (!attackedCombat.getLastAttackPlayer().equals(attacker)) {
+        if (attackedCombat.getLastAttackPlayer() != attacker) {
             attackedCombat.setLastAssistPlayer(attackedCombat.getLastAttackPlayer());
             attackedCombat.setLastAssistTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(60));
         }
 
         attackedCombat.setLastAttackPlayer(attacker);
-        attackerCombat.setLastAttackPlayer(attacked);
 
-        if (event.getDamager() instanceof Snowball) {
+        if (event.getDamager() instanceof Snowball || event.getDamager() instanceof Arrow) {
             double hp = attacked.getHealth();
             String replacedHpInfo = HP_INFO.replace("{HP}", String.valueOf(MathUtil.round(hp, 2)));
-
             TextUtil.message(attacker, replacedHpInfo);
 
             this.plugin.getActionBarNoticeCache().add(
-                    attacked.getUniqueId(),
+                    attacker.getUniqueId(),
                     ActionBarNotice.builder()
                             .type(ActionBarNoticeType.HP_INFO)
                             .text(replacedHpInfo)
-                            .expireTime(TimeUnit.SECONDS.toMillis(2))
+                            .expireTime(TimeUnit.SECONDS.toMillis(3))
                             .build()
             );
         }
@@ -122,23 +117,23 @@ public class PlayerDamageListener implements Listener {
         event.setCancelled(true);
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onArrow(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Arrow) {
-            Arrow arrow = (Arrow) event.getDamager();
-
-            if (arrow.getShooter() instanceof Player) {
-
-                Player shooter = (Player) arrow.getShooter();
-                CorePlayer shooterCorePlayer = this.plugin.getCorePlayerCache().findByPlayer(shooter);
-                PlayerCombat playerCombat = shooterCorePlayer.getCombat();
-
-                if (!playerCombat.hasFight()) {
-                    return;
-                }
-
-                playerCombat.setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
-            }
-        }
-    }
+//    @EventHandler(ignoreCancelled = true)
+//    public void onArrow(EntityDamageByEntityEvent event) {
+//        if (event.getDamager() instanceof Arrow) {
+//            Arrow arrow = (Arrow) event.getDamager();
+//
+//            if (arrow.getShooter() instanceof Player) {
+//
+//                Player shooter = (Player) arrow.getShooter();
+//                CorePlayer shooterCorePlayer = this.plugin.getCorePlayerCache().findByPlayer(shooter);
+//                PlayerCombat playerCombat = shooterCorePlayer.getCombat();
+//
+//                if (!playerCombat.hasFight()) {
+//                    return;
+//                }
+//
+//                playerCombat.setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
+//            }
+//        }
+//    }
 }

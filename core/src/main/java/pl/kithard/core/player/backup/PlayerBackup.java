@@ -3,9 +3,8 @@ package pl.kithard.core.player.backup;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import pl.kithard.core.api.entity.DatabaseEntity;
-import pl.kithard.core.api.entry.DatabaseEntry;
+import pl.kithard.core.api.database.entity.DatabaseEntity;
+import pl.kithard.core.api.database.entry.DatabaseEntry;
 import pl.kithard.core.util.MathUtil;
 
 import java.util.*;

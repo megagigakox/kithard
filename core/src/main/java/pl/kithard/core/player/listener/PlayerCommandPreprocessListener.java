@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class PlayerCommandPreprocessListener implements Listener {
 
     private final static String[] DISALLOWED_COMMANDS = {"me",
-            "src/src/main/java/pl",
+            "pl",
             "plugins",
             "about",
             "ver",

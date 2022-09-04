@@ -18,7 +18,7 @@ import pl.kithard.core.settings.ServerSettingsType;
 import pl.kithard.core.util.RandomUtil;
 import pl.kithard.core.util.SquareUtil;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

@@ -35,15 +35,15 @@ public class PlayerRankingService {
 
     public void sort() {
         this.playerPointsRanking.sort((o1, o2) -> Integer.compare(o2.getPoints(), o1.getPoints()));
-        this.playerMinedStoneRanking.sort((Comparator.comparingLong(o -> o.getAchievementProgress(AchievementType.MINED_STONE))));
-        this.playerOpenedCaseRanking.sort((Comparator.comparingLong(o -> o.getAchievementProgress(AchievementType.OPENED_CASE))));
-        this.playerConqueredPointsRanking.sort((Comparator.comparingLong(o -> o.getAchievementProgress(AchievementType.CONQUERED_POINTS))));
-        this.playerKillsRanking.sort((Comparator.comparingLong(o -> o.getAchievementProgress(AchievementType.KILLS))));
-        this.playerDeathsRanking.sort((Comparator.comparingLong(o -> o.getAchievementProgress(AchievementType.DEATHS))));
-        this.playerThrownEnderPearlsRanking.sort((Comparator.comparingLong(o -> o.getAchievementProgress(AchievementType.THROWN_PEARLS))));
-        this.playerEatenGoldenApplesRanking.sort((Comparator.comparingLong(o -> o.getAchievementProgress(AchievementType.EATEN_GOLDEN_APPLES))));
-        this.playerEatenEnchantedGoldenApplesRanking.sort((Comparator.comparingLong(o -> o.getAchievementProgress(AchievementType.EATEN_ENCHANTED_GOLDEN_APPLES))));
-        this.playerSpendTimeRanking.sort((Comparator.comparingLong(o -> o.getAchievementProgress(AchievementType.SPEND_TIME))));
+        this.playerMinedStoneRanking.sort((o1, o2) -> Long.compare(o2.getAchievementProgress(AchievementType.MINED_STONE), o1.getAchievementProgress(AchievementType.MINED_STONE)));
+        this.playerOpenedCaseRanking.sort((o1, o2) -> Long.compare(o2.getAchievementProgress(AchievementType.OPENED_CASE), o1.getAchievementProgress(AchievementType.OPENED_CASE)));
+        this.playerConqueredPointsRanking.sort((o1, o2) -> Long.compare(o2.getAchievementProgress(AchievementType.CONQUERED_POINTS), o1.getAchievementProgress(AchievementType.CONQUERED_POINTS)));
+        this.playerKillsRanking.sort((o1, o2) -> Long.compare(o2.getAchievementProgress(AchievementType.KILLS), o1.getAchievementProgress(AchievementType.KILLS)));
+        this.playerDeathsRanking.sort((o1, o2) -> Long.compare(o2.getAchievementProgress(AchievementType.DEATHS), o1.getAchievementProgress(AchievementType.DEATHS)));
+        this.playerThrownEnderPearlsRanking.sort((o1, o2) -> Long.compare(o2.getAchievementProgress(AchievementType.THROWN_PEARLS), o1.getAchievementProgress(AchievementType.THROWN_PEARLS)));
+        this.playerEatenGoldenApplesRanking.sort((o1, o2) -> Long.compare(o2.getAchievementProgress(AchievementType.EATEN_GOLDEN_APPLES), o1.getAchievementProgress(AchievementType.EATEN_GOLDEN_APPLES)));
+        this.playerEatenEnchantedGoldenApplesRanking.sort((o1, o2) -> Long.compare(o2.getAchievementProgress(AchievementType.EATEN_ENCHANTED_GOLDEN_APPLES), o1.getAchievementProgress(AchievementType.EATEN_ENCHANTED_GOLDEN_APPLES)));
+        this.playerSpendTimeRanking.sort((o1, o2) -> Long.compare(o2.getAchievementProgress(AchievementType.SPEND_TIME), o1.getAchievementProgress(AchievementType.SPEND_TIME)));
 
     }
 

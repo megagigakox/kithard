@@ -14,8 +14,8 @@ import pl.kithard.core.player.home.PlayerHome;
 import pl.kithard.core.player.settings.PlayerSettings;
 import pl.kithard.core.player.teleport.PlayerTeleport;
 import pl.kithard.core.shop.item.ShopSellItem;
-import pl.kithard.core.api.entity.DatabaseEntity;
-import pl.kithard.core.api.entry.DatabaseEntry;
+import pl.kithard.core.api.database.entity.DatabaseEntity;
+import pl.kithard.core.api.database.entry.DatabaseEntry;
 import pl.kithard.core.drop.DropItem;
 import pl.kithard.core.util.MathUtil;
 import pl.kithard.core.util.TextUtil;
@@ -48,7 +48,6 @@ public class CorePlayer extends DatabaseEntry {
     private final Map<String, Integer> depositItems;
     private final Map<String, Long> kitCooldowns;
     private final Map<AchievementType, Long> achievementProgress;
-
 
     private transient long lastTimeMeasurement;
     private transient boolean vanish;
@@ -209,7 +208,7 @@ public class CorePlayer extends DatabaseEntry {
     }
 
     public void addKillStreak(int killStreak) {
-        this.killStreak -= killStreak;
+        this.killStreak += killStreak;
     }
 
     public void setKillStreak(int killStreak) {
@@ -228,10 +227,6 @@ public class CorePlayer extends DatabaseEntry {
         }
 
         return MathUtil.round(this.getKills() / (double) this.getDeaths(), 2);
-    }
-
-    public void refreshPlayedTime() {
-        this.spentTime += System.currentTimeMillis() - this.lastTimeMeasurement;
     }
 
     public long getSpentTime() {
@@ -499,6 +494,5 @@ public class CorePlayer extends DatabaseEntry {
         this.combat = new PlayerCombat();
         this.cooldown = new PlayerCooldown();
         super.setNeedSave(false);
-
     }
 }

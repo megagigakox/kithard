@@ -7,7 +7,7 @@ import pl.kithard.core.CorePlugin;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.guild.GuildMember;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;

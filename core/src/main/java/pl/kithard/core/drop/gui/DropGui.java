@@ -17,7 +17,7 @@ import pl.kithard.core.settings.ServerSettings;
 import pl.kithard.core.util.GuiHelper;
 import pl.kithard.core.util.MathUtil;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 import java.util.Arrays;
 

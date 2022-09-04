@@ -18,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import pl.kithard.core.achievement.AchievementCache;
 import pl.kithard.core.achievement.AchievementCommand;
 import pl.kithard.core.achievement.AchievementListener;
+import pl.kithard.core.api.database.DatabaseConfig;
 import pl.kithard.core.automessage.config.AutoMessageConfiguration;
 import pl.kithard.core.automessage.task.AutoMessageTask;
 import pl.kithard.core.border.command.BorderCommand;
@@ -117,7 +118,7 @@ import pl.kithard.core.util.adapters.ItemStackArrayAdapter;
 import pl.kithard.core.warp.WarpCache;
 import pl.kithard.core.warp.WarpFactory;
 import pl.kithard.core.warp.command.WarpCommand;
-import pl.kithard.core.api.MongoService;
+import pl.kithard.core.api.database.MongoService;
 import pl.kithard.core.player.actionbar.task.ActionBarNoticeShowTask;
 import pl.kithard.core.player.enderchest.command.EnderChestCommand;
 import pl.kithard.core.player.enderchest.listener.EnderChestListener;
@@ -225,7 +226,7 @@ public final class CorePlugin extends JavaPlugin {
         this.dropItemCache = new DropItemCache(this);
         this.dropItemCache.init();
 
-        this.mongoService = new MongoService("mongodb://localhost", this.gson);
+        this.mongoService = new MongoService(DatabaseConfig.MONGO_URI, this.gson);
 
         this.serverSettingsService = new ServerSettingsService(this);
         this.serverSettings = this.serverSettingsService.load();

@@ -11,7 +11,7 @@ import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.util.GuiHelper;
 import pl.kithard.core.util.InventoryUtil;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;

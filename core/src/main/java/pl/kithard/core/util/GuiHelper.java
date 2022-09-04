@@ -1,6 +1,7 @@
 package pl.kithard.core.util;
 
 import dev.triumphteam.gui.builder.item.ItemBuilder;
+import dev.triumphteam.gui.builder.item.SkullBuilder;
 import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.GuiItem;
 import org.bukkit.Material;
@@ -34,17 +35,17 @@ public final class GuiHelper {
             .name(TextUtil.component(" "))
             .build();
 
-    public final static ItemStack BACK_ITEM = ItemBuilder.from(SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmM2OGEzNDJkZjZjOWU3MTFlYzNiYzEzOGY5MWNkYjFiMGZhNWU3MmY2NmU0MjUxODc1ZDhiZWRkMDU1M2ViNSJ9fX0="))
-            .name(TextUtil.component("&cPowrot"))
-            .build();
+    public final static ItemStack BACK_ITEM = ItemStackBuilder.of(SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmM2OGEzNDJkZjZjOWU3MTFlYzNiYzEzOGY5MWNkYjFiMGZhNWU3MmY2NmU0MjUxODc1ZDhiZWRkMDU1M2ViNSJ9fX0="))
+            .name("&cPowrot")
+            .asItemStack();
 
     public final static ItemStack NEXT_ITEM =
-            ItemBuilder.from(SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjY3MWM0YzA0MzM3YzM4YTVjN2YzMWE1Yzc1MWY5OTFlOTZjMDNkZjczMGNkYmVlOTkzMjA2NTVjMTlkIn19fQ=="))
+            ItemBuilder.skull().texture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjY3MWM0YzA0MzM3YzM4YTVjN2YzMWE1Yzc1MWY5OTFlOTZjMDNkZjczMGNkYmVlOTkzMjA2NTVjMTlkIn19fQ==")
                     .name(TextUtil.component("&aNastepna strona"))
                     .build();
 
     public final static ItemStack PREVIOUS_ITEM =
-            ItemBuilder.from(SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM5NzExMjRiZTg5YWM3ZGM5YzkyOWZlOWI2ZWZhN2EwN2NlMzdjZTFkYTJkZjY5MWJmODY2MzQ2NzQ3N2M3In19fQ=="))
+            ItemBuilder.skull().texture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTM5NzExMjRiZTg5YWM3ZGM5YzkyOWZlOWI2ZWZhN2EwN2NlMzdjZTFkYTJkZjY5MWJmODY2MzQ2NzQ3N2M3In19fQ==")
                     .name(TextUtil.component("&cPoprzednia strona"))
                     .build();
 

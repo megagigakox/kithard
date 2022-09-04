@@ -12,7 +12,7 @@ import pl.kithard.core.guild.panel.gui.GuildPanelGui;
 import pl.kithard.core.util.GuiHelper;
 import pl.kithard.core.util.ItemStackBuilder;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 public class GuildLogGui {
 

@@ -15,7 +15,7 @@ import pl.kithard.core.player.punishment.type.Mute;
 import pl.kithard.core.settings.ServerSettings;
 import pl.kithard.core.settings.ServerSettingsType;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 import java.util.concurrent.TimeUnit;
 

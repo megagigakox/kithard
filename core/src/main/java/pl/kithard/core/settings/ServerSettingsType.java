@@ -1,7 +1,7 @@
 package pl.kithard.core.settings;
 
 import org.bukkit.Material;
-import pl.kithard.core.api.entity.DatabaseEntity;
+import pl.kithard.core.api.database.entity.DatabaseEntity;
 
 @DatabaseEntity(database = "core", collection = "settings")
 public enum ServerSettingsType {

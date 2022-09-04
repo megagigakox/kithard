@@ -1,4 +1,4 @@
-package pl.kithard.queue.queue;
+package pl.kithard.queue.queue.listener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -6,10 +6,15 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.kithard.queue.QueuePlugin;
+import pl.kithard.queue.queue.QueuePlayer;
 import pl.kithard.queue.util.LocationUtil;
+
+import java.util.Locale;
 
 public class QueueListener implements Listener {
 
@@ -39,6 +44,20 @@ public class QueueListener implements Listener {
         player.setFlySpeed(0F);
         player.setHealth(20);
         player.setFoodLevel(20);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        if (!event.getPlayer().hasPermission("queue.chat")) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onChat(AsyncPlayerChatEvent event) {
+        if (!event.getPlayer().hasPermission("queue.chat")) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler

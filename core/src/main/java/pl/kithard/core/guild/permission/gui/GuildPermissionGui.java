@@ -4,6 +4,7 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import net.wesjd.anvilgui.AnvilGUI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -48,12 +49,12 @@ public class GuildPermissionGui {
 
         for (GuildMember guildMember : guild.getMembers()) {
 
-            ItemStack skull = ItemBuilder.from(SkullCreator.itemFromUuid(guildMember.getUuid()))
+            ItemStack skull = ItemBuilder.skull().owner(Bukkit.getOfflinePlayer(guildMember.getUuid()))
                     .name(TextUtil.component("&b&l" + guildMember.getName()))
                     .lore(TextUtil.component(Arrays.asList(
                             "",
-                            "  &7Kliknij &flewym &7aby &3zarzadzac &7permisjami!",
-                            "  &7Kliknij &fprawym &7aby &3nadac &7schemat permisji!")))
+                            " &7Kliknij &flewym &7aby &3zarzadzac &7permisjami!",
+                            " &7Kliknij &fprawym &7aby &3nadac &7schemat permisji!")))
                     .build();
 
             gui.addItem(ItemBuilder.from(skull)

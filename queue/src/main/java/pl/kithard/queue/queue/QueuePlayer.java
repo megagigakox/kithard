@@ -8,6 +8,8 @@ public class QueuePlayer implements Serializable {
     private final UUID uuid;
     private final String transferServer;
 
+    private int attempts;
+
     public QueuePlayer(UUID uuid, String transferServer) {
         this.uuid = uuid;
         this.transferServer = transferServer;
@@ -19,5 +21,17 @@ public class QueuePlayer implements Serializable {
 
     public String getTransferServer() {
         return transferServer;
+    }
+
+    public int getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(int attempts) {
+        this.attempts = attempts;
+    }
+
+    public void incrementAttempt() {
+        this.attempts++;
     }
 }

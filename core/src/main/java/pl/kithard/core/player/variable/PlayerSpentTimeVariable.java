@@ -4,7 +4,7 @@ import codecrafter47.bungeetablistplus.api.bukkit.Variable;
 import org.bukkit.entity.Player;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.CorePlayer;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 public class PlayerSpentTimeVariable extends Variable {
     private final CorePlugin plugin;

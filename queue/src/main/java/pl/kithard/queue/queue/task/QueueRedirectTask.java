@@ -1,7 +1,10 @@
-package pl.kithard.queue.queue;
+package pl.kithard.queue.queue.task;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import pl.kithard.queue.QueuePlugin;
+import pl.kithard.queue.queue.QueuePlayer;
+import pl.kithard.queue.util.TextUtil;
 import pl.kithard.queue.util.TitleUtil;
 import pl.kithard.queue.util.TransferUtil;
 
@@ -16,7 +19,7 @@ public class QueueRedirectTask implements Runnable {
         this.plugin = plugin;
         this.queue = queue;
 
-        this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this, 100L, 100L);
+        this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this,  80L, 80L);
     }
 
     @Override
@@ -32,7 +35,17 @@ public class QueueRedirectTask implements Runnable {
             return;
         }
 
+        if (queuePlayer.getAttempts() == 3) {
+            Bukkit.getScheduler().runTask(plugin, () ->
+                    player.kickPlayer(TextUtil.color(
+                            "&cWejscie na serwer skonczylo się niepowodzeniem!\n" +
+                            "&cSprobuj ponownie &bpozniej&c!"
+                    )));
+            return;
+        }
+
         String serverName = queuePlayer.getTransferServer();
+        queuePlayer.incrementAttempt();
         TransferUtil.transfer(player, serverName, this.plugin);
 
     }

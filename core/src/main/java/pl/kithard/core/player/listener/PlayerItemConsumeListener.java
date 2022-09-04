@@ -10,6 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.achievement.AchievementType;
+import pl.kithard.core.player.CorePlayer;
 
 public class PlayerItemConsumeListener implements Listener {
 
@@ -27,19 +29,29 @@ public class PlayerItemConsumeListener implements Listener {
         ItemStack item = event.getItem();
 
         if (item != null && item.getType() == Material.GOLDEN_APPLE) {
+            CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+
             if (item.getDurability() == 0) {
+                corePlayer.addAchievementProgress(AchievementType.EATEN_GOLDEN_APPLES, 1);
                 player.addPotionEffect(
-                        new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 2, true, true), true);
-                player.addPotionEffect(
-                        new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1, true, true), true);
+                        new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1), true);
+
+                Bukkit.getScheduler().runTaskLater(plugin, () -> player.addPotionEffect(
+                        new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 2, true, true), true), 1L);
+
             } else {
+                corePlayer.addAchievementProgress(AchievementType.EATEN_ENCHANTED_GOLDEN_APPLES, 1);
 
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
 
                     player.addPotionEffect(
-                            new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 120, 0, true, true), true);
+                            new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1), true);
                     player.addPotionEffect(
-                            new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 120, 0, true, true), true);
+                            new PotionEffect(PotionEffectType.REGENERATION, 20 * 15, 0), true);
+                    player.addPotionEffect(
+                            new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 120, 0), true);
+                    player.addPotionEffect(
+                            new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 120, 0), true);
 
                 },1L);
             }

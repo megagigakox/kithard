@@ -53,6 +53,6 @@ public class EnderChestListener implements Listener {
         }
 
         event.setCancelled(true);
-        new EnderChestGui(plugin).open(event.getPlayer());
+        new EnderChestGui(plugin).open(event.getPlayer(), event.getPlayer());
     }
 }

@@ -2,7 +2,7 @@ package pl.kithard.core.generator;
 
 import com.google.gson.annotations.SerializedName;
 import org.bukkit.Location;
-import pl.kithard.core.api.entity.DatabaseEntity;
+import pl.kithard.core.api.database.entity.DatabaseEntity;
 
 @DatabaseEntity(database = "core", collection = "generators")
 public class Generator {

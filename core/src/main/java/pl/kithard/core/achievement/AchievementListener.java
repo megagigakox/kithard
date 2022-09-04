@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.CorePlayer;
 
@@ -27,5 +28,14 @@ public class AchievementListener implements Listener {
         Player player = event.getPlayer();
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
         corePlayer.addAchievementProgress(AchievementType.MINED_STONE, 1);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onTeleport(PlayerTeleportEvent event) {
+        if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
+            Player player = event.getPlayer();
+            CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+            corePlayer.addAchievementProgress(AchievementType.THROWN_PEARLS, 1);
+        }
     }
 }

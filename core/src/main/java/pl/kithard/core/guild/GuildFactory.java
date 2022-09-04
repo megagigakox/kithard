@@ -15,7 +15,7 @@ import pl.kithard.core.CorePlugin;
 import pl.kithard.core.util.LocationUtil;
 import pl.kithard.core.util.SchematicPaster;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 import java.util.Arrays;
 

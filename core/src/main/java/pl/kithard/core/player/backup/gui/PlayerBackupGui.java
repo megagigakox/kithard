@@ -17,7 +17,7 @@ import pl.kithard.core.player.backup.PlayerBackup;
 import pl.kithard.core.util.GuiHelper;
 import pl.kithard.core.util.ItemStackBuilder;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;

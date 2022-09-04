@@ -9,7 +9,7 @@ public class RankingsRefreshTask extends BukkitRunnable {
 
     public RankingsRefreshTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimer(plugin, 200L, 200L);
+        this.runTaskTimer(plugin, 20 * 30, 20 * 30);
     }
 
     @Override

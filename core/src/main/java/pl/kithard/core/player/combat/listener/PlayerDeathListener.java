@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.achievement.AchievementType;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.player.backup.PlayerBackupType;
@@ -26,8 +27,8 @@ public class PlayerDeathListener implements Listener {
 
     private final static String TITLE_KILL_MESSAGE = "&7Zabiles gracza {LOSER_GUILD}&c{LOSER} &8(&7+{VICTIM_POINTS}&8, &c{VICTIM_HEARTS}❤&8)";
     private final static String TITLE_ASSIST_MESSAGE = "&7Asystowales przy zabiciu {LOSER_GUILD}&c{LOSER} &8(&7+{ASSISTANT_POINTS}&8, &c{ASSISTANT_HEARTS}❤&8)";
-    private final static String CHAT_KILL_MESSAGE = "{LOSER_GUILD}&c{LOSER} &8(&7-{LOSER_POINTS}&8) &7zostal zabity przez {VICTIM_GUILD}&c{VICTIM} &8(&7+{VICTIM_POINTS}&8, &c{VICTIM_HEARTS}❤&8)";
-    private final static String CHAT_ASSIST_MESSAGE = "&7Asystowal {ASSISTANT_GUILD}&c{ASSISTANT} &8(&7+{ASSISTANT_POINTS}&8, &c{ASSISTANT_HEARTS}❤&8)";
+    private final static String CHAT_KILL_MESSAGE = "&c&l⚔ {LOSER_GUILD}&c{LOSER} &8(&7-{LOSER_POINTS}&8) &7zostal zabity przez {VICTIM_GUILD}&c{VICTIM} &8(&7+{VICTIM_POINTS}&8, &c{VICTIM_HEARTS}❤&8)";
+    private final static String CHAT_ASSIST_MESSAGE = "&c&l⚔ &7Asystowal {ASSISTANT_GUILD}&c{ASSISTANT} &8(&7+{ASSISTANT_POINTS}&8, &c{ASSISTANT_HEARTS}❤&8)";
 
     private final CorePlugin plugin;
 
@@ -45,7 +46,7 @@ public class PlayerDeathListener implements Listener {
         CorePlayer loserCorePlayer = this.plugin.getCorePlayerCache().findByPlayer(loser);
         PlayerCombat loserCombat = loserCorePlayer.getCombat();
 
-        if (victim == null && loserCombat != null && loserCombat.wasFight()) {
+        if (victim == null && loserCombat.getLastAttackPlayer() != null && loserCombat.hasFight()) {
             victim = loserCombat.getLastAttackPlayer();
         }
 
@@ -59,10 +60,6 @@ public class PlayerDeathListener implements Listener {
             loserCorePlayer.removePoints(5);
             loserCorePlayer.addDeaths(1);
             loserCorePlayer.setNeedSave(true);
-            return;
-        }
-
-        if (!loserCombat.hasFight()) {
             return;
         }
 
@@ -83,7 +80,7 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
-        int toAdd = (int) (43.0 + (victimCorePlayer.getPoints() - loserCorePlayer.getPoints()) * -0.25);
+        int toAdd = (int) (67.0 + (victimCorePlayer.getPoints() - loserCorePlayer.getPoints()) * -0.25);
         if (toAdd <= 20) {
             toAdd = 20;
         }
@@ -100,7 +97,7 @@ public class PlayerDeathListener implements Listener {
                 victim,
                 "&c&lZabojstwo!",
                 TITLE_KILL_MESSAGE
-                        .replace("{LOSER_GUILD}", loserGuild == null ? "" :" &8[&c" + loserGuild.getTag() + "&8]" )
+                        .replace("{LOSER_GUILD}", loserGuild == null ? "" : " &8[&c" + loserGuild.getTag() + "&8]" )
                         .replace("{LOSER}", loser.getName())
                         .replace("{VICTIM_POINTS}", String.valueOf(toAdd))
                         .replace("{VICTIM_HEARTS}", String.valueOf(MathUtil.round(victim.getHealth() / 2, 2))),
@@ -131,7 +128,7 @@ public class PlayerDeathListener implements Listener {
             Player assistant = loserCombat.getLastAssistPlayer();
             CorePlayer assistantCorePlayer = this.plugin.getCorePlayerCache().findByPlayer(assistant);
 
-            int assistPoints = (int) ((37.0 + (assistantCorePlayer.getPoints() - loserCorePlayer.getPoints()) * -0.25) / 3.0);
+            int assistPoints = (int) ((42.0 + (assistantCorePlayer.getPoints() - loserCorePlayer.getPoints()) * -0.25) / 3.0);
             if (assistPoints <= 5) {
                 assistPoints = 5;
             }
@@ -169,6 +166,7 @@ public class PlayerDeathListener implements Listener {
 
         loserCorePlayer.removePoints(toRemove);
         loserCorePlayer.addDeaths(1);
+        loserCorePlayer.addAchievementProgress(AchievementType.DEATHS, 1);
         loserCorePlayer.setKillStreak(0);
         loserCorePlayer.getLastDeaths().put(victimCorePlayer.getUuid(), System.currentTimeMillis());
         loserCorePlayer.setNeedSave(true);
@@ -189,8 +187,10 @@ public class PlayerDeathListener implements Listener {
         }
 
         victimCorePlayer.addPoints(toAdd);
+        victimCorePlayer.addAchievementProgress(AchievementType.CONQUERED_POINTS, toAdd);
         victimCorePlayer.addKillStreak(1);
         victimCorePlayer.addKills(1);
+        victimCorePlayer.addAchievementProgress(AchievementType.KILLS, 1);
         victimCorePlayer.setNeedSave(true);
 
         this.plugin.getPlayerNameTagService().updateDummy(victimCorePlayer);

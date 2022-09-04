@@ -7,7 +7,7 @@ import pl.kithard.core.CorePlugin;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 @FunnyComponent
 public class PlayerInfoCommand {

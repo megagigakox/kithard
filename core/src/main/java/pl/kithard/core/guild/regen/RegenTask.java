@@ -8,7 +8,7 @@ import pl.kithard.core.player.actionbar.ActionBarNoticeType;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.TimeUtil;
+import pl.kithard.core.api.util.TimeUtil;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
