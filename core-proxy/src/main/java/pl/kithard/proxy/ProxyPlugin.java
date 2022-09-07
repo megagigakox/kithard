@@ -58,14 +58,6 @@ public class ProxyPlugin extends Plugin {
         new AuthListener(this);
     }
 
-    @Override
-    public void onDisable() {
-        System.out.println("zapisano wszstkich authplayerow");
-        for (AuthPlayer authPlayer : this.authPlayerCache.values()) {
-            this.mongoService.save(authPlayer);
-        }
-    }
-
     public MotdConfig getMotdConfig() {
         return motdConfig;
     }

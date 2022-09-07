@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import pl.kithard.core.achievement.Achievement;
-import pl.kithard.core.achievement.AchievementType;
+import pl.kithard.core.player.achievement.Achievement;
+import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.deposit.DepositItem;
 import pl.kithard.core.player.combat.PlayerCombat;
 import pl.kithard.core.player.cooldown.PlayerCooldown;
@@ -34,7 +34,7 @@ public class CorePlayer extends DatabaseEntry {
     private double money, earnedMoney, spendMoney;
     private int points, kills, deaths, assists, killStreak;
 
-    private long turboDrop, spentTime;
+    private long turboDrop, spentTime, protection;
 
     private final Set<UUID> ignoredPlayers;
     private final Set<String> disabledSellItems;
@@ -494,5 +494,13 @@ public class CorePlayer extends DatabaseEntry {
         this.combat = new PlayerCombat();
         this.cooldown = new PlayerCooldown();
         super.setNeedSave(false);
+    }
+
+    public long getProtection() {
+        return protection;
+    }
+
+    public void setProtection(long protection) {
+        this.protection = protection;
     }
 }

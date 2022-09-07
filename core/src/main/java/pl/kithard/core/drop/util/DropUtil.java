@@ -17,10 +17,10 @@ public final class DropUtil {
         }
 
         Player player = corePlayer.source();
-        if (player.hasPermission("kithard.dropbonus.legenda")) {
+        if (player.hasPermission("kithard.dropbonus.hard")) {
             chance *= 1.20;
         }
-        else if (player.hasPermission("kithard.dropbonus.mvp")) {
+        else if (player.hasPermission("kithard.dropbonus.sponsor")) {
             chance *= 1.15;
         }
         else if (player.hasPermission("kithard.dropbonus.svip")) {

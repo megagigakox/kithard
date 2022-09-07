@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pl.kithard.core.CorePlugin;
-import pl.kithard.core.achievement.AchievementType;
+import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.player.CorePlayer;
 
 public class PlayerItemConsumeListener implements Listener {

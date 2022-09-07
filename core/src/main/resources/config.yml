@@ -15,7 +15,7 @@ prefix:
   default: ""
   vip: "&eVIP"
   svip: "&6SVIP"
-  sponsor: "&5SPONSOR"
+  sponsor: "&bSponsor"
   hard: "&3HARD"
   testhelper: "&b&lT&3&lH"
   helper: "&3&lHELPER"

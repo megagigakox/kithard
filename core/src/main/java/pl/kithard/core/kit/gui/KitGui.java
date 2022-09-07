@@ -10,12 +10,9 @@ import pl.kithard.core.kit.Kit;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.util.GuiHelper;
 import pl.kithard.core.util.InventoryUtil;
+import pl.kithard.core.util.ItemStackBuilder;
 import pl.kithard.core.util.TextUtil;
 import pl.kithard.core.api.util.TimeUtil;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class KitGui {
     private final CorePlugin plugin;
@@ -26,23 +23,23 @@ public class KitGui {
 
     public void open(Player player) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Wybierz kit:"))
+                .title(TextUtil.component("&3&lWybor zestawu"))
                 .rows(6)
                 .create();
 
         GuiHelper.fillColorGui6(gui);
 
-        for (Kit kit : this.plugin.getKitCache().getKits()) {
+        for (Kit kit : this.plugin.getKitConfiguration().getKits().values()) {
 
-            List<String> lore = new ArrayList<>();
-            for (String kitLore : kit.getLore()) {
-                lore.add(kitLore
-                        .replace("{COOLDOWN}", kit.getCooldown())
-                        .replace("{ACCESS}", player.hasPermission(kit.getPermission()) ? "&a✔ ON" : "&c✖ OFF"));
-            }
-
-            gui.setItem(kit.getGuiSlot(), ItemBuilder.from(kit.getIcon()).name(TextUtil.component("&b&l" + kit.getName()))
-                    .lore(TextUtil.component(lore))
+            gui.setItem(kit.getGuiSlot(), ItemStackBuilder.of(kit.getIcon()).name("&3&l" + kit.getName())
+                    .lore(
+                            "",
+                            " &7Status&8: " + (kit.isEnable() ? "&a✔ wlaczony." : "&c✖ wylaczony."),
+                            " &7Cooldown tego zestawu wynosi&8: &f" + TimeUtil.formatTimeMillis(kit.getCooldown()) + ".",
+                            " &7Posiadasz dostep&8: " + (player.hasPermission(kit.getPermission()) ? "&a✔ tak." : "&c✖ nie."),
+                            "",
+                            "&7Kliknij &flewym &7aby zobaczyc &3podglad &7tego zestawu."
+                    )
                     .asGuiItem(event -> openKit(player, kit)));
         }
 
@@ -52,7 +49,7 @@ public class KitGui {
 
     public void openKit(Player player, Kit kit) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component(kit.getGuiName()))
+                .title(TextUtil.component("&3&lZestaw: &8(" + kit.getName() + "&8)"))
                 .rows(6)
                 .create();
 
@@ -61,40 +58,49 @@ public class KitGui {
         kit.getItems().forEach(kitItem -> gui.addItem(ItemBuilder.from(kitItem).asGuiItem()));
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+        long time = corePlayer.getTime(kit.getName());
 
-        gui.setItem(5, 8, ItemBuilder.from(new ItemStack(Material.getMaterial(351), 1, (short) 10))
-                .name(TextUtil.component("&b&lOdbierz zestaw."))
-                .lore(TextUtil.component(Arrays.asList(
-                        "",
-                        " &7Kliknij tutaj &aaby odebrac &7zestaw!")))
-                .asGuiItem(event -> {
+        ItemStackBuilder builder = ItemStackBuilder.of(new ItemStack(Material.getMaterial(351), 1, (short) 10))
+                .name("&b&lOdbierz zestaw.");
 
-                    if (!kit.isStatus()) {
-                        TextUtil.message(player, "&8[&4&l!&8] &cTen zestaw jest wylaczony!");
-                        player.closeInventory();
-                        return;
-                    }
+        if (player.hasPermission(kit.getPermission())) {
+            builder.appendLore("");
+            builder.appendLore(" &7Mozesz odebrac&8: " + (time > System.currentTimeMillis() ? "&fza" + TimeUtil.formatTimeMillis(time - System.currentTimeMillis()) + "." : "&a✔ w tym momencie."));
+            builder.appendLore("");
+            builder.appendLore("&7Kliknij &flewym &7aby &3odebrac &7ten zestaw.");
+        }
+        else {
+            builder.appendLore("&cBlad! Nie posiadasz uprawnien do odebrania tego zestawu!");
+        }
 
-                    if (player.hasPermission(kit.getPermission())) {
+        gui.setItem(5, 8, builder.asGuiItem(event -> {
 
-                        if (corePlayer.getTime(kit.getName()) < System.currentTimeMillis()) {
-                            kit.getItems().forEach(kitItem -> InventoryUtil.addItem(player, kitItem));
-                            gui.close(player);
-                            corePlayer.getKitCooldowns().put(kit.getName(), TimeUtil.parseDateDiff(kit.getCooldown(), true));
+            if (!kit.isEnable()) {
+                TextUtil.message(player, "&8[&4&l!&8] &cTen zestaw jest wylaczony!");
+                player.closeInventory();
+                return;
+            }
 
-                        } else {
+            if (player.hasPermission(kit.getPermission())) {
 
-                            TextUtil.message(player, "&8[&4&l!&8] &cTen zestaw mozesz odebrac dopiero za &4" + TimeUtil.formatTimeMillis(corePlayer.getTime(kit.getName()) - System.currentTimeMillis()));
+                if (corePlayer.getTime(kit.getName()) < System.currentTimeMillis()) {
+                    kit.getItems().forEach(kitItem -> InventoryUtil.addItem(player, kitItem));
+                    gui.close(player);
+                    corePlayer.getKitCooldowns().put(kit.getName(), kit.getCooldown() + System.currentTimeMillis());
 
-                        }
+                } else {
 
-                    } else {
+                    TextUtil.message(player, "&8[&4&l!&8] &cTen zestaw mozesz odebrac dopiero za &4" + TimeUtil.formatTimeMillis(corePlayer.getTime(kit.getName()) - System.currentTimeMillis()));
 
-                        TextUtil.insufficientPermission(player, kit.getPermission());
+                }
 
-                    }
+            } else {
 
-                }));
+                TextUtil.insufficientPermission(player, kit.getPermission());
+
+            }
+
+        }));
 
 
         gui.setItem(6, 5, ItemBuilder.from(GuiHelper.BACK_ITEM).asGuiItem(event -> open(player)));

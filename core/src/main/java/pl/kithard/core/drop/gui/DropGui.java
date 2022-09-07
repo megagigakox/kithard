@@ -15,6 +15,7 @@ import pl.kithard.core.drop.util.DropUtil;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.settings.ServerSettings;
 import pl.kithard.core.util.GuiHelper;
+import pl.kithard.core.util.ItemStackBuilder;
 import pl.kithard.core.util.MathUtil;
 import pl.kithard.core.util.TextUtil;
 import pl.kithard.core.api.util.TimeUtil;
@@ -31,7 +32,7 @@ public class DropGui {
 
     public void open(Player player) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Wybierz podglad dropu:"))
+                .title(TextUtil.component("&3&lWybierz podglad dropu:"))
                 .rows(5)
                 .create();
 
@@ -67,7 +68,7 @@ public class DropGui {
 
     public void openStone(Player player) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Drop z &8kamienia&7:"))
+                .title(TextUtil.component("&3&lDrop z kamienia"))
                 .rows(6)
                 .create();
 
@@ -79,7 +80,7 @@ public class DropGui {
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
         ServerSettings serverSettings = this.plugin.getServerSettings();
 
-        for (DropItem dropItem : this.plugin.getDropItemCache().getDropItems()) {
+        for (DropItem dropItem : this.plugin.getDropItemConfiguration().getDropItems()) {
             boolean status = corePlayer.isDisabledDropItem(dropItem);
             boolean fortune = dropItem.isFortune();
             double chance = DropUtil.calculateChanceFromStone(dropItem, corePlayer, serverSettings);
@@ -94,10 +95,13 @@ public class DropGui {
                             " &7Fortuna: " + (fortune ? "&a✔" : "&c✖"),
                             " &7Aktualny status: " + (status ? "&c✖" : "&a✔"),
                             "",
-                            " &7Posiadajac range &6SVIP&7, &bMVP &7lub &5Legenda",
-                            " &7twoj drop zostaje zwiekszony!",
+                            " &7Jezeli posiadasz range &epremium",
+                            " &7twoj drop z kamienia zostanie &3zwiekszony&7!",
+                            "  &8- &fPrzy posiadaniu rangi &6SVIP&8: &e10&8%",
+                            "  &8- &fPrzy posiadaniu rangi &bSponsor&8: &e+15&8%",
+                            "  &8- &fPrzy posiadaniu rangi &3HARD&8: &e+20&8%",
                             "",
-                            " &7Kliknij aby " + (status ? "&awlaczyc" : "&cwylaczyc") + " &7drop!"
+                            "&7Kliknij &flewym &7aby " + (status ? "&awlaczyc" : "&cwylaczyc") + " &7drop!"
                     )))
                     .glow(!status)
                     .asGuiItem(inventoryClickEvent -> {
@@ -179,7 +183,7 @@ public class DropGui {
                 .name(TextUtil.component("&aWlacz wszystkie dropy"))
                 .asGuiItem(inventoryClickEvent -> {
 
-                    for (DropItem dropItem : this.plugin.getDropItemCache().getDropItems()) {
+                    for (DropItem dropItem : this.plugin.getDropItemConfiguration().getDropItems()) {
                         corePlayer.removeDisabledDropItem(dropItem);
                     }
 
@@ -192,7 +196,7 @@ public class DropGui {
                 .name(TextUtil.component("&cWylacz wszystkie dropy"))
                 .asGuiItem(inventoryClickEvent -> {
 
-                    for (DropItem dropItem : this.plugin.getDropItemCache().getDropItems()) {
+                    for (DropItem dropItem : this.plugin.getDropItemConfiguration().getDropItems()) {
                         if (corePlayer.isDisabledDropItem(dropItem)) {
                             continue;
                         }
@@ -209,7 +213,7 @@ public class DropGui {
                 .name(TextUtil.component("&bWlacz dropy itemow na gildie"))
                 .asGuiItem(inventoryClickEvent -> {
 
-                    for (DropItem dropItem : this.plugin.getDropItemCache().getDropItems()) {
+                    for (DropItem dropItem : this.plugin.getDropItemConfiguration().getDropItems()) {
                         corePlayer.removeDisabledDropItem(dropItem);
 
                         if (!dropItem.isGuildItem()) {
@@ -229,7 +233,7 @@ public class DropGui {
 
     public void openMagicChest(Player player) {
         PaginatedGui gui = Gui.paginated()
-                .title(TextUtil.component("&7Drop z &bmagicznych skrzynek&7:"))
+                .title(TextUtil.component("&3&lDrop z magicznych skrzynek:"))
                 .pageSize(28)
                 .rows(6)
                 .create();
@@ -246,13 +250,18 @@ public class DropGui {
                 .asGuiItem(inventoryClickEvent -> gui.previous()));
 
 
-        for (SpecialDropItem dropItem : this.plugin.getDropItemCache().getSpecialDropItems()) {
+        for (SpecialDropItem dropItem : this.plugin.getDropItemConfiguration().getSpecialDropItems()) {
 
             if (dropItem.getType() != SpecialDropItemType.MAGIC_CHEST) {
                 continue;
             }
 
-            gui.addItem(ItemBuilder.from(dropItem.getItem())
+            gui.addItem(ItemStackBuilder.of(dropItem.getItem().clone())
+                    .amount(dropItem.getMax())
+                    .appendLore(
+                            "",
+                            " &7Od&8: &f" + dropItem.getMin() + " &7Do&8: &f" + dropItem.getMax()
+                    )
                     .asGuiItem());
 
         }
@@ -263,7 +272,7 @@ public class DropGui {
 
     public void openCobbleX(Player player) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7lDrop z &2cobblex'ow&7:"))
+                .title(TextUtil.component("&3&lDrop z cobblexow"))
                 .rows(6)
                 .create();
 
@@ -273,13 +282,18 @@ public class DropGui {
                 .asGuiItem(inventoryClickEvent -> open(player)));
 
 
-        for (SpecialDropItem dropItem : this.plugin.getDropItemCache().getSpecialDropItems()) {
+        for (SpecialDropItem dropItem : this.plugin.getDropItemConfiguration().getSpecialDropItems()) {
 
             if (dropItem.getType() != SpecialDropItemType.COBBLEX) {
                 continue;
             }
 
-            gui.addItem(ItemBuilder.from(dropItem.getItem())
+            gui.addItem(ItemBuilder.from(dropItem.getItem().clone())
+                    .amount(dropItem.getMax())
+                    .lore(TextUtil.component(Arrays.asList(
+                            "",
+                            " &7Od&8: &f" + dropItem.getMin() + " &7Do&8: &f" + dropItem.getMax()
+                    )))
                     .asGuiItem());
 
         }

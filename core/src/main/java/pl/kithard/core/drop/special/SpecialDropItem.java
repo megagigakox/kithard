@@ -8,12 +8,15 @@ public class SpecialDropItem {
 
     private final ItemStack item;
     private final double chance;
+    private final int min, max;
     private final SpecialDropItemType type;
 
-    public SpecialDropItem(String name, ItemStack item, double chance, SpecialDropItemType type) {
+    public SpecialDropItem(String name, ItemStack item, double chance, int min, int max, SpecialDropItemType type) {
         this.name = name;
         this.item = item;
         this.chance = chance;
+        this.min = min;
+        this.max = max;
         this.type = type;
     }
 
@@ -27,6 +30,14 @@ public class SpecialDropItem {
 
     public double getChance() {
         return chance;
+    }
+
+    public int getMin() {
+        return min;
+    }
+
+    public int getMax() {
+        return max;
     }
 
     public SpecialDropItemType getType() {

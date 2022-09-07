@@ -1,11 +1,13 @@
 package pl.kithard.proxy.auth;
 
+import com.google.gson.annotations.SerializedName;
 import pl.kithard.core.api.database.entity.DatabaseEntity;
 import pl.kithard.core.api.database.entry.DatabaseEntry;
 
 @DatabaseEntity(database = "core", collection = "auth-players")
-public class AuthPlayer extends DatabaseEntry {
+public class AuthPlayer {
 
+    @SerializedName("_id")
     private final String name;
     private String password, ip;
 

@@ -25,7 +25,7 @@ public class GuildPanelGui {
 
     public void openPanel(Player player, Guild guild) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&9&lPanel gildyjny"))
+                .title(TextUtil.component("&3&lPanel gildyjny"))
                 .rows(6)
                 .create();
 

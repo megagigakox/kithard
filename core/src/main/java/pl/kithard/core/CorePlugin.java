@@ -4,6 +4,9 @@ import codecrafter47.bungeetablistplus.api.bukkit.BungeeTabListPlusBukkitAPI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.LongSerializationPolicy;
+import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
+import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
 import net.dzikoysk.funnycommands.FunnyCommands;
 import net.dzikoysk.funnycommands.commands.CommandUtils;
 import net.dzikoysk.funnycommands.resources.completers.OnlinePlayersCompleter;
@@ -15,10 +18,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.kithard.core.achievement.AchievementCache;
-import pl.kithard.core.achievement.AchievementCommand;
-import pl.kithard.core.achievement.AchievementListener;
+import pl.kithard.core.antimacro.AntiMacroCache;
+import pl.kithard.core.antimacro.AntiMacroListener;
+import pl.kithard.core.antimacro.AntiMacroTask;
 import pl.kithard.core.api.database.DatabaseConfig;
+import pl.kithard.core.api.database.MongoService;
 import pl.kithard.core.automessage.config.AutoMessageConfiguration;
 import pl.kithard.core.automessage.task.AutoMessageTask;
 import pl.kithard.core.border.command.BorderCommand;
@@ -29,15 +33,19 @@ import pl.kithard.core.deposit.DepositItemCache;
 import pl.kithard.core.deposit.command.DepositCommand;
 import pl.kithard.core.deposit.configuration.DepositConfiguration;
 import pl.kithard.core.deposit.task.DepositTask;
-import pl.kithard.core.drop.DropItemCache;
+import pl.kithard.core.drop.DropItemConfiguration;
+import pl.kithard.core.drop.DropItemSerdes;
 import pl.kithard.core.drop.command.DropCommand;
 import pl.kithard.core.drop.command.TurboDropCommand;
-import pl.kithard.core.drop.config.DropItemConfiguration;
 import pl.kithard.core.drop.listener.ItemDropListener;
+import pl.kithard.core.drop.special.SpecialDropItemSerdes;
 import pl.kithard.core.drop.special.listener.SpecialDropsListener;
 import pl.kithard.core.effect.CustomEffectCache;
 import pl.kithard.core.effect.command.CustomEffectCommand;
 import pl.kithard.core.effect.configuration.CustomEffectConfiguration;
+import pl.kithard.core.enchant.*;
+import pl.kithard.core.freeze.FreezeCommand;
+import pl.kithard.core.freeze.FreezeTask;
 import pl.kithard.core.generator.GeneratorCache;
 import pl.kithard.core.generator.GeneratorFactory;
 import pl.kithard.core.generator.listener.GeneratorListener;
@@ -69,12 +77,17 @@ import pl.kithard.core.itemshop.ItemShopService;
 import pl.kithard.core.itemshop.ItemShopServiceCache;
 import pl.kithard.core.itemshop.command.ItemShopCommand;
 import pl.kithard.core.itemshop.configuration.ItemShopServiceConfiguration;
-import pl.kithard.core.kit.KitCache;
+import pl.kithard.core.kit.KitConfiguration;
+import pl.kithard.core.kit.KitSerdes;
 import pl.kithard.core.kit.command.KitCommand;
-import pl.kithard.core.kit.configuration.KitConfiguration;
+import pl.kithard.core.kit.command.KitManageCommand;
 import pl.kithard.core.player.CorePlayerCache;
 import pl.kithard.core.player.CorePlayerFactory;
+import pl.kithard.core.player.achievement.AchievementCache;
+import pl.kithard.core.player.achievement.AchievementCommand;
+import pl.kithard.core.player.achievement.AchievementListener;
 import pl.kithard.core.player.actionbar.ActionBarNoticeCache;
+import pl.kithard.core.player.actionbar.task.ActionBarNoticeShowTask;
 import pl.kithard.core.player.backup.PlayerBackupFactory;
 import pl.kithard.core.player.backup.PlayerBackupService;
 import pl.kithard.core.player.backup.command.PlayerBackupCommand;
@@ -86,15 +99,22 @@ import pl.kithard.core.player.combat.listener.PlayerDamageListener;
 import pl.kithard.core.player.combat.listener.PlayerDeathListener;
 import pl.kithard.core.player.command.*;
 import pl.kithard.core.player.command.bind.CorePlayerBind;
+import pl.kithard.core.player.enderchest.command.EnderChestCommand;
+import pl.kithard.core.player.enderchest.listener.EnderChestListener;
 import pl.kithard.core.player.home.command.HomeCommand;
 import pl.kithard.core.player.listener.*;
 import pl.kithard.core.player.nametag.PlayerNameTagService;
 import pl.kithard.core.player.nametag.task.PlayerNameTagRefreshTask;
 import pl.kithard.core.player.punishment.PunishmentCache;
 import pl.kithard.core.player.punishment.PunishmentFactory;
+import pl.kithard.core.player.punishment.command.PunishmentCommand;
+import pl.kithard.core.player.punishment.listener.PlayerLoginListener;
 import pl.kithard.core.player.ranking.PlayerRankingCommand;
 import pl.kithard.core.player.ranking.PlayerRankingService;
+import pl.kithard.core.player.settings.command.PlayerSettingsCommand;
 import pl.kithard.core.player.task.PlayerSpentTimeTask;
+import pl.kithard.core.player.teleport.countdown.PlayerTeleportCountdown;
+import pl.kithard.core.player.teleport.listener.PlayerMoveTeleportListener;
 import pl.kithard.core.player.variable.*;
 import pl.kithard.core.recipe.CustomRecipe;
 import pl.kithard.core.recipe.command.AdminItemsCommand;
@@ -118,15 +138,6 @@ import pl.kithard.core.util.adapters.ItemStackArrayAdapter;
 import pl.kithard.core.warp.WarpCache;
 import pl.kithard.core.warp.WarpFactory;
 import pl.kithard.core.warp.command.WarpCommand;
-import pl.kithard.core.api.database.MongoService;
-import pl.kithard.core.player.actionbar.task.ActionBarNoticeShowTask;
-import pl.kithard.core.player.enderchest.command.EnderChestCommand;
-import pl.kithard.core.player.enderchest.listener.EnderChestListener;
-import pl.kithard.core.player.punishment.command.PunishmentCommand;
-import pl.kithard.core.player.punishment.listener.PlayerLoginListener;
-import pl.kithard.core.player.settings.command.PlayerSettingsCommand;
-import pl.kithard.core.player.teleport.countdown.PlayerTeleportCountdown;
-import pl.kithard.core.player.teleport.listener.PlayerMoveTeleportListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -157,7 +168,6 @@ public final class CorePlugin extends JavaPlugin {
     private ItemShopServiceCache itemShopServiceCache;
     private ItemShopServiceConfiguration itemShopServiceConfiguration;
 
-    private DropItemCache dropItemCache;
     private DropItemConfiguration dropItemConfiguration;
 
     private AutoMessageConfiguration autoMessageConfiguration;
@@ -180,19 +190,19 @@ public final class CorePlugin extends JavaPlugin {
     private PunishmentCache punishmentCache;
     private PunishmentFactory punishmentFactory;
 
-    private KitCache kitCache;
     private KitConfiguration kitConfiguration;
 
     private FreeSpaceCache freeSpaceCache;
     private ActionBarNoticeCache actionBarNoticeCache;
     private AchievementCache achievementCache;
+    private AntiMacroCache antiMacroCache;
+    private CustomEnchantConfiguration customEnchantConfiguration;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
 
         this.gson = new GsonBuilder()
-//                .registerTypeHierarchyAdapter(Location.class, new LocationAdapter())
                 .registerTypeHierarchyAdapter(ConfigurationSerializable.class, new ConfigurationSerializableAdapter())
                 .registerTypeHierarchyAdapter(ItemStack[].class, new ItemStackArrayAdapter())
                 .registerTypeHierarchyAdapter(Inventory.class, new InventoryAdapter())
@@ -208,8 +218,38 @@ public final class CorePlugin extends JavaPlugin {
         this.itemShopServiceConfiguration = new ItemShopServiceConfiguration(this);
         this.itemShopServiceConfiguration.createConfig();
 
-        this.dropItemConfiguration = new DropItemConfiguration(this);
-        this.dropItemConfiguration.createConfig();
+        this.kitConfiguration = ConfigManager.create(KitConfiguration.class, (it) -> {
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit());
+            it.withSerdesPack(registry -> registry.register(new KitSerdes()));
+            it.withBindFile(getDataFolder() + "/kits.yml");
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load(true);
+        });
+
+        this.customEnchantConfiguration = ConfigManager.create(CustomEnchantConfiguration.class, (it) -> {
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit());
+            it.withSerdesPack(registry -> {
+                registry.register(new CustomEnchantWrapperSerdes());
+                registry.register(new CustomEnchantSerdes());
+            });
+            it.withBindFile(getDataFolder() + "/customEnchant.yml");
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load(true);
+        });
+
+        this.dropItemConfiguration = ConfigManager.create(DropItemConfiguration.class, (it) -> {
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit());
+            it.withSerdesPack(registry -> {
+                registry.register(new DropItemSerdes());
+                registry.register(new SpecialDropItemSerdes());
+            });
+            it.withBindFile(getDataFolder() + "/drops.yml");
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load(true);
+        });
 
         this.autoMessageConfiguration = new AutoMessageConfiguration(this);
         this.autoMessageConfiguration.createConfig();
@@ -222,9 +262,6 @@ public final class CorePlugin extends JavaPlugin {
 
         this.depositItemCache = new DepositItemCache(this);
         this.depositItemCache.init();
-
-        this.dropItemCache = new DropItemCache(this);
-        this.dropItemCache.init();
 
         this.mongoService = new MongoService(DatabaseConfig.MONGO_URI, this.gson);
 
@@ -254,7 +291,7 @@ public final class CorePlugin extends JavaPlugin {
         this.customEffectCache.init();
 
         this.itemShopServiceCache = new ItemShopServiceCache(this);
-        this.itemShopServiceCache.init();
+//        this.itemShopServiceCache.init();
 
         this.shopItemCache = new ShopItemCache(this);
         this.shopItemCache.init();
@@ -271,16 +308,12 @@ public final class CorePlugin extends JavaPlugin {
         this.punishmentFactory = new PunishmentFactory(this);
         this.punishmentFactory.load();
 
-        this.kitConfiguration = new KitConfiguration(this);
-        this.kitConfiguration.createConfig();
-
-        this.kitCache = new KitCache(this);
-        this.kitCache.init();
-
         this.freeSpaceCache = new FreeSpaceCache();
         this.actionBarNoticeCache = new ActionBarNoticeCache();
         this.achievementCache = new AchievementCache();
         this.achievementCache.init();
+
+        this.antiMacroCache = new AntiMacroCache();
 
         this.initTabList();
         this.initCommands();
@@ -384,7 +417,11 @@ public final class CorePlugin extends JavaPlugin {
                         new FreeSpaceCommand(this),
                         new GuildAlertCommand(this),
                         new AchievementCommand(this),
-                        new PlayerRankingCommand(this)
+                        new PlayerRankingCommand(this),
+                        new FreezeCommand(this),
+                        new DisableProtectionCommand(this),
+                        new KitManageCommand(this),
+                        new CustomEnchantCommand(this)
                 ))
                 .completer("itemShopServices", (context, prefix, limit) -> CommandUtils.collectCompletions(
                         this.itemShopServiceCache.getServices().values(),
@@ -412,6 +449,8 @@ public final class CorePlugin extends JavaPlugin {
         new FreeSpaceTask(this).run();
         new PlayerBackupTask(this);
         new PlayerSpentTimeTask(this);
+        new FreezeTask(this);
+        new AntiMacroTask(this);
     }
 
     private void initListeners() {
@@ -443,6 +482,8 @@ public final class CorePlugin extends JavaPlugin {
         new RegenListener(this);
         new GuildPeriscopeListener(this);
         new AchievementListener(this);
+        new AntiMacroListener(this);
+        new CustomEnchantListener(this);
     }
 
     private void initRecipes() {
@@ -469,10 +510,6 @@ public final class CorePlugin extends JavaPlugin {
         Bukkit.addRecipe(new ShapedRecipe(CustomRecipe.COBBLEX.getItem())
                 .shape("aaa", "aaa", "aaa")
                 .setIngredient('a', Material.COBBLESTONE));
-
-        Bukkit.addRecipe(new ShapedRecipe(CustomRecipe.THROWN_TNT.getItem())
-                .shape("aaa", "aaa", "aaa")
-                .setIngredient('a', Material.TNT));
 
         Bukkit.addRecipe(new ShapedRecipe(CustomRecipe.ENDER_CHEST.getItem())
                 .shape("aaa", "aba", "aaa")
@@ -540,10 +577,6 @@ public final class CorePlugin extends JavaPlugin {
 
     public ItemShopServiceConfiguration getItemShopServiceConfiguration() {
         return itemShopServiceConfiguration;
-    }
-
-    public DropItemCache getDropItemCache() {
-        return dropItemCache;
     }
 
     public DropItemConfiguration getDropItemConfiguration() {
@@ -626,10 +659,6 @@ public final class CorePlugin extends JavaPlugin {
         return playerNameTagService;
     }
 
-    public KitCache getKitCache() {
-        return kitCache;
-    }
-
     public KitConfiguration getKitConfiguration() {
         return kitConfiguration;
     }
@@ -652,5 +681,13 @@ public final class CorePlugin extends JavaPlugin {
 
     public AchievementCache getAchievementCache() {
         return achievementCache;
+    }
+
+    public AntiMacroCache getAntiMacroCache() {
+        return antiMacroCache;
+    }
+
+    public CustomEnchantConfiguration getCustomEnchantConfiguration() {
+        return customEnchantConfiguration;
     }
 }

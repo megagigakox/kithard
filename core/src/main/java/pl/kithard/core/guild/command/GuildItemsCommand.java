@@ -46,8 +46,7 @@ public class GuildItemsCommand {
                     .lore(TextUtil.component(Arrays.asList(
                             "",
                             " &7W ekwipunku&8: &f" + InventoryUtil.countItemsIgnoreItemMeta(player, itemStack) + "&8/&f" + itemStack.getAmount(),
-                            "",
-                            " &7Ranga &bMVP &7oraz &5Legenda &7maja o polowe mniej itemow na gildie!"
+                            player.hasPermission("kithard.premium.items") ? "&7Posiadasz range &epremium&7, twoje itemy na gildie są &bzmniejszone&7!" : ""
                     )))
                     .asGuiItem());
 

@@ -1,7 +1,6 @@
 package pl.kithard.core.player.combat.listener;
 
 import org.bukkit.Bukkit;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pl.kithard.core.CorePlugin;
-import pl.kithard.core.achievement.AchievementType;
+import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.player.backup.PlayerBackupType;
@@ -227,26 +226,5 @@ public class PlayerDeathListener implements Listener {
         InventoryUtil.addItems(killer, drops, event.getEntity().getLocation().getBlock());
         killer.giveExp(event.getDroppedExp());
         event.getDrops().clear();
-    }
-
-    public static int getAmount(ItemStack tool) {
-        if (tool == null) {
-            return RandomUtil.getRandInt(2, 5);
-        }
-        if (!tool.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
-            return RandomUtil.getRandInt(2, 5);
-        }
-
-        switch (tool.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS)) {
-            case 1: {
-                return RandomUtil.getRandInt(4, 11);
-            }
-            case 2: {
-                return RandomUtil.getRandInt(5, 15);
-            }
-            default: {
-                return RandomUtil.getRandInt(3, 8);
-            }
-        }
     }
 }

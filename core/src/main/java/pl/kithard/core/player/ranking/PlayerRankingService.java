@@ -1,10 +1,9 @@
 package pl.kithard.core.player.ranking;
 
-import pl.kithard.core.achievement.AchievementType;
+import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.player.CorePlayer;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class PlayerRankingService {

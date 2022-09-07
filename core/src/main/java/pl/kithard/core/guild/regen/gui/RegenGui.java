@@ -31,7 +31,7 @@ public class RegenGui {
     public void open(Player player, Guild guild) {
         Gui gui = Gui.gui()
                 .rows(5)
-                .title(TextUtil.component("&9&lZregeneruj cuboid"))
+                .title(TextUtil.component("&3&lZregeneruj cuboid"))
                 .create();
 
         GuiHelper.fillColorGui5(gui);

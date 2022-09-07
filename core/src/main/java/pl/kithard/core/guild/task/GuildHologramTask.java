@@ -10,7 +10,7 @@ public class GuildHologramTask extends BukkitRunnable {
 
     public GuildHologramTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimer(this.plugin, 500L, 500L);
+        this.runTaskTimer(this.plugin, 20 * 360, 20 * 360);
     }
 
     @Override

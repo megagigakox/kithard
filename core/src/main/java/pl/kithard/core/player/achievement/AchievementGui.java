@@ -1,4 +1,4 @@
-package pl.kithard.core.achievement;
+package pl.kithard.core.player.achievement;
 
 import dev.triumphteam.gui.guis.Gui;
 import net.md_5.bungee.api.ChatColor;

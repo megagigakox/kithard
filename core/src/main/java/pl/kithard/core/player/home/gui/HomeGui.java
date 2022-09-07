@@ -24,7 +24,7 @@ public class HomeGui {
 
     public void open(Player player) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Zarzadzanie domami:"))
+                .title(TextUtil.component("&3&lZarzadzanie domami"))
                 .rows(3)
                 .create();
 

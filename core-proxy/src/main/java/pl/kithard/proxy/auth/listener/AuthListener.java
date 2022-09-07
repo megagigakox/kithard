@@ -34,13 +34,13 @@ public class AuthListener implements Listener {
         event.registerIntent(plugin);
         this.plugin.getProxy().getScheduler().runAsync(plugin, () -> {
 
-
             AuthPlayer authPlayer = this.plugin.getAuthPlayerCache().findByName(name);
             if (authPlayer == null) {
 
                 if (MojangUtil.isLimited()) {
                     event.setCancelReason(TextComponent.fromLegacyText(TextUtil.color("&CSprobuj ponownie za chwile.")));
                     event.setCancelled(true);
+                    event.completeIntent(plugin);
                     return;
                 }
 
@@ -48,7 +48,7 @@ public class AuthListener implements Listener {
                 authPlayer.setPremium(MojangUtil.fetchStatus(name));
                 authPlayer.setFirstJoinTime(System.currentTimeMillis());
                 authPlayer.setIp(connection.getAddress().getAddress().getHostAddress());
-                authPlayer.setNeedSave(true);
+                this.plugin.getMongoService().save(authPlayer);
 
                 if (this.plugin.getAuthPlayerCache().hasMaxAccountsPerIP(connection.getAddress().getAddress().getHostAddress())) {
                     event.setCancelReason(TextComponent.fromLegacyText(TextUtil.color("&cOsiagnales limit kont na tym ip!")));
@@ -103,7 +103,7 @@ public class AuthListener implements Listener {
 
         if (authPlayer.getIp() == null || !authPlayer.getIp().equals(player.getAddress().getAddress().getHostAddress())) {
             authPlayer.setIp(player.getAddress().getAddress().getHostAddress());
-            authPlayer.setNeedSave(true);
+            this.plugin.getProxy().getScheduler().runAsync(plugin, () -> this.plugin.getMongoService().save(authPlayer));
         }
 
         if (!authPlayer.isPremium()) {

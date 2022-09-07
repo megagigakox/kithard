@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.api.util.TimeUtil;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.player.actionbar.ActionBarNotice;
@@ -59,8 +60,24 @@ public class PlayerDamageListener implements Listener {
             }
         }
 
-        PlayerCombat attackedCombat = this.plugin.getCorePlayerCache().findByPlayer(attacked).getCombat();
-        PlayerCombat attackerCombat = this.plugin.getCorePlayerCache().findByPlayer(attacker).getCombat();
+
+        CorePlayer attackedPlayer = this.plugin.getCorePlayerCache().findByPlayer(attacked);
+        CorePlayer attackerPlayer = this.plugin.getCorePlayerCache().findByPlayer(attacker);
+
+        if (attackedPlayer.getProtection() > System.currentTimeMillis()) {
+            TextUtil.message(attacker, "&8[&4&l!&8] &cZaatakowany gracz posiada ochrone startowa jeszcze przez: &4" + TimeUtil.formatTimeMillis(attackedPlayer.getProtection() - System.currentTimeMillis()));
+            event.setCancelled(true);
+            return;
+        }
+
+        if (attackerPlayer.getProtection() > System.currentTimeMillis()) {
+            TextUtil.message(attacker, "&8[&4&l!&8] &cPosiadasz ochroe startowa jeszcze przez: &4" + TimeUtil.formatTimeMillis(attackerPlayer.getProtection() - System.currentTimeMillis()) + ". &cJezeli chcesz ja wylaczyc uzyj komendy: &4/wylaczochrone");
+            event.setCancelled(true);
+            return;
+        }
+
+        PlayerCombat attackedCombat = attackedPlayer.getCombat();
+        PlayerCombat attackerCombat = attackerPlayer.getCombat();
 
         attackedCombat.setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
         attackerCombat.setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
@@ -82,7 +99,7 @@ public class PlayerDamageListener implements Listener {
                     ActionBarNotice.builder()
                             .type(ActionBarNoticeType.HP_INFO)
                             .text(replacedHpInfo)
-                            .expireTime(TimeUnit.SECONDS.toMillis(3))
+                            .expireTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(3))
                             .build()
             );
         }

@@ -55,7 +55,8 @@ public class AuthCommand extends Command {
 
                 authPlayer.setPassword("");
                 authPlayer.setRegistered(false);
-                authPlayer.setNeedSave(true);
+
+                this.plugin.getProxy().getScheduler().runAsync(plugin, () -> this.plugin.getMongoService().save(authPlayer));
 
                 sender.sendMessage(new TextComponent(TextUtil.color("&aPomyslnie odrejestrowano gracza: &b" + authPlayer.getName() + "&a!")));
 
@@ -92,7 +93,7 @@ public class AuthCommand extends Command {
                 }
 
                 authPlayer.setPassword(args[2]);
-                authPlayer.setNeedSave(true);
+                this.plugin.getProxy().getScheduler().runAsync(plugin, () -> this.plugin.getMongoService().save(authPlayer));
                 sender.sendMessage(new TextComponent(TextUtil.color("&aPomyslnie ustawiono nowe haslo gracza: &b" + authPlayer.getName() + "&a!")));
                 return;
             }

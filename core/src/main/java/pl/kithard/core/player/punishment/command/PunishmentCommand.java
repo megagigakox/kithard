@@ -83,7 +83,7 @@ public class PunishmentCommand {
                 .assignBanToPlayer(
                         args[0],
                         sender.getName(),
-                        TimeUtil.parseDateDiff(args[1], true),
+                        TimeUtil.timeFromString(args[1]) + System.currentTimeMillis(),
                         reason);
 
         Bukkit.broadcastMessage(
@@ -269,7 +269,7 @@ public class PunishmentCommand {
 
         String reason = StringUtils.join(args, " ", 2, args.length);
         this.plugin.getPunishmentFactory()
-                .assignMuteToPlayer(args[0], sender.getName(), TimeUtil.parseDateDiff(args[1], true), reason);
+                .assignMuteToPlayer(args[0], sender.getName(), TimeUtil.timeFromString(args[1]) + System.currentTimeMillis(), reason);
 
         Bukkit.broadcastMessage(
                 TextUtil.color(

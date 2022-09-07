@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.CorePlugin;
-import pl.kithard.core.achievement.AchievementType;
+import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.api.util.TimeUtil;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.util.*;

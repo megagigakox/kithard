@@ -1,6 +1,5 @@
 package pl.kithard.core.player.listener;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -14,7 +13,6 @@ import org.bukkit.material.Button;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.util.LocationUtil;
-import pl.kithard.core.util.RandomUtil;
 import pl.kithard.core.util.TextUtil;
 
 import java.util.List;
@@ -32,8 +30,8 @@ public class PlayerInteractListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
 
-        Player p = event.getPlayer();
-        if (LocationUtil.isInSpawn(p.getLocation())) {
+        Player player = event.getPlayer();
+        if (LocationUtil.isInSpawn(player.getLocation())) {
             if (!event.hasBlock()) {
                 return;
             }
@@ -53,7 +51,7 @@ public class PlayerInteractListener implements Listener {
                 return;
             }
 
-            LocationUtil.randomTeleport(p);
+            player.teleport(LocationUtil.getRadnomLocation());
         }
     }
 
@@ -89,7 +87,7 @@ public class PlayerInteractListener implements Listener {
                 return;
             }
 
-            List<Player> playersInRadius = LocationUtil.getPlayersInRadius(event.getClickedBlock().getLocation(), 4, Material.WOOD_PLATE);
+            List<Player> playersInRadius = LocationUtil.getPlayersInRadius(event.getClickedBlock().getLocation(), 5, Material.WOOD_PLATE);
             if (playersInRadius.size() == 1) {
                 TextUtil.message(event.getPlayer(), "&8[&4&l!&8] &cNie mozesz sie teleportowac sam!");
                 return;
@@ -138,7 +136,7 @@ public class PlayerInteractListener implements Listener {
             }
 
             player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
-            LocationUtil.randomTeleport(player);
+            player.teleport(LocationUtil.getRadnomLocation());
             for (Player it : playersInRadius) {
                 it.teleport(player.getLocation());
                 it.setAllowFlight(false);
@@ -148,9 +146,6 @@ public class PlayerInteractListener implements Listener {
     }
 
     public void randomTeleport(List<Player> players, int i) {
-        int x = RandomUtil.getRandInt(-2000, 2000);
-        int z = RandomUtil.getRandInt(-2000, 2000);
-        Location location = new Location((players.get(0)).getWorld(), x, ((players.get(0)).getWorld().getHighestBlockYAt(x, z)), z);
         int a = 0;
 
         for (Player target : players) {
@@ -160,7 +155,7 @@ public class PlayerInteractListener implements Listener {
 
             target.getActivePotionEffects().forEach(potionEffect -> target.removePotionEffect(potionEffect.getType()));
             target.setAllowFlight(false);
-            target.teleport(location);
+            target.teleport(LocationUtil.getRadnomLocation());
             a++;
         }
     }

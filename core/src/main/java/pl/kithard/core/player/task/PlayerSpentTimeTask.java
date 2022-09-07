@@ -3,7 +3,7 @@ package pl.kithard.core.player.task;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.kithard.core.CorePlugin;
-import pl.kithard.core.achievement.AchievementType;
+import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.player.CorePlayer;
 
 public class PlayerSpentTimeTask extends BukkitRunnable {
@@ -12,7 +12,7 @@ public class PlayerSpentTimeTask extends BukkitRunnable {
 
     public PlayerSpentTimeTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimerAsynchronously(plugin, 20 * 10, 20 * 10);
+        this.runTaskTimerAsynchronously(plugin, 20 * 25, 20 * 25);
     }
 
     @Override

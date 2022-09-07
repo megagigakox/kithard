@@ -25,7 +25,7 @@ public class GuildLogGui {
     public void open(Player player, Guild guild) {
         Gui gui = Gui.gui()
                 .rows(3)
-                .title(TextUtil.component("&f&lLogi gildyjne"))
+                .title(TextUtil.component("&3&lLogi gildyjne"))
                 .create();
 
         GuiHelper.fillColorGui3(gui);

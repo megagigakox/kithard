@@ -101,6 +101,15 @@ public class ActionBarNoticeShowTask extends BukkitRunnable {
                         .build()
         );
 
+        add(
+                corePlayer.getProtection() > System.currentTimeMillis(),
+                player,
+                ActionBarNotice.builder()
+                        .type(ActionBarNoticeType.PROTECTION)
+                        .text("&e&lOchrona &8(&f" + TimeUtil.formatTimeMillis(corePlayer.getProtection() - System.currentTimeMillis()) + "&8)")
+                        .build()
+        );
+
         Guild guildByLocation = this.plugin.getGuildCache().findByLocation(player.getLocation());
         if (guildByLocation != null) {
             String message;

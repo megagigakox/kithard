@@ -1,4 +1,4 @@
-package pl.kithard.core.achievement;
+package pl.kithard.core.player.achievement;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

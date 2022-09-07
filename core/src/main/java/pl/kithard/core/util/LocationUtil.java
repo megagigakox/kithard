@@ -1,7 +1,9 @@
 package pl.kithard.core.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -52,11 +54,12 @@ public final class LocationUtil {
         return players;
     }
 
-    public static void randomTeleport(Player player) {
-        int x = RandomUtil.getRandInt(-2000, 2000);
-        int z = RandomUtil.getRandInt(-2000, 2000);
-        double y = (player.getWorld().getHighestBlockYAt(x, z) + 1.5F);
-        player.teleport(new Location(player.getWorld(), x, y, z));
+    public static Location getRadnomLocation() {
+        World world = Bukkit.getWorld("world");
+        int x = RandomUtil.getRandInt(-(int) (world.getWorldBorder().getSize() / 2), (int) (world.getWorldBorder().getSize() / 2));
+        int z = RandomUtil.getRandInt(-(int) (world.getWorldBorder().getSize() /2), (int) (world.getWorldBorder().getSize() / 2));
+        double y = (world.getHighestBlockYAt(x, z) + 1.5F);
+        return new Location(world, x, y, z);
     }
 
     public static boolean loc(int minX, int maxX, int minZ, int maxZ, Location l) {

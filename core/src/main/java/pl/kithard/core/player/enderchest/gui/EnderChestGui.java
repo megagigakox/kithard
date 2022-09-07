@@ -22,7 +22,7 @@ public class EnderChestGui {
 
     public void open(Player p, Player viewer) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Wybor enderchesta:"))
+                .title(TextUtil.component("&3&lWybor enderchesta"))
                 .rows(3)
                 .create();
 

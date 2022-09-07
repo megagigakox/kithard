@@ -54,44 +54,36 @@ public class SpecialDropsListener implements Listener {
                 return;
             }
 
-            List<SpecialDropItem> dropItems = new ArrayList<>();
-            for (SpecialDropItem dropItem : this.plugin.getDropItemCache().getSpecialDropItems()) {
+            int i = 0;
+            do {
+                for (SpecialDropItem dropItem : this.plugin.getDropItemConfiguration().getSpecialDropItems()) {
 
-                if (dropItem.getType() != SpecialDropItemType.MAGIC_CHEST) {
-                    continue;
+                    if (dropItem.getType() != SpecialDropItemType.MAGIC_CHEST) {
+                        continue;
+                    }
+
+                    if (i == 1) {
+                        continue;
+                    }
+
+                    double chance = dropItem.getChance();
+                    if (RandomUtil.getChance(chance)) {
+                        i++;
+                        InventoryUtil.addItem(player, dropItem.getItem());
+                        for (Player it : Bukkit.getOnlinePlayers()) {
+
+                            CorePlayer itPlayer = this.plugin.getCorePlayerCache().findByPlayer(it);
+                            if (itPlayer.isDisabledSetting(PlayerSettings.MAGIC_CHEST_MESSAGES)) {
+                                continue;
+                            }
+
+                            TextUtil.message(it, "&8» &7Gracz &f" + player.getName() + " &7otworzyl &bMagiczna Skrzynke &7i wydropil: &b" + dropItem.getName() + " &7(&f" + dropItem.getItem().getAmount() + "x&7)");
+                        }
+                    }
                 }
 
-                double chance = dropItem.getChance();
-                if (!RandomUtil.getChance(chance)) {
-                    continue;
-                }
+            } while (i == 0);
 
-                if (dropItems.size() == 2) {
-                    break;
-                }
-
-                dropItems.add(dropItem);
-
-            }
-
-            for (SpecialDropItem specialDropItem : dropItems) {
-
-                InventoryUtil.addItem(player, specialDropItem.getItem());
-
-            }
-
-            for (Player it : Bukkit.getOnlinePlayers()) {
-
-                CorePlayer itPlayer = this.plugin.getCorePlayerCache().findByPlayer(it);
-                if (itPlayer.isDisabledSetting(PlayerSettings.MAGIC_CHEST_MESSAGES)) {
-                    continue;
-                }
-
-                TextUtil.message(it, "&8» &7Gracz &f" + player.getName() + " &7otworzyl &bMagiczna Skrzynke &7i wydropil: &b" +
-                        (dropItems.isEmpty()
-                                ? "Nic :("
-                                : StringUtils.join(dropItems.stream().map(SpecialDropItem::getName).collect(Collectors.toList()), "&8,&b ")));
-            }
 
             event.setCancelled(true);
 
@@ -111,36 +103,30 @@ public class SpecialDropsListener implements Listener {
                 return;
             }
 
-            List<SpecialDropItem> dropItems = new ArrayList<>();
-            for (SpecialDropItem dropItem : this.plugin.getDropItemCache().getSpecialDropItems()) {
+            int i = 0;
+            do {
 
-                if (dropItem.getType() != SpecialDropItemType.COBBLEX) {
-                    continue;
+                for (SpecialDropItem dropItem : this.plugin.getDropItemConfiguration().getSpecialDropItems()) {
+
+                    if (dropItem.getType() != SpecialDropItemType.COBBLEX) {
+                        continue;
+                    }
+
+                    if (i == 1) {
+                        continue;
+                    }
+
+                    double chance = dropItem.getChance();
+                    if (RandomUtil.getChance(chance)) {
+                        i++;
+                        ItemStack itemStack = dropItem.getItem();
+                        itemStack.setAmount(RandomUtil.getRandInt(dropItem.getMin(), dropItem.getMax()));
+                        InventoryUtil.addItem(player, itemStack);
+                        TextUtil.message(player, "&8» &7Otworzyles &2&lCobbleX &7i droplo ci: &b" + dropItem.getName() + " &7(&f" + itemStack.getAmount() + "x&7)");
+                    }
                 }
 
-                double chance = dropItem.getChance();
-                if (!RandomUtil.getChance(chance)) {
-                    continue;
-                }
-
-                if (dropItems.size() == 1) {
-                    break;
-                }
-
-                dropItems.add(dropItem);
-
-            }
-
-            for (SpecialDropItem specialDropItem : dropItems) {
-                InventoryUtil.addItem(player, specialDropItem.getItem());
-            }
-
-            TextUtil.message(player, "&8» &7Otworzyles &2CobbleX &7i droplo ci: &b" +
-                    (dropItems.isEmpty()
-                            ? "Nic :("
-                            : StringUtils.join(dropItems.stream()
-                            .map(SpecialDropItem::getName)
-                            .collect(Collectors.toList()), "&8,&b ")));
+            } while (i == 0);
 
             event.setCancelled(true);
 

@@ -2,37 +2,31 @@ package pl.kithard.core.kit;
 
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Kit {
 
     private final String name;
-    private final String guiName;
+
     private final String permission;
     private final int guiSlot;
-    private final String cooldown;
-    private boolean status;
+    private final long cooldown;
+    private boolean enable;
     private final ItemStack icon;
-    private final List<String> lore = new ArrayList<>();
-    private final List<ItemStack> items = new ArrayList<>();
+    private final List<ItemStack> items;
 
-    public Kit(String name, String guiName, int guiSlot, String permission, String cooldown, ItemStack icon) {
+    public Kit(String name, int guiSlot, String permission, long cooldown, ItemStack icon, List<ItemStack> items) {
         this.name = name;
-        this.guiName = guiName;
         this.guiSlot = guiSlot;
         this.permission = permission;
         this.cooldown = cooldown;
         this.icon = icon;
-        this.status = true;
+        this.items = items;
+        this.enable = true;
     }
 
     public String getName() {
         return name;
-    }
-
-    public String getGuiName() {
-        return guiName;
     }
 
     public String getPermission() {
@@ -43,25 +37,22 @@ public class Kit {
         return guiSlot;
     }
 
-    public String getCooldown() {
+    public long getCooldown() {
         return cooldown;
     }
 
-    public boolean isStatus() {
-        return status;
+    public boolean isEnable() {
+        return enable;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     public ItemStack getIcon() {
         return icon;
     }
 
-    public List<String> getLore() {
-        return lore;
-    }
 
     public List<ItemStack> getItems() {
         return items;

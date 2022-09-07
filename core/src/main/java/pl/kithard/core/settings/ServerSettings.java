@@ -13,7 +13,7 @@ public class ServerSettings {
     @SerializedName("_id")
     private final String name = "server_settings";
 
-    private long turboDrop;
+    private long turboDrop, freeze;
     private final List<ServerSettingsType> enabledSettings = new ArrayList<>();
 
     public ServerSettings() {
@@ -38,5 +38,13 @@ public class ServerSettings {
 
     public void setTurboDrop(long turboDrop) {
         this.turboDrop = turboDrop;
+    }
+
+    public long getFreeze() {
+        return freeze;
+    }
+
+    public void setFreeze(long freeze) {
+        this.freeze = freeze;
     }
 }

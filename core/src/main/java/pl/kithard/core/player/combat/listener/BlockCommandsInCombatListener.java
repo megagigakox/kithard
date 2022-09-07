@@ -14,7 +14,19 @@ import java.util.Locale;
 public class BlockCommandsInCombatListener implements Listener {
 
     private final static String[] DISALLOWED_COMMANDS = {
+            "wb",
+            "workbench",
+            "craft",
+            "craftingi",
+            "crafting",
+            "bloki",
+            "nagroda",
+            "os",
+            "osiagniecia",
+            "achievement",
+            "achievements",
             "sklep",
+            "shop",
             "depozyt",
             "kit",
             "kity",
@@ -22,6 +34,7 @@ public class BlockCommandsInCombatListener implements Listener {
             "depozyt",
             "depo",
             "home",
+            "sethome",
             "spawn",
             "tpa",
             "tpaccept",

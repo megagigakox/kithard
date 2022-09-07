@@ -6,7 +6,7 @@ public enum ActionBarNoticeType {
     ANTI_LOGOUT(2),
     HP_INFO(3),
     TURBO_DROP(4),
-    INCOGNITO(5),
+    PROTECTION(5),
     GUILD_TERRAIN(6),
     GUILD_TERRAIN_REGEN(7),
     STONE_DROP(8),

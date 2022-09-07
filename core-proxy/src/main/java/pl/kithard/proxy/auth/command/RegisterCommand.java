@@ -54,7 +54,7 @@ public class RegisterCommand extends Command {
         authPlayer.setPassword(password);
         authPlayer.setRegistered(true);
         authPlayer.setLogged(true);
-        authPlayer.setNeedSave(true);
+        this.plugin.getProxy().getScheduler().runAsync(plugin, () -> this.plugin.getMongoService().save(authPlayer));
         BungeeUtil.sendCustomData(player, player.getUniqueId().toString(), "main");
     }
 }

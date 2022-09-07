@@ -27,12 +27,6 @@ public class IncognitoCommand {
     public void handle(CorePlayer corePlayer) {
         corePlayer.setIncognito(!corePlayer.isIncognito());
         TextUtil.message(corePlayer.source(), "&8[&3&l!&8] &7Incognito zostalo " + (corePlayer.isIncognito() ? "&awlaczone" : "&cwylaczone") + "&7!");
-        this.plugin.getActionBarNoticeCache().add(corePlayer.getUuid(), ActionBarNotice.builder()
-                .type(ActionBarNoticeType.INCOGNITO)
-                .text("&aPomyslnie " + (corePlayer.isIncognito() ? "wlaczyles" : "wylaczyles") + " incognito! &2&l✔")
-                .expireTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(20))
-                .build());
-
         this.plugin.getPlayerNameTagService().updateDummy(corePlayer);
 
     }

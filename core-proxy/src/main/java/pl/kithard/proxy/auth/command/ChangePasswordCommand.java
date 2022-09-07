@@ -50,7 +50,7 @@ public class ChangePasswordCommand extends Command {
         }
 
         authPlayer.setPassword(newPassword);
-        authPlayer.setNeedSave(true);
+        this.plugin.getProxy().getScheduler().runAsync(plugin, () -> this.plugin.getMongoService().save(authPlayer));
         player.sendMessage(new TextComponent(TextUtil.color("&aPomyslnie ustawiono nowe haslo!")));
     }
 }

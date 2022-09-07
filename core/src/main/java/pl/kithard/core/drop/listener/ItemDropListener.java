@@ -64,7 +64,7 @@ public class ItemDropListener implements Listener {
                     itemInHand.containsEnchantment(Enchantment.SILK_TOUCH) ? Material.STONE : Material.COBBLESTONE, 1));
         }
 
-        for (DropItem dropItem : this.plugin.getDropItemCache().getDropItems()) {
+        for (DropItem dropItem : this.plugin.getDropItemConfiguration().getDropItems()) {
             double chance = DropUtil.calculateChanceFromStone(dropItem, corePlayer, serverSettings);
 
             if (!RandomUtil.getChance(chance)) {
@@ -92,15 +92,15 @@ public class ItemDropListener implements Listener {
                             player.getUniqueId(),
                             ActionBarNotice.builder()
                                     .type(ActionBarNoticeType.STONE_DROP)
-                                    .text("&8» &7Wydropiles&8: &b" + dropItem.getItem())
-                                    .expireTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(1))
+                                    .text("&8» &7Wydropiles&8: &b" + dropItem.getItem().getType().toString() + "&7(&f" + dropItem.getItem().getAmount() + "x&8,&f " + dropItem.getExp() + "exp&7)")
+                                    .expireTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(2))
                                     .build()
                     );
                 }
             }
         }
 
-        player.giveExp(8);
+        player.giveExp(2);
         event.setCancelled(true);
         block.setType(Material.AIR);
 

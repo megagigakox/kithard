@@ -1,4 +1,4 @@
-package pl.kithard.core.achievement;
+package pl.kithard.core.player.achievement;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -182,8 +182,8 @@ public class AchievementCache {
                                 .id(8)
                                 .type(AchievementType.SPEND_TIME)
                                 .reward(AchievementReward.builder()
-                                        .friendlyName("10x Rzucane TNT")
-                                        .itemStack(ItemStackBuilder.of(CustomRecipe.THROWN_TNT.getItem().clone()).amount(10).asItemStack())
+                                        .friendlyName("128x TNT")
+                                        .itemStack(ItemStackBuilder.of(Material.TNT).amount(128).asItemStack())
                                         .build())
                                 .required(TimeUnit.HOURS.toMillis(40))
                                 .build(),

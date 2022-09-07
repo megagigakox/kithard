@@ -58,24 +58,6 @@ public class CustomRecipeListener implements Listener {
                 }
             }
         }
-
-        else if (result.equals(CustomRecipe.THROWN_TNT.getItem())) {
-
-            ItemStack tnt = new ItemStack(Material.TNT, 64);
-
-            for (int i = 1; i <= 9; i++) {
-                if (inventory.getItem(i) != null) {
-                    ItemStack inventoryItem = inventory.getItem(i);
-
-                    if (inventoryItem.getType() != tnt.getType()) {
-                        event.getInventory().setResult(new ItemStack(Material.AIR));
-                    }
-                    if (inventoryItem.getAmount() < tnt.getAmount()) {
-                        event.getInventory().setResult(new ItemStack(Material.AIR));
-                    }
-                }
-            }
-        }
     }
 
     @EventHandler
@@ -104,31 +86,6 @@ public class CustomRecipeListener implements Listener {
                 for (int i = 1; i <= 9; i++) {
                     InventoryUtil.removeItem(inventory,i, 64);
                     inventory.setResult(CustomRecipe.COBBLEX.getItem());
-                }
-            }
-        }
-
-        else if (result.equals(CustomRecipe.THROWN_TNT.getItem())) {
-            ItemStack tnt = new ItemStack(Material.TNT, 64);
-
-            for (int i = 1; i <= 9; i++) {
-                if (inventory.getItem(i) != null) {
-
-                    ItemStack inventoryItem = inventory.getItem(i);
-                    if (inventoryItem.getType() != tnt.getType()) {
-                        event.setCancelled(true);
-                    }
-                    if (inventoryItem.getAmount() < tnt.getAmount()) {
-                        event.setCancelled(true);
-                    }
-                }
-
-            }
-            inventory.setResult(new ItemStack(Material.AIR));
-            if (!event.isCancelled()){
-                for (int i = 1; i <= 9; i++) {
-                    InventoryUtil.removeItem(inventory, i, 64);
-                    inventory.setResult(CustomRecipe.THROWN_TNT.getItem());
                 }
             }
         }
@@ -243,38 +200,6 @@ public class CustomRecipeListener implements Listener {
 
         }
 
-        else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.THROWN_TNT.getItem().getItemMeta().getDisplayName())) {
-
-            if (LocationUtil.isInSpawn(player.getLocation())) {
-                TextUtil.message(player, "&8[&4&l!&8] &cNie możesz &4rzucic &crzucaka na spawnie!");
-                event.setCancelled(true);
-                return;
-            }
-
-            CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
-
-            if (corePlayer.getCooldown().getTntThrownDelay() > System.currentTimeMillis()) {
-                TextUtil.message(player, "&8[&4&l!&8] &cRzucane TNT mozesz rzucic dopiero za &4" +
-                        TimeUtil.formatTimeMillis(
-                                corePlayer.getCooldown().getTntThrownDelay() - System.currentTimeMillis()));
-
-                event.setCancelled(true);
-                return;
-            }
-
-            if (this.plugin.getGuildCache().isNotAllowed(player, player.getLocation(), GuildPermission.THROW_TNT_PLACEMENT)) {
-                event.setCancelled(true);
-                return;
-            }
-
-
-            event.setCancelled(true);
-            corePlayer.getCooldown().setTntThrownDelay(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(10));
-            player.getWorld().spawn(event.getBlock().getLocation(), TNTPrimed.class);
-
-            InventoryUtil.removeItem(player, CustomRecipe.THROWN_TNT.getItem());
-        }
-
 
     }
 
@@ -296,36 +221,17 @@ public class CustomRecipeListener implements Listener {
             return;
         }
 
-        if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.THROWN_TNT.getItem().getItemMeta().getDisplayName())) {
+        if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.VIP_VOUCHER.getItem().getItemMeta().getDisplayName())) {
 
-            if (LocationUtil.isInSpawn(player.getLocation())) {
-                TextUtil.message(player, "&8[&4&l!&8] &cNie możesz &4rzucic &crzucaka na spawnie!");
-                event.setCancelled(true);
-                return;
+            if (itemInHand.getAmount() > 1) {
+                itemInHand.setAmount(itemInHand.getAmount() - 1);
+            } else {
+                player.setItemInHand(null);
             }
 
-            CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent addtemp vip 30d");
+            TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
 
-            if (corePlayer.getCooldown().getTntThrownDelay() > System.currentTimeMillis()) {
-                TextUtil.message(player, "&8[&4&l!&8] &cRzucane TNT mozesz rzucic dopiero za &4" +
-                        TimeUtil.formatTimeMillis(
-                                corePlayer.getCooldown().getTntThrownDelay() - System.currentTimeMillis()));
-
-                event.setCancelled(true);
-                return;
-            }
-
-            if (this.plugin.getGuildCache().isNotAllowed(player, player.getLocation(), GuildPermission.THROW_TNT_PLACEMENT)) {
-                event.setCancelled(true);
-                return;
-            }
-
-            corePlayer.getCooldown().setTntThrownDelay(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(10));
-
-            Entity entity = player.getWorld().spawn(player.getLocation(), TNTPrimed.class);
-            entity.setVelocity(player.getLocation().getDirection().multiply(1));
-
-            InventoryUtil.removeItem(player, CustomRecipe.THROWN_TNT.getItem());
         }
 
         else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.SVIP_VOUCHER.getItem().getItemMeta().getDisplayName())) {
@@ -336,7 +242,7 @@ public class CustomRecipeListener implements Listener {
                 player.setItemInHand(null);
             }
 
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent set svipedycja");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent addtemp svip 30d");
             TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
 
         }
@@ -348,7 +254,7 @@ public class CustomRecipeListener implements Listener {
                 player.setItemInHand(null);
             }
 
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent set mvpedycja");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent sponsor vip 30d");
             TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
 
         }
@@ -360,9 +266,8 @@ public class CustomRecipeListener implements Listener {
                 player.setItemInHand(null);
             }
 
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "turbo " + player.getName() + " 30min");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "turbo " + player.getName() + " 30m");
             TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
-
         }
         else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.TURBO_DROP_VOUCHER_60MIN.getItem().getItemMeta().getDisplayName())) {
 
@@ -374,7 +279,6 @@ public class CustomRecipeListener implements Listener {
 
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "turbo " + player.getName() + " 1h");
             TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
-
         }
     }
 

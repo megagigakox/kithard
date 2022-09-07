@@ -22,7 +22,7 @@ public class PlayerSettingsGui {
 
     public void open(Player player) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Ustawienia:"))
+                .title(TextUtil.component("&3&lUstawienia"))
                 .rows(3)
                 .create();
 

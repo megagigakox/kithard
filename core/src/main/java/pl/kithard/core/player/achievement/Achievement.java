@@ -1,4 +1,4 @@
-package pl.kithard.core.achievement;
+package pl.kithard.core.player.achievement;
 
 public class Achievement {
 

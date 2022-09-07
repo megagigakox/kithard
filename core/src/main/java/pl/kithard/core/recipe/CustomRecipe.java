@@ -2,6 +2,7 @@ package pl.kithard.core.recipe;
 
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.util.TextUtil;
 
@@ -54,15 +55,6 @@ public enum CustomRecipe {
             )))
             .glow()
             .build()),
-    THROWN_TNT(ItemBuilder.from(new ItemStack(Material.TNT,1))
-            .name(TextUtil.component("&8» &c&lRzucane TNT &8«"))
-            .lore(TextUtil.component(Arrays.asList(
-                    "",
-                    " &7Kliknij aby wyrzucic",
-                    " &7Odpalone &cTNT &7w powietrze!"
-            )))
-            .glow()
-            .build()),
     ANTI_LEGS(ItemBuilder.from(new ItemStack(Material.GOLD_BOOTS,1))
             .name(TextUtil.component("&8» &6&lAnty Nogi &8«"))
             .lore(TextUtil.component(Arrays.asList(
@@ -84,6 +76,14 @@ public enum CustomRecipe {
                     "",
                     " &aPoloż na ziemi aby ja otworzyc!"
             )))
+            .build()),
+    VIP_VOUCHER(ItemBuilder.from(new ItemStack(Material.PAPER,1))
+            .name(TextUtil.component("&8» &7Voucher na: &eVIP &7na edycje &8«"))
+            .lore(TextUtil.component(Arrays.asList(
+                    "",
+                    " &7Kliknij aby aktywowac!"
+            )))
+            .glow()
             .build()),
     SVIP_VOUCHER(ItemBuilder.from(new ItemStack(Material.PAPER,1))
             .name(TextUtil.component("&8» &7Voucher na: &6SVIP &7na edycje &8«"))
@@ -118,6 +118,12 @@ public enum CustomRecipe {
             .glow()
             .build()),
     ENDER_CHEST(ItemBuilder.from(new ItemStack(Material.ENDER_CHEST,1))
+            .build()),
+    PICKAXE633(ItemBuilder.from(new ItemStack(Material.DIAMOND_PICKAXE,1))
+            .name(TextUtil.component("&3&lLegendarny kilof 6/3/3"))
+            .enchant(Enchantment.DIG_SPEED, 6)
+            .enchant(Enchantment.LOOT_BONUS_BLOCKS, 3)
+            .enchant(Enchantment.DURABILITY, 3)
             .build());
 
     private final ItemStack item;

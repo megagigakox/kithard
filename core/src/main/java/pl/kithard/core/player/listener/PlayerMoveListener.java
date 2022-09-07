@@ -12,6 +12,7 @@ import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.player.combat.PlayerCombat;
 import pl.kithard.core.util.LocationUtil;
 import pl.kithard.core.util.TextUtil;
+import pl.kithard.core.util.TitleUtil;
 
 public class PlayerMoveListener implements Listener {
 
@@ -24,8 +25,8 @@ public class PlayerMoveListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onMove(PlayerMoveEvent event) {
-        Location locFrom = event.getFrom(), locTo = event.getTo();
-        if (locFrom.getBlockX() == locTo.getBlockX() && locFrom.getBlockZ() == locTo.getBlockZ()) {
+        Location from = event.getFrom(), to = event.getTo();
+        if (from.getBlockX() == to.getBlockX() && from.getBlockZ() == to.getBlockZ()) {
             return;
         }
 
@@ -51,11 +52,9 @@ public class PlayerMoveListener implements Listener {
         }
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
-        PlayerCombat u = corePlayer.getCombat();
+        PlayerCombat combat = corePlayer.getCombat();
 
-        if (u.hasFight() && !player.hasPermission("kithard.antilogout.bypass")) {
-            Location to = event.getTo();
-            Location from = event.getFrom();
+        if (combat.hasFight() && !player.hasPermission("kithard.antilogout.bypass")) {
             if ((from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY() || from.getBlockZ() != to.getBlockZ()) && LocationUtil.loc(61, -61, -61, 61, to)) {
                 event.setCancelled(true);
 
@@ -65,6 +64,21 @@ public class PlayerMoveListener implements Listener {
                 Vector vector = l.toVector().add(new Vector(0, 5, 0)).multiply(1.25 / distance);
                 player.setVelocity(vector.multiply(-1.5));
             }
+        }
+
+        if (corePlayer.getTeleport() != null) {
+            corePlayer.setTeleport(null);
+            TitleUtil.title(
+                    player,
+                    "&4Ruszyles sie!",
+                    "&cTeleportacja zostala przerwana.",
+                    20, 30, 20
+            );
+        }
+
+        if (this.plugin.getServerSettings().getFreeze() > System.currentTimeMillis() && !player.hasPermission("kithard.freeze.bypass")) {
+            event.setTo(event.getFrom());
+            event.setCancelled(true);
         }
     }
 

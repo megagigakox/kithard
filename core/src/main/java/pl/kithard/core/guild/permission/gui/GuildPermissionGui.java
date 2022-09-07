@@ -31,7 +31,7 @@ public class GuildPermissionGui {
 
     public void openMembersList(Player player, Guild guild) {
         PaginatedGui gui = Gui.paginated()
-                .title(TextUtil.component("&9&lCzlonkowie"))
+                .title(TextUtil.component("&3&lCzlonkowie"))
                 .rows(6)
                 .pageSize(28)
                 .create();
@@ -164,7 +164,7 @@ public class GuildPermissionGui {
 
     public void openPermissionSchemeList(Player player, Guild guild) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&9&lSchematy uprawnien"))
+                .title(TextUtil.component("&3&lSchematy uprawnien"))
                 .rows(3)
                 .create();
 

@@ -10,6 +10,7 @@ import pl.kithard.core.util.GuiHelper;
 import pl.kithard.core.util.InventoryUtil;
 import pl.kithard.core.util.TextUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -290,37 +291,28 @@ public class CustomRecipeGui {
 
         this.fill(gui, player);
 
-        gui.setItem(2, 2, ItemBuilder.from(Material.TNT)
-                .amount(64)
+        gui.setItem(2, 2, ItemBuilder.from(Material.GOLD_BLOCK)
                 .asGuiItem());
-        gui.setItem(2, 3, ItemBuilder.from(Material.TNT)
-                .amount(64)
+        gui.setItem(2, 3, ItemBuilder.from(Material.GOLD_BLOCK)
                 .asGuiItem());
-        gui.setItem(2, 4, ItemBuilder.from(Material.TNT)
-                .amount(64)
+        gui.setItem(2, 4, ItemBuilder.from(Material.GOLD_BLOCK)
                 .asGuiItem());
 
-        gui.setItem(3, 2, ItemBuilder.from(Material.TNT)
-                .amount(64)
+        gui.setItem(3, 2, ItemBuilder.from(Material.GOLD_BLOCK)
                 .asGuiItem());
-        gui.setItem(3, 3, ItemBuilder.from(Material.TNT)
-                .amount(64)
+        gui.setItem(3, 3, ItemBuilder.from(Material.DIAMOND_BOOTS)
                 .asGuiItem());
-        gui.setItem(3, 4, ItemBuilder.from(Material.TNT)
-                .amount(64)
+        gui.setItem(3, 4, ItemBuilder.from(Material.GOLD_BLOCK)
                 .asGuiItem());
 
-        gui.setItem(4, 2, ItemBuilder.from(Material.TNT)
-                .amount(64)
+        gui.setItem(4, 2, ItemBuilder.from(Material.GOLD_BLOCK)
                 .asGuiItem());
-        gui.setItem(4, 3, ItemBuilder.from(Material.TNT)
-                .amount(64)
+        gui.setItem(4, 3, ItemBuilder.from(Material.GOLD_BLOCK)
                 .asGuiItem());
-        gui.setItem(4, 4, ItemBuilder.from(Material.TNT)
-                .amount(64)
+        gui.setItem(4, 4, ItemBuilder.from(Material.GOLD_BLOCK)
                 .asGuiItem());
 
-        gui.setItem(3,6, ItemBuilder.from(CustomRecipe.THROWN_TNT.getItem())
+        gui.setItem(3,6, ItemBuilder.from(CustomRecipe.ANTI_LEGS.getItem())
                 .asGuiItem());
 
         gui.setItem(3,7, ItemBuilder.from(Material.WORKBENCH)
@@ -332,8 +324,8 @@ public class CustomRecipeGui {
                 .asGuiItem(inventoryClickEvent ->
                         craft(
                                 player,
-                                Collections.singletonList(new ItemStack(Material.TNT, 576)),
-                                CustomRecipe.THROWN_TNT)));
+                                Arrays.asList(new ItemStack(Material.GOLD_BLOCK, 8), new ItemStack(Material.DIAMOND_BOOTS)),
+                                CustomRecipe.ANTI_LEGS)));
 
 
         gui.setDefaultClickAction(inventoryClickEvent -> inventoryClickEvent.setCancelled(true));
@@ -403,7 +395,7 @@ public class CustomRecipeGui {
                 asGuiItem(inventoryClickEvent -> openStoneGenerator(player)));
         gui.setItem(6,6, ItemBuilder.from(CustomRecipe.COBBLEX.getItem())
                 .asGuiItem(inventoryClickEvent -> openCobbleX(player)));
-        gui.setItem(6,7, ItemBuilder.from(CustomRecipe.THROWN_TNT.getItem())
+        gui.setItem(6,7, ItemBuilder.from(CustomRecipe.ANTI_LEGS.getItem())
                 .asGuiItem(inventoryClickEvent -> openThrownTnt(player)));
         gui.setItem(6,8, ItemBuilder.from(CustomRecipe.ENDER_CHEST.getItem())
                 .asGuiItem(inventoryClickEvent -> openEnderChest(player)));

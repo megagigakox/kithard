@@ -1,11 +1,11 @@
-package pl.kithard.core.achievement;
+package pl.kithard.core.player.achievement;
 
 import org.bukkit.inventory.ItemStack;
 
 public class AchievementReward {
 
     private final String friendlyName;
-    private final ItemStack itemStack;
+    private final transient ItemStack itemStack;
 
     public AchievementReward(String friendlyName, ItemStack itemStack) {
         this.friendlyName = friendlyName;

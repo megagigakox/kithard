@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import pl.kithard.core.api.util.TimeUtil;
 import pl.kithard.core.player.nametag.PlayerNameTagService;
 import pl.kithard.core.player.ranking.PlayerRankingService;
 import pl.kithard.core.CorePlugin;
@@ -48,6 +49,7 @@ public class PlayerDataListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        this.plugin.getAntiMacroCache().getUuidClicksPerSecondMap().put(player.getUniqueId(), 0);
         CorePlayer corePlayer = this.corePlayerCache.findByUuid(player.getUniqueId());
 
         event.setJoinMessage(null);
@@ -59,6 +61,7 @@ public class PlayerDataListener implements Listener {
                     player.getAddress().getHostString()
             );
             corePlayer.setNeedSave(true);
+            corePlayer.setProtection(TimeUtil.timeFromString("5m") + System.currentTimeMillis());
 
             this.corePlayerCache.add(corePlayer);
             this.playerRankingService.add(corePlayer);
@@ -67,11 +70,11 @@ public class PlayerDataListener implements Listener {
             player.getInventory().setArmorContents(null);
             player.setGameMode(GameMode.SURVIVAL);
 
-            LocationUtil.randomTeleport(player);
+            player.teleport(LocationUtil.getRadnomLocation());
             InventoryUtil.addItem(
                     player,
                     Arrays.asList(
-                            ItemBuilder.from(new ItemStack(Material.DIAMOND_PICKAXE))
+                            ItemBuilder.from(new ItemStack(Material.IRON_PICKAXE))
                             .enchant(Enchantment.DIG_SPEED, 3)
                             .enchant(Enchantment.DURABILITY, 1)
                             .build(),

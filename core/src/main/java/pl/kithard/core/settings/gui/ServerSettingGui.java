@@ -20,7 +20,7 @@ public class ServerSettingGui {
     public void open(Player player) {
 
         PaginatedGui gui = Gui.paginated()
-                .title(TextUtil.component("&7Zarzadzanie serwerem:"))
+                .title(TextUtil.component("&3&lZarzadzanie serwerem"))
                 .rows(3)
                 .create();
 

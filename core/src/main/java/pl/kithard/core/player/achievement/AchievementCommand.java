@@ -1,4 +1,4 @@
-package pl.kithard.core.achievement;
+package pl.kithard.core.player.achievement;
 
 import net.dzikoysk.funnycommands.stereotypes.FunnyCommand;
 import net.dzikoysk.funnycommands.stereotypes.FunnyComponent;

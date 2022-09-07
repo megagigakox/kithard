@@ -1,66 +1,64 @@
 package pl.kithard.core.itemshop;
 
-import dev.triumphteam.gui.builder.item.ItemBuilder;
+import eu.okaeri.configs.OkaeriConfig;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import pl.kithard.core.player.settings.PlayerSettings;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.CorePlayer;
+import pl.kithard.core.player.settings.PlayerSettings;
 import pl.kithard.core.util.TextUtil;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ItemShopServiceCache {
+public class ItemShopServiceCache extends OkaeriConfig {
 
     private final CorePlugin plugin;
-    private final Map<String, ItemShopService> services = new HashMap<>();
+    private Map<String, ItemShopService> services = new HashMap<>();
 
     public ItemShopServiceCache(CorePlugin plugin) {
         this.plugin = plugin;
     }
 
-    public void init() {
-        this.services.clear();
-        Configuration config = this.plugin.getItemShopServiceConfiguration().getCustomConfig();
-
-        for (String name : config.getConfigurationSection("services").getKeys(false)) {
-            ItemShopService itemShopService = new ItemShopService(name,
-                    config.getStringList("services." + name + ".commands"),
-                    config.getStringList("services." + name + ".messages"));
-
-            this.services.put(name, itemShopService);
-
-            if (config.getConfigurationSection("services." + name + ".items") != null) {
-                for (String item : config.getConfigurationSection("services." + name + ".items").getKeys(false)) {
-
-                    List<String> enchantList = config.getStringList("services." + name + ".items." + item + ".enchantments");
-                    String[] split = config.getString("services." + name + ".items." + item + ".type").split(":");
-
-                    ItemStack itemStack = ItemBuilder.from(new ItemStack(Material.getMaterial(split[0]), Integer.parseInt(split[1])))
-                            .name(TextUtil.component(config.getString("services." + name + ".items." + item + ".name")))
-                            .lore(TextUtil.component(config.getStringList("services." + name + ".items." + item + ".lore")))
-                            .build();
-
-                    if (enchantList.size() > 0) {
-                        for (String enchant : enchantList) {
-
-                            String[] enchantArray = enchant.split(":");
-                            String enchantment = enchantArray[0];
-                            int enchantMultiplier = Integer.parseInt(enchantArray[1]);
-
-                            itemStack.addUnsafeEnchantment(Enchantment.getByName(enchantment), enchantMultiplier);
-                        }
-                    }
-
-                    itemShopService.getItems().add(itemStack);
-                }
-            }
-        }
-    }
+//    public void init() {
+//        this.services.clear();
+//        Configuration config = this.plugin.getItemShopServiceConfiguration().getCustomConfig();
+//
+//        for (String name : config.getConfigurationSection("services").getKeys(false)) {
+//            ItemShopService itemShopService = new ItemShopService(name,
+//                    config.getStringList("services." + name + ".commands"),
+//                    config.getStringList("services." + name + ".messages"));
+//
+//            this.services.put(name, itemShopService);
+//
+//            if (config.getConfigurationSection("services." + name + ".items") != null) {
+//                for (String item : config.getConfigurationSection("services." + name + ".items").getKeys(false)) {
+//
+//                    List<String> enchantList = config.getStringList("services." + name + ".items." + item + ".enchantments");
+//                    String[] split = config.getString("services." + name + ".items." + item + ".type").split(":");
+//
+//                    ItemStack itemStack = ItemBuilder.from(new ItemStack(Material.getMaterial(split[0]), Integer.parseInt(split[1])))
+//                            .name(TextUtil.component(config.getString("services." + name + ".items." + item + ".name")))
+//                            .lore(TextUtil.component(config.getStringList("services." + name + ".items." + item + ".lore")))
+//                            .build();
+//
+//                    if (enchantList.size() > 0) {
+//                        for (String enchant : enchantList) {
+//
+//                            String[] enchantArray = enchant.split(":");
+//                            String enchantment = enchantArray[0];
+//                            int enchantMultiplier = Integer.parseInt(enchantArray[1]);
+//
+//                            itemStack.addUnsafeEnchantment(Enchantment.getByName(enchantment), enchantMultiplier);
+//                        }
+//                    }
+//
+//                    itemShopService.getItems().add(itemStack);
+//                }
+//            }
+//        }
+//    }
 
     public ItemShopService findByKey(String key) {
         return this.services.get(key);
