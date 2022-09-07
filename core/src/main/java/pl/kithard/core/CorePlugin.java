@@ -421,7 +421,8 @@ public final class CorePlugin extends JavaPlugin {
                         new FreezeCommand(this),
                         new DisableProtectionCommand(this),
                         new KitManageCommand(this),
-                        new CustomEnchantCommand(this)
+                        new CustomEnchantCommand(this),
+                        new GuildMemberNeedHelpCommand(this)
                 ))
                 .completer("itemShopServices", (context, prefix, limit) -> CommandUtils.collectCompletions(
                         this.itemShopServiceCache.getServices().values(),

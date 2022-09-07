@@ -40,8 +40,9 @@ public class CustomEnchantConfiguration extends OkaeriConfig {
                 new CustomEnchant("ZAKLETY OGIEN 1", 11, 25, 1, Enchantment.FIRE_ASPECT),
                 new CustomEnchant("NIEZNISZCZALNOSC 3", 12, 30, 3, Enchantment.DURABILITY),
                 new CustomEnchant("NIEZNISZCZALNOSC 2", 21, 20, 2, Enchantment.DURABILITY),
-                new CustomEnchant("NIEZNISZCZALNOSC 1", 30, 15, 1, Enchantment.DURABILITY)))
-        );
+                new CustomEnchant("NIEZNISZCZALNOSC 1", 30, 15, 1, Enchantment.DURABILITY),
+                new CustomEnchant("KNOCKBACK 2", 13, 40, 2, Enchantment.KNOCKBACK),
+                new CustomEnchant("KNOCKBACK 1", 22, 25, 1, Enchantment.KNOCKBACK))));
 
         this.customEnchants.add(new CustomEnchantWrapper(CustomEnchantType.TOOLS, Arrays.asList(
                 new CustomEnchant("WYDAJNOSC 5", 10, 40, 5, Enchantment.DIG_SPEED),

@@ -7,10 +7,11 @@ public enum ActionBarNoticeType {
     HP_INFO(3),
     TURBO_DROP(4),
     PROTECTION(5),
-    GUILD_TERRAIN(6),
-    GUILD_TERRAIN_REGEN(7),
-    STONE_DROP(8),
-    PERISCOPE(9);
+    NEED_HELP(6),
+    GUILD_TERRAIN(7),
+    GUILD_TERRAIN_REGEN(8),
+    STONE_DROP(9),
+    PERISCOPE(10);
 
     private final int priority;
 

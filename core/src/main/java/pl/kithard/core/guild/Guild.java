@@ -19,6 +19,7 @@ import pl.kithard.core.util.TextUtil;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @DatabaseEntity(database = "core", collection = "guilds")
 public class Guild extends DatabaseEntry {
@@ -235,6 +236,12 @@ public class Guild extends DatabaseEntry {
 
     public Set<GuildMember> getMembers() {
         return members;
+    }
+
+    public Set<GuildMember> getOnlineMembers() {
+        return this.members.stream()
+                .filter(guildMember -> Bukkit.getPlayer(guildMember.getUuid()) != null)
+                .collect(Collectors.toSet());
     }
 
     public GuildMember findMemberByName(String name) {

@@ -36,7 +36,8 @@ public class GuildCommand {
                 "&8» &f/g magazyn &8- &7Otwiera magazyn gildyjny.",
                 "&8» &f/g panel &8- &7Otwiera panel gildyjny.",
                 "&8» &f/g wolnemiejsce &8- &7Znajduje wolny teren.",
-                "&8» &f/g alert (wiadomosc) &8- &7Wiadomosc do czlonkow gildii"
+                "&8» &f/g alert (wiadomosc) &8- &7Wiadomosc do czlonkow gildii.",
+                "&8» &f/g pp &8- &7Wysyla wiadomosc z prosba o pomoc do gildii."
         ));
     }
 }

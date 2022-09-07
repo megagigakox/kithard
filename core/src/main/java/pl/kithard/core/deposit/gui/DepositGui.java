@@ -20,7 +20,7 @@ public class DepositGui {
 
     public void open(Player player, CorePlayer corePlayer) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Schowek:"))
+                .title(TextUtil.component("&3&lDepozyt"))
                 .rows(5)
                 .create();
 
@@ -29,11 +29,11 @@ public class DepositGui {
         for (DepositItem depositItem : this.plugin.getDepositItemCache().getDepositItems()) {
             gui.setItem(depositItem.getSlot(), ItemStackBuilder.of(depositItem.getItem().clone())
                     .amount(depositItem.getLimit())
-                    .name("&b&l" + depositItem.getName())
+                    .name("&3&l" + depositItem.getName())
                     .lore(
                             "",
-                            " &8» &7W schowku posiadasz: &f" + corePlayer.getAmountOfDepositItem(depositItem.getId()),
-                            " &8» &7Aktualny limit w eq: &f" + depositItem.getLimit(),
+                            " &8» &7W schowku posiadasz&8: &f" + corePlayer.getAmountOfDepositItem(depositItem.getId()),
+                            " &8» &7Aktualny limit w eq&8: &f" + depositItem.getLimit(),
                             "",
                             " &7Kliknij &flewym &7aby wyplacic limit!",
                             " &7Kliknij &fprawym &7aby wplacic limit!"
@@ -71,16 +71,8 @@ public class DepositGui {
 
                                 ItemStack toRemove = depositItem.getItem().clone();
                                 toRemove.setAmount(amountInInventory);
+                                InventoryUtil.removeItemIgnoreItemMeta(player, toRemove);
 
-                                if (toRemove.getType() != Material.TNT) {
-
-                                    InventoryUtil.removeItemIgnoreItemMeta(player, toRemove);
-
-                                } else {
-
-                                    InventoryUtil.removeItemByDisplayName(player, toRemove);
-
-                                }
                             }
                         }
 

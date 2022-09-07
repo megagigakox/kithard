@@ -69,7 +69,9 @@ public class SpecialDropsListener implements Listener {
                     double chance = dropItem.getChance();
                     if (RandomUtil.getChance(chance)) {
                         i++;
-                        InventoryUtil.addItem(player, dropItem.getItem());
+                        ItemStack itemStack = dropItem.getItem().clone();
+                        itemStack.setAmount(RandomUtil.getRandInt(dropItem.getMin(), dropItem.getMax()));
+                        InventoryUtil.addItem(player, itemStack);
                         for (Player it : Bukkit.getOnlinePlayers()) {
 
                             CorePlayer itPlayer = this.plugin.getCorePlayerCache().findByPlayer(it);
@@ -77,7 +79,8 @@ public class SpecialDropsListener implements Listener {
                                 continue;
                             }
 
-                            TextUtil.message(it, "&8» &7Gracz &f" + player.getName() + " &7otworzyl &bMagiczna Skrzynke &7i wydropil: &b" + dropItem.getName() + " &7(&f" + dropItem.getItem().getAmount() + "x&7)");
+
+                            TextUtil.message(it, "&8» &7Gracz &f" + player.getName() + " &7otworzyl &b&lMagiczna Skrzynke &7i wydropil: &b" + dropItem.getName() + " &7(&f" + itemStack.getAmount() + "x&7)");
                         }
                     }
                 }
@@ -119,7 +122,7 @@ public class SpecialDropsListener implements Listener {
                     double chance = dropItem.getChance();
                     if (RandomUtil.getChance(chance)) {
                         i++;
-                        ItemStack itemStack = dropItem.getItem();
+                        ItemStack itemStack = dropItem.getItem().clone();
                         itemStack.setAmount(RandomUtil.getRandInt(dropItem.getMin(), dropItem.getMax()));
                         InventoryUtil.addItem(player, itemStack);
                         TextUtil.message(player, "&8» &7Otworzyles &2&lCobbleX &7i droplo ci: &b" + dropItem.getName() + " &7(&f" + itemStack.getAmount() + "x&7)");
