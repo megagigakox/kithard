@@ -30,7 +30,7 @@ public class FreezeCommand {
         long time = TimeUtil.timeFromString(args[0]) + System.currentTimeMillis();
         ServerSettings serverSettings = this.plugin.getServerSettings();
         serverSettings.setFreeze(time);
-        this.plugin.getExecutorService().execute(() -> this.plugin.getServerSettingsService().save(serverSettings));
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getServerSettingsService().save(serverSettings));
         TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie ustawiono zamrozenie na: &2" + TimeUtil.formatTimeMillis(time - System.currentTimeMillis()));
 
     }

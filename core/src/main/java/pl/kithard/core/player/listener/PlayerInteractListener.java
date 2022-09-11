@@ -1,8 +1,10 @@
 package pl.kithard.core.player.listener;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,6 +14,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.Button;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.CorePlayer;
+import pl.kithard.core.player.combat.PlayerCombat;
+import pl.kithard.core.recipe.CustomRecipe;
 import pl.kithard.core.util.LocationUtil;
 import pl.kithard.core.util.TextUtil;
 
@@ -26,6 +30,7 @@ public class PlayerInteractListener implements Listener {
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
+
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -89,11 +94,25 @@ public class PlayerInteractListener implements Listener {
 
             List<Player> playersInRadius = LocationUtil.getPlayersInRadius(event.getClickedBlock().getLocation(), 5, Material.WOOD_PLATE);
             if (playersInRadius.size() == 1) {
-                TextUtil.message(event.getPlayer(), "&8[&4&l!&8] &cNie mozesz sie teleportowac sam!");
+                TextUtil.message(player, "&8[&4&l!&8] &cNie mozesz sie teleportowac sam!");
                 return;
             }
 
-            randomTeleport(playersInRadius, 2);
+            int i = 0;
+            Location randomLocation = LocationUtil.getRadnomLocation();
+            for (Player radius : playersInRadius) {
+                if (i == 2) {
+                    return;
+                }
+
+                CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(radius);
+                corePlayer.getCooldown().setGtpFightDelay(TimeUnit.SECONDS.toMillis(3) + System.currentTimeMillis());
+                corePlayer.getCombat().setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
+                radius.getActivePotionEffects().forEach(potionEffect -> radius.removePotionEffect(potionEffect.getType()));
+                radius.setAllowFlight(false);
+                radius.teleport(randomLocation);
+                i++;
+            }
         }
     }
 
@@ -137,26 +156,49 @@ public class PlayerInteractListener implements Listener {
 
             player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
             player.teleport(LocationUtil.getRadnomLocation());
-            for (Player it : playersInRadius) {
-                it.teleport(player.getLocation());
-                it.setAllowFlight(false);
-                it.getActivePotionEffects().forEach(potionEffect -> it.removePotionEffect(potionEffect.getType()));
+            CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+            corePlayer.getCooldown().setGtpFightDelay(TimeUnit.SECONDS.toMillis(3) + System.currentTimeMillis());
+            corePlayer.getCombat().setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
+            for (Player radius : playersInRadius) {
+                CorePlayer radiusCorePlayer = this.plugin.getCorePlayerCache().findByPlayer(radius);
+                radiusCorePlayer.getCooldown().setGtpFightDelay(TimeUnit.SECONDS.toMillis(3) + System.currentTimeMillis());
+                radiusCorePlayer.getCombat().setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
+                radius.teleport(player.getLocation());
+                radius.setAllowFlight(false);
+                radius.getActivePotionEffects().forEach(potionEffect -> radius.removePotionEffect(potionEffect.getType()));
             }
         }
     }
 
-    public void randomTeleport(List<Player> players, int i) {
-        int a = 0;
+    @EventHandler
+    public void onClickBoots(final PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (player.getItemInHand().getItemMeta() == null) {
+            return;
+        }
 
-        for (Player target : players) {
-            if (a == i) {
-                return;
+        if (player.getItemInHand().getItemMeta().getDisplayName() == null) {
+            return;
+        }
+
+        if (player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.ANTI_LEGS.getItem().getItemMeta().getDisplayName())
+                && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+            event.setCancelled(true);
+            player.updateInventory();
+            List<Entity> near = player.getNearbyEntities(3.0, 3.0, 3.0);
+            for (Entity entity : near) {
+                if (entity instanceof Player) {
+                    Player nearest = (Player)entity;
+                    PlayerCombat playerCombat = this.plugin.getCorePlayerCache().findByPlayer(player).getCombat();
+                    PlayerCombat nearestCombat = this.plugin.getCorePlayerCache().findByPlayer(nearest).getCombat();
+                    if (!playerCombat.hasFight() || !nearestCombat.hasFight()) {
+                        continue;
+                    }
+
+                    player.teleport(nearest);
+                    player.setItemInHand(null);
+                }
             }
-
-            target.getActivePotionEffects().forEach(potionEffect -> target.removePotionEffect(potionEffect.getType()));
-            target.setAllowFlight(false);
-            target.teleport(LocationUtil.getRadnomLocation());
-            a++;
         }
     }
 
@@ -174,8 +216,7 @@ public class PlayerInteractListener implements Listener {
             }
 
             CorePlayer clickedCorePlayer = plugin.getCorePlayerCache().findByPlayer((Player) event.getRightClicked());
-
-            int toAddClicked = (int) (43.0 + (clickedCorePlayer.getPoints() - killerCorePlayer.getPoints()) * -0.25);
+            int toAddClicked = (int) (67.0 + (clickedCorePlayer.getPoints() - killerCorePlayer.getPoints()) * -0.25);
             if (toAddClicked <= 20) {
                 toAddClicked = 20;
             }
@@ -185,17 +226,14 @@ public class PlayerInteractListener implements Listener {
                 toRemoveClicked = 10;
             }
 
-            int add = (int) (43.0 + (killerCorePlayer.getPoints() - clickedCorePlayer.getPoints()) * -0.25);
+            int add = (int) (67.0 + (killerCorePlayer.getPoints() - clickedCorePlayer.getPoints()) * -0.25);
             if (add <= 20) {
                 add = 20;
             }
 
-            killerCorePlayer.getCooldown().setPointsInfoDelay(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(1));
-
-            TextUtil.message(player, "");
-            TextUtil.message(player, " &8» &7Za zabicie tego gracza dostaniesz &b&l+" + (clickedCorePlayer.getLastDeaths().containsKey(killerCorePlayer.getUuid()) ? "0" : add) + " &7punktow!");
-            TextUtil.message(player, " &8» &7Za zginiecie od tego gracza stracisz &c&l-" + (killerCorePlayer.getLastDeaths().containsKey(clickedCorePlayer.getUuid()) ? "0" : toRemoveClicked) + " &7punktow!");
-            TextUtil.message(player, "");
+            killerCorePlayer.getCooldown().setPointsInfoDelay(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(3));
+            TextUtil.message(player, "&7Jezeli zabijesz tego gracza dostaniesz&8: &b&l+" + (clickedCorePlayer.getLastDeaths().containsKey(killerCorePlayer.getUuid()) ? "0" : add) + " &7punktow!");
+            TextUtil.message(player, "&7Natomiast za zginiecie zostanie ci odebrane: &c&l-" + (killerCorePlayer.getLastDeaths().containsKey(clickedCorePlayer.getUuid()) ? "0" : toRemoveClicked) + " &7punktow!");
         }
     }
 }

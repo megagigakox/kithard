@@ -12,7 +12,6 @@ public enum GuildPermission {
     BEACON(new ItemStack(Material.BEACON), "Niszczenie beacona"),
     BEACON_USE(new ItemStack(Material.BEACON, 2), "Używanie beacona"),
     TNT_PLACEMENT(new ItemStack(Material.TNT), "Stawianie tnt"),
-    THROW_TNT_PLACEMENT(new ItemStack(Material.TNT, 2), "Rzucanie/stawianie rzucakow"),
     ANVIL_PLACEMENT(new ItemStack(Material.ANVIL), "Stawianie kowadel"),
     RED_STONE_PLACEMENT(new ItemStack(Material.REDSTONE), "Stawianie redstone"),
     BOY_FARMER_PLACEMENT(new ItemStack(Material.CLAY), "Stawianie boyfarmerow"),
@@ -64,7 +63,6 @@ public enum GuildPermission {
             SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzRiODlhZDA2ZDMxOGYwYWUxZWVhZjY2MGZlYTc4YzM0ZWI1NWQwNWYwMWUxY2Y5OTlmMzMxZmIzMmQzODk0MiJ9fX0="),
             "Przegladanie logow gildyjnych"
     );
-
 
     private final ItemStack icon;
     private final String name;

@@ -51,7 +51,6 @@ public class PlayerDataListener implements Listener {
         Player player = event.getPlayer();
         this.plugin.getAntiMacroCache().getUuidClicksPerSecondMap().put(player.getUniqueId(), 0);
         CorePlayer corePlayer = this.corePlayerCache.findByUuid(player.getUniqueId());
-
         event.setJoinMessage(null);
 
         if (corePlayer == null) {
@@ -69,6 +68,7 @@ public class PlayerDataListener implements Listener {
             player.getInventory().clear();
             player.getInventory().setArmorContents(null);
             player.setGameMode(GameMode.SURVIVAL);
+            player.setAllowFlight(false);
 
             player.teleport(LocationUtil.getRadnomLocation());
             InventoryUtil.addItem(
@@ -129,7 +129,7 @@ public class PlayerDataListener implements Listener {
         }
 
         this.plugin.getPlayerBackupFactory().create(player, PlayerBackupType.QUIT, "null", 0);
-        this.plugin.getExecutorService().execute(() -> this.plugin.getMongoService().save(corePlayer));
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getMongoService().save(corePlayer));
     }
 
 }

@@ -31,10 +31,7 @@ public class WhoIsCommand {
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByName(args[0]);
 
-
-
-        TextUtil.message(sender, "&7Json: &f" + this.plugin.getGson().toJson(corePlayer));
-        TextUtil.message(sender, "");
+        TextUtil.message(sender, "&7toString: &f" + corePlayer.toString());
         TextUtil.message(sender, "&7Gracz: &f" + corePlayer.getName());
         TextUtil.message(sender, "&7Tryb gamemode: &f" + ((corePlayer.source() == null) ? "offline" : corePlayer.source().getGameMode().toString().toUpperCase()));
         TextUtil.message(sender, "&7Tryb latania: &f" + ((corePlayer.source() == null) ? "offline" : (corePlayer.source().getAllowFlight() ? "wlaczony" : "wylaczony")));

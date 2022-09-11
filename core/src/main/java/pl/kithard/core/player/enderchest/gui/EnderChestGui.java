@@ -61,7 +61,7 @@ public class EnderChestGui {
             gui.setItem(slot, ItemStackBuilder.of(item.asItemStack()).asGuiItem(event -> {
                 if (event.getClick() == ClickType.LEFT) {
                     if (p.hasPermission(enderChest.getPermission())) {
-                        enderChest.openInventory(p);
+                        enderChest.openInventory(viewer);
                     } else {
                         viewer.closeInventory();
                         TextUtil.insufficientPermission(p, enderChest.getPermission());

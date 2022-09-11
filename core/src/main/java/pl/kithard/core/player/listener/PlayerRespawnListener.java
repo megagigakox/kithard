@@ -19,7 +19,6 @@ public class PlayerRespawnListener implements Listener {
 
     @EventHandler
     public void handle(PlayerRespawnEvent event) {
-
         Player player = event.getPlayer();
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
         PlayerCombat playerCombat = corePlayer.getCombat();

@@ -1,7 +1,6 @@
 package pl.kithard.core.deposit.task;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -35,25 +34,18 @@ public class DepositTask extends BukkitRunnable {
 
             CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
 
-            for (DepositItem depositItem : this.plugin.getDepositItemCache().getDepositItems()) {
-                int itemToRemove = InventoryUtil.countAmountForDeposit(player, depositItem.getItem());
+            for (DepositItem depositItem : this.plugin.getDepositItemConfiguration().getDepositItems()) {
+                int itemToRemove = InventoryUtil.countItemsIgnoreItemMeta(player, depositItem.getItem());
 
                 if (itemToRemove > depositItem.getLimit()) {
                     int amountToRemove = itemToRemove - depositItem.getLimit();
-
                     ItemStack itemStack = depositItem.getItem().clone();
                     itemStack.setAmount(amountToRemove);
-
-                    if (itemStack.getType() != Material.TNT) {
-                        InventoryUtil.remove(itemStack,player, amountToRemove);
-                    } else {
-                        InventoryUtil.removeItemByDisplayName(player, itemStack);
-                    }
-
+                    InventoryUtil.removeItemIgnoreItemMeta(player, itemStack);
                     corePlayer.addToDeposit(depositItem, amountToRemove);
                     TextUtil.message(player, depositItem.getMessage()
                             .replace("{AMOUNT}", String.valueOf(amountToRemove))
-                            .replace("{OWNED-AMOUNT}", String.valueOf(corePlayer.getAmountOfDepositItem(depositItem.getId()))));
+                            .replace("{OWNED-AMOUNT}", String.valueOf(corePlayer.getAmountOfDepositItem(depositItem.getName()))));
                 }
             }
         }

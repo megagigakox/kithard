@@ -31,6 +31,7 @@ public class KitSerdes implements ObjectSerializer<Kit> {
                 data.get("guiSlot", Integer.class),
                 data.get("permission", String.class),
                 data.get("cooldown", Long.class),
+                data.get("enable", Boolean.class),
                 data.get("icon", ItemStack.class),
                 data.getAsList("items", ItemStack.class));
     }

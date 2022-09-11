@@ -16,14 +16,14 @@ public class GeneratorFactory {
         Generator generator = new Generator(location);
         this.plugin.getGeneratorCache().add(generator);
 
-        this.plugin.getExecutorService().execute(() ->
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
                 this.plugin.getMongoService().insert(generator));
     }
 
     public void delete(Generator generator) {
         this.plugin.getGeneratorCache().remove(generator);
 
-        this.plugin.getExecutorService().execute(() ->
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
                 this.plugin.getMongoService().delete(generator));
     }
 

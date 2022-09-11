@@ -34,10 +34,11 @@ public class PlayerItemConsumeListener implements Listener {
             if (item.getDurability() == 0) {
                 corePlayer.addAchievementProgress(AchievementType.EATEN_GOLDEN_APPLES, 1);
                 player.addPotionEffect(
-                        new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1), true);
+                        new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1));
 
                 Bukkit.getScheduler().runTaskLater(plugin, () -> player.addPotionEffect(
-                        new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 2, true, true), true), 1L);
+                        new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 0)),
+                        1L);
 
             } else {
                 corePlayer.addAchievementProgress(AchievementType.EATEN_ENCHANTED_GOLDEN_APPLES, 1);
@@ -45,13 +46,13 @@ public class PlayerItemConsumeListener implements Listener {
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
 
                     player.addPotionEffect(
-                            new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1), true);
+                            new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1));
                     player.addPotionEffect(
-                            new PotionEffect(PotionEffectType.REGENERATION, 20 * 15, 0), true);
+                            new PotionEffect(PotionEffectType.REGENERATION, 20 * 15, 1));
                     player.addPotionEffect(
-                            new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 120, 0), true);
+                            new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 120, 0));
                     player.addPotionEffect(
-                            new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 120, 0), true);
+                            new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 120, 0));
 
                 },1L);
             }

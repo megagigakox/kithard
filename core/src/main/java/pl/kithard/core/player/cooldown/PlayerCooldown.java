@@ -3,20 +3,11 @@ package pl.kithard.core.player.cooldown;
 public class PlayerCooldown {
 
     private long helpOpDelay;
-    private long tntThrownDelay;
     private long chatDelay;
     private long commandsDelay;
     private long pointsInfoDelay;
     private long rankResetDelay;
-
-    public PlayerCooldown() {
-        this.helpOpDelay = 0L;
-        this.tntThrownDelay = 0L;
-        this.chatDelay = 0L;
-        this.commandsDelay = 0L;
-        this.pointsInfoDelay = 0L;
-        this.rankResetDelay = 0L;
-    }
+    private long gtpFightDelay;
 
     public long getHelpOpDelay() {
         return helpOpDelay;
@@ -24,14 +15,6 @@ public class PlayerCooldown {
 
     public void setHelpOpDelay(long helpOpDelay) {
         this.helpOpDelay = helpOpDelay;
-    }
-
-    public long getTntThrownDelay() {
-        return tntThrownDelay;
-    }
-
-    public void setTntThrownDelay(long tntThrownDelay) {
-        this.tntThrownDelay = tntThrownDelay;
     }
 
     public long getChatDelay() {
@@ -64,5 +47,13 @@ public class PlayerCooldown {
 
     public void setRankResetDelay(long rankResetDelay) {
         this.rankResetDelay = rankResetDelay;
+    }
+
+    public long getGtpFightDelay() {
+        return gtpFightDelay;
+    }
+
+    public void setGtpFightDelay(long gtpFightDelay) {
+        this.gtpFightDelay = gtpFightDelay;
     }
 }

@@ -22,7 +22,9 @@ import java.util.concurrent.TimeUnit;
 
 public class PlayerCommandPreprocessListener implements Listener {
 
-    private final static String[] DISALLOWED_COMMANDS = {"me",
+    private final static String[] DISALLOWED_COMMANDS = {
+            "me",
+            "minecraft:me",
             "pl",
             "plugins",
             "about",
@@ -36,7 +38,11 @@ public class PlayerCommandPreprocessListener implements Listener {
             "bukkit:version",
             "bukkit:about",
             "bukkit:?",
-            "bukkit:help"
+            "bukkit:help",
+            "/calc",
+            "/eval",
+            "/evaluate",
+            "/calculate"
     };
 
     private final CorePlugin plugin;

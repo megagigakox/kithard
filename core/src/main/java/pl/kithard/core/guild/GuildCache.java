@@ -1,6 +1,7 @@
 package pl.kithard.core.guild;
 
 import org.bukkit.Location;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import pl.kithard.core.guild.permission.GuildPermission;
 import pl.kithard.core.player.CorePlayer;

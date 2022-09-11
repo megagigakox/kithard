@@ -4,7 +4,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class DepositItem {
 
-    private final String id;
     private final String name;
     private final int limit;
     private final boolean withdrawAll;
@@ -12,8 +11,7 @@ public class DepositItem {
     private final String message;
     private final ItemStack item;
 
-    public DepositItem(String id, String name, int limit, boolean withdrawAll, int slot, String message, ItemStack item) {
-        this.id = id;
+    public DepositItem(String name, int limit, boolean withdrawAll, int slot, String message, ItemStack item) {
         this.name = name;
         this.limit = limit;
         this.withdrawAll = withdrawAll;
@@ -24,10 +22,6 @@ public class DepositItem {
 
     public String getName() {
         return name;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public int getLimit() {

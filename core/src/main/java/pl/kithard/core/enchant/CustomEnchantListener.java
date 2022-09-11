@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.settings.ServerSettingsType;
 import pl.kithard.core.util.TextUtil;
 
 public class CustomEnchantListener implements Listener {
@@ -32,6 +33,12 @@ public class CustomEnchantListener implements Listener {
             }
 
             CustomEnchantType customEnchantType = this.plugin.getCustomEnchantConfiguration().findType(player.getItemInHand().getType().name());
+            if (customEnchantType == CustomEnchantType.ARMOR || customEnchantType == CustomEnchantType.BOW || customEnchantType == CustomEnchantType.SWORD || customEnchantType == CustomEnchantType.BOOTS) {
+                if (!this.plugin.getServerSettings().isEnabled(ServerSettingsType.ENCHANT)) {
+                    TextUtil.message(player, "&cEnchantowanie tych przedmiotow zostalo tymczasowo wylaczone do godziny 12:00 Niedziela");
+                    return;
+                }
+            }
             if (customEnchantType == null) {
                 TextUtil.message(player, "&8[&4&l!&8] &cNie mozesz tego zenchantowac!");
                 return;

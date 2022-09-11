@@ -85,11 +85,8 @@ public class GuildCreateCommand {
             itemsForGuildCreate = CoreConstants.PLAYER_GUILD_ITEMS;
         }
 
-        for (ItemStack itemStack : itemsForGuildCreate) {
-            if (!InventoryUtil.hasItem(player, itemStack.getType(), itemStack.getAmount())){
-                TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz &4wszystkich itemow &cna zalożenie gildii!");
-                return;
-            }
+        if (!InventoryUtil.hasItems(player, itemsForGuildCreate)) {
+            TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz &4wszystkich itemow &cna zalożenie gildii!");
         }
 
         InventoryUtil.removeItems(player, itemsForGuildCreate);

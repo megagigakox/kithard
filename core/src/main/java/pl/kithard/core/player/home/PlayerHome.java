@@ -29,4 +29,13 @@ public class PlayerHome {
     public void setLocation(Location location) {
         this.location = location;
     }
+
+    @Override
+    public String toString() {
+        return "PlayerHome{" +
+                "id=" + id +
+                ", requiredRank='" + requiredRank + '\'' +
+                ", location=" + location +
+                '}';
+    }
 }

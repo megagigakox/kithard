@@ -5,30 +5,24 @@ import org.bukkit.inventory.ItemStack;
 public class ShopVillagerItem {
 
     private final String name;
-    private final int price;
-    private final ItemStack inGui;
-    private final ItemStack afterBuy;
+    private final double price;
+    private final ItemStack item;
 
-    public ShopVillagerItem(String name, int price, ItemStack inGui, ItemStack afterBuy) {
+    public ShopVillagerItem(String name, double price, ItemStack item) {
         this.name = name;
         this.price = price;
-        this.inGui = inGui;
-        this.afterBuy = afterBuy;
+        this.item = item;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public ItemStack getInGui() {
-        return inGui;
-    }
-
-    public ItemStack getAfterBuy() {
-        return afterBuy;
+    public ItemStack getItem() {
+        return item;
     }
 }

@@ -5,10 +5,12 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.util.GuiHelper;
+import pl.kithard.core.util.InventoryUtil;
 import pl.kithard.core.util.LocationUtil;
 import pl.kithard.core.util.TextUtil;
 
@@ -26,7 +28,7 @@ public class FreeSpaceGui {
     }
 
     public void open(Player player) {
-        this.plugin.getExecutorService().execute(() -> {
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             PaginatedGui gui = Gui.paginated()
                     .rows(6)
                     .pageSize(28)
@@ -57,7 +59,19 @@ public class FreeSpaceGui {
                                 "",
                                 "&7Kliknij &flewym &7aby sie teleportowac."
                         )))
-                        .asGuiItem());
+                        .asGuiItem(inventoryClickEvent -> {
+
+                            if (!player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD_BLOCK), distance / 6)) {
+                                TextUtil.message(
+                                        player,
+                                        "&8[&4&l!&8] &cNie posiadasz wystarczajacej ilosci blokow emeraldow! &4(" + distance / 6 + " blokow)"
+                                );
+                                return;
+                            }
+
+                            InventoryUtil.removeItem(player, Material.EMERALD_BLOCK,distance / 6);
+                            this.plugin.getCorePlayerCache().findByPlayer(player).teleport(location, 20);
+                        }));
 
             }
 

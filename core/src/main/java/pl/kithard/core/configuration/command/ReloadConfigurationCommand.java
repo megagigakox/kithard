@@ -20,10 +20,13 @@ public class ReloadConfigurationCommand {
             acceptsExceeded = true
     )
     public void handle(CommandSender sender) {
-
-        this.plugin.getShopConfiguration().createConfig();
-        this.plugin.getShopItemCache().init();
-
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            this.plugin.getDropItemConfiguration().load();
+            this.plugin.getDepositItemConfiguration().load();
+            this.plugin.getShopConfiguration().load();
+            this.plugin.getItemShopServiceConfiguration().load();
+            this.plugin.getCustomEnchantConfiguration().load();
+        });
     }
 
 }

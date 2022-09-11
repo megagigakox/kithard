@@ -96,7 +96,7 @@ public class PlayerDeathListener implements Listener {
                 victim,
                 "&c&lZabojstwo!",
                 TITLE_KILL_MESSAGE
-                        .replace("{LOSER_GUILD}", loserGuild == null ? "" : " &8[&c" + loserGuild.getTag() + "&8]" )
+                        .replace("{LOSER_GUILD}", loserGuild == null ? "" : " &8[&c" + loserGuild.getTag() + "&8] " )
                         .replace("{LOSER}", loser.getName())
                         .replace("{VICTIM_POINTS}", String.valueOf(toAdd))
                         .replace("{VICTIM_HEARTS}", String.valueOf(MathUtil.round(victim.getHealth() / 2, 2))),
@@ -110,8 +110,8 @@ public class PlayerDeathListener implements Listener {
 
             if (!itCorePlayer.isDisabledSetting(PlayerSettings.DEATHS_MESSAGES)) {
                 TextUtil.message(it, CHAT_KILL_MESSAGE
-                        .replace("{LOSER_GUILD}", loserGuild == null ? "" : "&8[&c" + loserGuild.getTag() + "&8]")
-                        .replace("{VICTIM_GUILD}", victimGuild == null ? "" : "&8[&c" + victimGuild.getTag() + "&8]")
+                        .replace("{LOSER_GUILD}", loserGuild == null ? "" : "&8[&c" + loserGuild.getTag() + "&8] ")
+                        .replace("{VICTIM_GUILD}", victimGuild == null ? "" : "&8[&c" + victimGuild.getTag() + "&8] ")
                         .replace("{VICTIM}", victim.getName())
                         .replace("{LOSER}", loser.getName())
                         .replace("{LOSER_POINTS}", String.valueOf(toRemove))
@@ -138,7 +138,7 @@ public class PlayerDeathListener implements Listener {
                     "&c&lAsysta!",
                     TITLE_ASSIST_MESSAGE
                             .replace("{LOSER}", loser.getName())
-                            .replace("{LOSER_GUILD}", loserGuild == null ? "" : "&8[&c" + loserGuild.getTag() + "&8]")
+                            .replace("{LOSER_GUILD}", loserGuild == null ? "" : "&8[&c" + loserGuild.getTag() + "&8] ")
                             .replace("{ASSISTANT_POINTS}", String.valueOf(assistPoints))
                             .replace("{ASSISTANT_HEARTS}", String.valueOf(MathUtil.round(assistant.getHealth() / 2, 2))),
                     20,
@@ -151,7 +151,7 @@ public class PlayerDeathListener implements Listener {
 
                 if (!itCorePlayer.isDisabledSetting(PlayerSettings.DEATHS_MESSAGES)) {
                     TextUtil.message(it, CHAT_ASSIST_MESSAGE
-                            .replace("{ASSISTANT_GUILD}", assistantGuild == null ? "" : "&8[&c" + assistantGuild.getTag() + "&8]")
+                            .replace("{ASSISTANT_GUILD}", assistantGuild == null ? "" : "&8[&c" + assistantGuild.getTag() + "&8] ")
                             .replace("{ASSISTANT}", assistant.getName())
                             .replace("{ASSISTANT_POINTS}", String.valueOf(assistPoints))
                             .replace("{ASSISTANT_HEARTS}", String.valueOf(MathUtil.round(assistant.getHealth() / 2, 2))));
@@ -196,13 +196,7 @@ public class PlayerDeathListener implements Listener {
 
         ItemStack itemStack = SkullCreator.itemFromUuid(loserCorePlayer.getUuid());
         InventoryUtil.addItem(victim, itemStack);
-        victim.addPotionEffect(new PotionEffect(
-                PotionEffectType.FIRE_RESISTANCE,
-                20 * 10,
-                1,
-                true,
-                true
-        ), true);
+        victim.setFireTicks(0);
 
         if (victimGuild != null) {
             victimGuild.addKills(1);

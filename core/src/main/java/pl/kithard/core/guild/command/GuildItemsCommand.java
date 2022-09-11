@@ -42,7 +42,7 @@ public class GuildItemsCommand {
         for (ItemStack itemStack : itemsForGuildCreate) {
             i++;
 
-            gui.setItem(i, ItemBuilder.from(itemStack)
+            gui.setItem(i, ItemBuilder.from(itemStack.clone())
                     .lore(TextUtil.component(Arrays.asList(
                             "",
                             " &7W ekwipunku&8: &f" + InventoryUtil.countItemsIgnoreItemMeta(player, itemStack) + "&8/&f" + itemStack.getAmount(),

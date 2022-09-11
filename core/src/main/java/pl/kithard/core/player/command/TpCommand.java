@@ -20,7 +20,7 @@ public class TpCommand {
             name = "tp",
             permission = "kithard.commands.tp",
             acceptsExceeded = true,
-            completer = "online-players:5"
+            completer = "online-players:100"
     )
     public void handle(Player player, String[] args) {
 

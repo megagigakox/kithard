@@ -77,9 +77,9 @@ public class AsyncPlayerChatListener implements Listener {
         format = TextUtil.color(format
                 .replace("{POINTS}", String.valueOf(points))
                 .replace("{TAG}", guild == null ? "" : "&8[&c" + guild.getTag() + "&8] ")
-                .replace("{MESSAGE}", ChatColor.stripColor(event.getMessage()))
                 .replace("{PLAYER}", player.getName())
-                .replace("{RANK}", this.plugin.getConfig().getString("prefix." + group)));
+                .replace("{RANK}", this.plugin.getConfig().getString("prefix." + group))
+                .replace("{MESSAGE}", ChatColor.stripColor(event.getMessage().replace("%", "%%").replace("&", ""))));
 
         corePlayer.getCooldown().setChatDelay(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(2));
         event.setFormat(format);

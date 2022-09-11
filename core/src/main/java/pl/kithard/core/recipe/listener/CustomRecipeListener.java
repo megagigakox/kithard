@@ -164,7 +164,6 @@ public class CustomRecipeListener implements Listener {
 
                 block.setType(Material.SAND);
             }
-
         }
 
         else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.AIR_FARMER.getItem().getItemMeta().getDisplayName())) {
@@ -199,8 +198,6 @@ public class CustomRecipeListener implements Listener {
             }
 
         }
-
-
     }
 
     @EventHandler
@@ -229,7 +226,7 @@ public class CustomRecipeListener implements Listener {
                 player.setItemInHand(null);
             }
 
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent addtemp vip 30d");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent addtemp vip 21d");
             TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
 
         }
@@ -242,7 +239,7 @@ public class CustomRecipeListener implements Listener {
                 player.setItemInHand(null);
             }
 
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent addtemp svip 30d");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent addtemp svip 21d");
             TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
 
         }
@@ -254,7 +251,7 @@ public class CustomRecipeListener implements Listener {
                 player.setItemInHand(null);
             }
 
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent sponsor vip 30d");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent addtemp sponsor 21d");
             TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
 
         }

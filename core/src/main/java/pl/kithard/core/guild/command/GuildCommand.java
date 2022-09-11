@@ -12,7 +12,7 @@ public class GuildCommand {
 
     @FunnyCommand(
             name = "g",
-            aliases = {"guild", "guilds", "gildie", "gildia"},
+            aliases = {"gildia"},
             acceptsExceeded = true
     )
     public void handle(Player player) {
@@ -37,7 +37,8 @@ public class GuildCommand {
                 "&8» &f/g panel &8- &7Otwiera panel gildyjny.",
                 "&8» &f/g wolnemiejsce &8- &7Znajduje wolny teren.",
                 "&8» &f/g alert (wiadomosc) &8- &7Wiadomosc do czlonkow gildii.",
-                "&8» &f/g pp &8- &7Wysyla wiadomosc z prosba o pomoc do gildii."
+                "&8» &f/g pp &8- &7Wysyla wiadomosc z prosba o pomoc do gildii.",
+                "&8» &f/g walka &8- &7Wysyla kordy twojej gildii na chacie."
         ));
     }
 }

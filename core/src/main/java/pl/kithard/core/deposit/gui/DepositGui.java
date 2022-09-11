@@ -26,13 +26,13 @@ public class DepositGui {
 
         GuiHelper.fillColorGui5(gui);
 
-        for (DepositItem depositItem : this.plugin.getDepositItemCache().getDepositItems()) {
+        for (DepositItem depositItem : this.plugin.getDepositItemConfiguration().getDepositItems()) {
             gui.setItem(depositItem.getSlot(), ItemStackBuilder.of(depositItem.getItem().clone())
                     .amount(depositItem.getLimit())
                     .name("&3&l" + depositItem.getName())
                     .lore(
                             "",
-                            " &8» &7W schowku posiadasz&8: &f" + corePlayer.getAmountOfDepositItem(depositItem.getId()),
+                            " &8» &7W schowku posiadasz&8: &f" + corePlayer.getAmountOfDepositItem(depositItem.getName()),
                             " &8» &7Aktualny limit w eq&8: &f" + depositItem.getLimit(),
                             "",
                             " &7Kliknij &flewym &7aby wyplacic limit!",
@@ -46,14 +46,14 @@ public class DepositGui {
                             if (amountInInventory >= depositItem.getLimit())
                                 return;
 
-                            if (corePlayer.getAmountOfDepositItem(depositItem.getId()) <= 0) return;
+                            if (corePlayer.getAmountOfDepositItem(depositItem.getName()) <= 0) return;
 
                             int i = depositItem.getLimit() - amountInInventory;
                             if (LocationUtil.isInSpawn(player.getLocation()))
                                 i = depositItem.getItem().getMaxStackSize();
 
-                            if (i > corePlayer.getAmountOfDepositItem(depositItem.getId()))
-                                i = corePlayer.getAmountOfDepositItem(depositItem.getId());
+                            if (i > corePlayer.getAmountOfDepositItem(depositItem.getName()))
+                                i = corePlayer.getAmountOfDepositItem(depositItem.getName());
 
                             corePlayer.removeFromDeposit(depositItem, i);
                             open(player, corePlayer);
@@ -86,22 +86,22 @@ public class DepositGui {
                         " &7Kliknij tutaj aby &fdobrac caly &7limit!"
                 ).asGuiItem(event -> {
 
-                    for (DepositItem depositItem : this.plugin.getDepositItemCache().getDepositItems()) {
+                    for (DepositItem depositItem : this.plugin.getDepositItemConfiguration().getDepositItems()) {
 
                         if (!depositItem.isWithdrawAll()) continue;
 
                         int amountInInventory = InventoryUtil.countAmountForDeposit(player, depositItem.getItem().clone());
                         if (amountInInventory >= depositItem.getLimit() && !LocationUtil.isInSpawn(player.getLocation())) continue;
 
-                        if (corePlayer.getAmountOfDepositItem(depositItem.getId()) <= 0) continue;
+                        if (corePlayer.getAmountOfDepositItem(depositItem.getName()) <= 0) continue;
 
                         int i = depositItem.getLimit() - amountInInventory;
 
                         if (LocationUtil.isInSpawn(player.getLocation()))
                             i = depositItem.getItem().getMaxStackSize();
 
-                        if (i > corePlayer.getAmountOfDepositItem(depositItem.getId()))
-                            i = corePlayer.getAmountOfDepositItem(depositItem.getId());
+                        if (i > corePlayer.getAmountOfDepositItem(depositItem.getName()))
+                            i = corePlayer.getAmountOfDepositItem(depositItem.getName());
 
                         corePlayer.removeFromDeposit(depositItem, i);
 

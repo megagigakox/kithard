@@ -40,6 +40,7 @@ public class RankingResetCommand {
         corePlayer.setAssists(0);
         corePlayer.setKills(0);
         corePlayer.setDeaths(0);
+        corePlayer.setKillStreak(0);
         corePlayer.getCooldown().setRankResetDelay(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(3));
         corePlayer.setNeedSave(true);
 

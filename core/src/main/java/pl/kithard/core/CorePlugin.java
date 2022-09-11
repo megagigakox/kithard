@@ -14,24 +14,27 @@ import net.dzikoysk.funnycommands.resources.types.PlayerType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
+import pl.kithard.core.abbys.AbbysTask;
 import pl.kithard.core.antimacro.AntiMacroCache;
 import pl.kithard.core.antimacro.AntiMacroListener;
 import pl.kithard.core.antimacro.AntiMacroTask;
-import pl.kithard.core.api.database.DatabaseConfig;
 import pl.kithard.core.api.database.MongoService;
+import pl.kithard.core.api.database.RedisService;
+import pl.kithard.core.api.database.config.DatabaseConfig;
 import pl.kithard.core.automessage.config.AutoMessageConfiguration;
 import pl.kithard.core.automessage.task.AutoMessageTask;
 import pl.kithard.core.border.command.BorderCommand;
 import pl.kithard.core.border.listener.BorderListener;
 import pl.kithard.core.configuration.command.ReloadConfigurationCommand;
 import pl.kithard.core.database.task.DataSaveTask;
-import pl.kithard.core.deposit.DepositItemCache;
+import pl.kithard.core.deposit.DepositItemConfiguration;
+import pl.kithard.core.deposit.DepositItemSerdes;
 import pl.kithard.core.deposit.command.DepositCommand;
-import pl.kithard.core.deposit.configuration.DepositConfiguration;
 import pl.kithard.core.deposit.task.DepositTask;
 import pl.kithard.core.drop.DropItemConfiguration;
 import pl.kithard.core.drop.DropItemSerdes;
@@ -72,15 +75,18 @@ import pl.kithard.core.guild.regen.command.RegenCommand;
 import pl.kithard.core.guild.regen.listener.RegenListener;
 import pl.kithard.core.guild.task.GuildExpireTask;
 import pl.kithard.core.guild.task.GuildHologramTask;
+import pl.kithard.core.guild.task.GuildShadowBlockProtectionTask;
 import pl.kithard.core.guild.variables.*;
 import pl.kithard.core.itemshop.ItemShopService;
-import pl.kithard.core.itemshop.ItemShopServiceCache;
+import pl.kithard.core.itemshop.ItemShopServiceConfiguration;
+import pl.kithard.core.itemshop.ItemShopServiceExecutor;
+import pl.kithard.core.itemshop.ItemShopServiceSerdes;
 import pl.kithard.core.itemshop.command.ItemShopCommand;
-import pl.kithard.core.itemshop.configuration.ItemShopServiceConfiguration;
 import pl.kithard.core.kit.KitConfiguration;
 import pl.kithard.core.kit.KitSerdes;
 import pl.kithard.core.kit.command.KitCommand;
 import pl.kithard.core.kit.command.KitManageCommand;
+import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.player.CorePlayerCache;
 import pl.kithard.core.player.CorePlayerFactory;
 import pl.kithard.core.player.achievement.AchievementCache;
@@ -94,7 +100,7 @@ import pl.kithard.core.player.backup.command.PlayerBackupCommand;
 import pl.kithard.core.player.backup.task.PlayerBackupTask;
 import pl.kithard.core.player.chat.command.ChatManageCommand;
 import pl.kithard.core.player.chat.listener.AsyncPlayerChatListener;
-import pl.kithard.core.player.combat.listener.BlockCommandsInCombatListener;
+import pl.kithard.core.player.combat.listener.BlockCombatInteractionsListener;
 import pl.kithard.core.player.combat.listener.PlayerDamageListener;
 import pl.kithard.core.player.combat.listener.PlayerDeathListener;
 import pl.kithard.core.player.command.*;
@@ -111,6 +117,8 @@ import pl.kithard.core.player.punishment.command.PunishmentCommand;
 import pl.kithard.core.player.punishment.listener.PlayerLoginListener;
 import pl.kithard.core.player.ranking.PlayerRankingCommand;
 import pl.kithard.core.player.ranking.PlayerRankingService;
+import pl.kithard.core.player.reward.RewardCommand;
+import pl.kithard.core.player.reward.RewardTask;
 import pl.kithard.core.player.settings.command.PlayerSettingsCommand;
 import pl.kithard.core.player.task.PlayerSpentTimeTask;
 import pl.kithard.core.player.teleport.countdown.PlayerTeleportCountdown;
@@ -126,10 +134,12 @@ import pl.kithard.core.settings.ServerSettings;
 import pl.kithard.core.settings.ServerSettingsService;
 import pl.kithard.core.settings.command.ServerSettingsCommand;
 import pl.kithard.core.settings.listener.ServerSettingsListeners;
-import pl.kithard.core.shop.ShopItemCache;
+import pl.kithard.core.shop.ShopConfiguration;
 import pl.kithard.core.shop.command.SellCommand;
 import pl.kithard.core.shop.command.ShopCommand;
-import pl.kithard.core.shop.config.ShopConfiguration;
+import pl.kithard.core.shop.item.ShopItemSerdes;
+import pl.kithard.core.shop.item.ShopVillagerItemSerdes;
+import pl.kithard.core.shop.item.ShopVillagerSerdes;
 import pl.kithard.core.task.RankingsRefreshTask;
 import pl.kithard.core.util.TextUtil;
 import pl.kithard.core.util.adapters.ConfigurationSerializableAdapter;
@@ -141,14 +151,12 @@ import pl.kithard.core.warp.command.WarpCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public final class CorePlugin extends JavaPlugin {
 
     private Gson gson;
-    private ExecutorService executorService;
     private MongoService mongoService;
+    private RedisService redisService;
 
     private CorePlayerCache corePlayerCache;
     private CorePlayerFactory corePlayerFactory;
@@ -165,21 +173,19 @@ public final class CorePlugin extends JavaPlugin {
     private CustomEffectCache customEffectCache;
     private CustomEffectConfiguration customEffectConfiguration;
 
-    private ItemShopServiceCache itemShopServiceCache;
     private ItemShopServiceConfiguration itemShopServiceConfiguration;
+    private ItemShopServiceExecutor itemShopServiceExecutor;
 
     private DropItemConfiguration dropItemConfiguration;
 
     private AutoMessageConfiguration autoMessageConfiguration;
 
-    private ShopItemCache shopItemCache;
     private ShopConfiguration shopConfiguration;
 
     private ServerSettings serverSettings;
     private ServerSettingsService serverSettingsService;
 
-    private DepositItemCache depositItemCache;
-    private DepositConfiguration depositConfiguration;
+    private DepositItemConfiguration depositItemConfiguration;
 
     private GeneratorCache generatorCache;
     private GeneratorFactory generatorFactory;
@@ -210,13 +216,21 @@ public final class CorePlugin extends JavaPlugin {
                 .serializeNulls()
                 .create();
 
-        this.executorService = Executors.newCachedThreadPool();
+        this.redisService = new RedisService(DatabaseConfig.REDIS_URI);
+        this.mongoService = new MongoService(DatabaseConfig.MONGO_URI, this.gson);
 
         this.customEffectConfiguration = new CustomEffectConfiguration(this);
         this.customEffectConfiguration.createConfig();
 
-        this.itemShopServiceConfiguration = new ItemShopServiceConfiguration(this);
-        this.itemShopServiceConfiguration.createConfig();
+        this.itemShopServiceConfiguration = ConfigManager.create(ItemShopServiceConfiguration.class, (it) -> {
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit());
+            it.withSerdesPack(registry -> registry.register(new ItemShopServiceSerdes()));
+            it.withBindFile(getDataFolder() + "/itemShopServices.yml");
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load(true);
+        });
+        this.itemShopServiceExecutor = new ItemShopServiceExecutor(this);
 
         this.kitConfiguration = ConfigManager.create(KitConfiguration.class, (it) -> {
             it.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit());
@@ -251,19 +265,31 @@ public final class CorePlugin extends JavaPlugin {
             it.load(true);
         });
 
+        this.depositItemConfiguration = ConfigManager.create(DepositItemConfiguration.class, (it) -> {
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit());
+            it.withSerdesPack(registry -> registry.register(new DepositItemSerdes()));
+            it.withBindFile(getDataFolder() + "/deposit.yml");
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load(true);
+        });
+
+        this.shopConfiguration = ConfigManager.create(ShopConfiguration.class, (it) -> {
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit());
+            it.withSerdesPack(registry -> {
+                registry.register(new ShopItemSerdes());
+                registry.register(new ShopVillagerItemSerdes());
+                registry.register(new ShopVillagerSerdes());
+            });
+            it.withBindFile(getDataFolder() + "/shop.yml");
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load(true);
+        });
+
         this.autoMessageConfiguration = new AutoMessageConfiguration(this);
         this.autoMessageConfiguration.createConfig();
 
-        this.shopConfiguration = new ShopConfiguration(this);
-        this.shopConfiguration.createConfig();
-
-        this.depositConfiguration = new DepositConfiguration(this);
-        this.depositConfiguration.createConfig();
-
-        this.depositItemCache = new DepositItemCache(this);
-        this.depositItemCache.init();
-
-        this.mongoService = new MongoService(DatabaseConfig.MONGO_URI, this.gson);
 
         this.serverSettingsService = new ServerSettingsService(this);
         this.serverSettings = this.serverSettingsService.load();
@@ -289,12 +315,6 @@ public final class CorePlugin extends JavaPlugin {
 
         this.customEffectCache = new CustomEffectCache(this);
         this.customEffectCache.init();
-
-        this.itemShopServiceCache = new ItemShopServiceCache(this);
-//        this.itemShopServiceCache.init();
-
-        this.shopItemCache = new ShopItemCache(this);
-        this.shopItemCache.init();
 
         this.generatorCache = new GeneratorCache(this);
         this.generatorFactory = new GeneratorFactory(this);
@@ -324,6 +344,14 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+
+        for (Player player : getServer().getOnlinePlayers()) {
+            CorePlayer corePlayer = this.corePlayerCache.findByPlayer(player);
+            corePlayer.getCombat().setLastAttackTime(0L);
+            corePlayer.getCombat().setLastAssistTime(0L);
+            corePlayer.getCombat().setLastAssistPlayer(null);
+            corePlayer.getCombat().setLastAttackPlayer(null);
+        }
 
         this.guildFactory.saveAll(false);
         this.corePlayerFactory.saveAll(false);
@@ -384,7 +412,7 @@ public final class CorePlugin extends JavaPlugin {
                         new GuildItemsCommand(),
                         new PlayerGuideCommand(),
                         new GuildPanelCommand(this),
-                        new GuildAdminCommand(),
+                        new GuildAdminCommand(this),
                         new GuildAdminGiveItemsCommand(this),
                         new GuildMemberInviteCommand(this),
                         new GuildJoinCommand(this),
@@ -422,10 +450,14 @@ public final class CorePlugin extends JavaPlugin {
                         new DisableProtectionCommand(this),
                         new KitManageCommand(this),
                         new CustomEnchantCommand(this),
-                        new GuildMemberNeedHelpCommand(this)
+                        new GuildMemberNeedHelpCommand(this),
+                        new RewardCommand(this),
+                        new BlocksCommand(),
+                        new GuildWarCommand(),
+                        new SaveAllCommand(this)
                 ))
                 .completer("itemShopServices", (context, prefix, limit) -> CommandUtils.collectCompletions(
-                        this.itemShopServiceCache.getServices().values(),
+                        this.itemShopServiceConfiguration.getServices(),
                         prefix,
                         limit,
                         ArrayList::new,
@@ -452,6 +484,9 @@ public final class CorePlugin extends JavaPlugin {
         new PlayerSpentTimeTask(this);
         new FreezeTask(this);
         new AntiMacroTask(this);
+        new AbbysTask(this);
+        new RewardTask(this);
+        new GuildShadowBlockProtectionTask(this);
     }
 
     private void initListeners() {
@@ -471,7 +506,7 @@ public final class CorePlugin extends JavaPlugin {
         new SpecialDropsListener(this);
         new GuildTerrainActionsListener(this);
         new PlayerMoveListener(this);
-        new BlockCommandsInCombatListener(this);
+        new BlockCombatInteractionsListener(this);
         new BorderListener(this);
         new GuildPermissionListener(this);
         new PlayerRespawnListener(this);
@@ -516,6 +551,11 @@ public final class CorePlugin extends JavaPlugin {
                 .shape("aaa", "aba", "aaa")
                 .setIngredient('a', Material.OBSIDIAN)
                 .setIngredient('b', Material.ENDER_PEARL));
+
+        Bukkit.addRecipe(new ShapedRecipe(CustomRecipe.ANTI_LEGS.getItem())
+                .shape("aaa", "aba", "aaa")
+                .setIngredient('a', Material.GOLD_BLOCK)
+                .setIngredient('b', Material.GOLD_BOOTS));
     }
 
     private void initTabList() {
@@ -548,10 +588,6 @@ public final class CorePlugin extends JavaPlugin {
         return gson;
     }
 
-    public ExecutorService getExecutorService() {
-        return executorService;
-    }
-
     public MongoService getMongoService() {
         return mongoService;
     }
@@ -572,10 +608,6 @@ public final class CorePlugin extends JavaPlugin {
         return customEffectConfiguration;
     }
 
-    public ItemShopServiceCache getItemShopServiceCache() {
-        return itemShopServiceCache;
-    }
-
     public ItemShopServiceConfiguration getItemShopServiceConfiguration() {
         return itemShopServiceConfiguration;
     }
@@ -586,10 +618,6 @@ public final class CorePlugin extends JavaPlugin {
 
     public AutoMessageConfiguration getAutoMessageConfiguration() {
         return autoMessageConfiguration;
-    }
-
-    public ShopItemCache getShopItemCache() {
-        return shopItemCache;
     }
 
     public ShopConfiguration getShopConfiguration() {
@@ -604,12 +632,8 @@ public final class CorePlugin extends JavaPlugin {
         return serverSettingsService;
     }
 
-    public DepositItemCache getDepositItemCache() {
-        return depositItemCache;
-    }
-
-    public DepositConfiguration getDepositConfiguration() {
-        return depositConfiguration;
+    public DepositItemConfiguration getDepositItemConfiguration() {
+        return depositItemConfiguration;
     }
 
     public GuildCache getGuildCache() {
@@ -690,5 +714,13 @@ public final class CorePlugin extends JavaPlugin {
 
     public CustomEnchantConfiguration getCustomEnchantConfiguration() {
         return customEnchantConfiguration;
+    }
+
+    public RedisService getRedisService() {
+        return redisService;
+    }
+
+    public ItemShopServiceExecutor getItemShopServiceExecutor() {
+        return itemShopServiceExecutor;
     }
 }

@@ -9,7 +9,7 @@ public class DataSaveTask extends BukkitRunnable {
 
     public DataSaveTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimerAsynchronously(this.plugin, 20 * 360, 20 * 360);
+        this.runTaskTimerAsynchronously(this.plugin, 20 * 720, 20 * 720);
     }
 
     @Override

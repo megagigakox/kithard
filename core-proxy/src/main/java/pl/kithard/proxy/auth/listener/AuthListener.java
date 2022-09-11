@@ -44,18 +44,19 @@ public class AuthListener implements Listener {
                     return;
                 }
 
-                authPlayer = this.plugin.getAuthPlayerCache().create(name);
-                authPlayer.setPremium(MojangUtil.fetchStatus(name));
-                authPlayer.setFirstJoinTime(System.currentTimeMillis());
-                authPlayer.setIp(connection.getAddress().getAddress().getHostAddress());
-                this.plugin.getMongoService().save(authPlayer);
-
                 if (this.plugin.getAuthPlayerCache().hasMaxAccountsPerIP(connection.getAddress().getAddress().getHostAddress())) {
                     event.setCancelReason(TextComponent.fromLegacyText(TextUtil.color("&cOsiagnales limit kont na tym ip!")));
                     event.setCancelled(true);
                     event.completeIntent(plugin);
                     return;
                 }
+
+                authPlayer = this.plugin.getAuthPlayerCache().create(name);
+                authPlayer.setPremium(MojangUtil.fetchStatus(name));
+                authPlayer.setFirstJoinTime(System.currentTimeMillis());
+                authPlayer.setIp(connection.getAddress().getAddress().getHostAddress());
+                this.plugin.getMongoService().save(authPlayer);
+
             }
 
             if (this.plugin.getProxy().getPlayer(name) != null) {

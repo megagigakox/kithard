@@ -36,7 +36,7 @@ public class PlayerBackupService {
 
 
         playerBackup.getAdminsRestored().put(System.currentTimeMillis(), player.getName());
-        this.plugin.getExecutorService().execute(() -> this.plugin.getMongoService().save(playerBackup));
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getMongoService().save(playerBackup));
     }
 
 }

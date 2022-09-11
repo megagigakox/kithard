@@ -13,10 +13,10 @@ import pl.kithard.core.player.enderchest.PlayerEnderChest;
 import pl.kithard.core.player.home.PlayerHome;
 import pl.kithard.core.player.settings.PlayerSettings;
 import pl.kithard.core.player.teleport.PlayerTeleport;
-import pl.kithard.core.shop.item.ShopSellItem;
 import pl.kithard.core.api.database.entity.DatabaseEntity;
 import pl.kithard.core.api.database.entry.DatabaseEntry;
 import pl.kithard.core.drop.DropItem;
+import pl.kithard.core.shop.item.ShopItem;
 import pl.kithard.core.util.MathUtil;
 import pl.kithard.core.util.TextUtil;
 
@@ -64,7 +64,7 @@ public class CorePlayer extends DatabaseEntry {
         this.name = name;
         this.ip = ip;
 
-        this.money = 1200;
+        this.money = 0;
         this.points = 500;
 
         this.disabledSellItems = new HashSet<>();
@@ -294,26 +294,26 @@ public class CorePlayer extends DatabaseEntry {
     }
 
     public void addToDeposit(DepositItem depositItem, int amount) {
-        int items = this.getAmountOfDepositItem(depositItem.getId());
+        int items = this.getAmountOfDepositItem(depositItem.getName());
         items += amount;
-        this.depositItems.put(depositItem.getId(), items);
+        this.depositItems.put(depositItem.getName(), items);
     }
 
     public void removeFromDeposit(DepositItem depositItem, int amount) {
-        int items = this.getAmountOfDepositItem(depositItem.getId());
+        int items = this.getAmountOfDepositItem(depositItem.getName());
         items -= amount;
-        this.depositItems.put(depositItem.getId(), items);
+        this.depositItems.put(depositItem.getName(), items);
     }
 
-    public void addDisabledSellItem(ShopSellItem shopSellItem) {
-        this.disabledSellItems.add(shopSellItem.getName());
+    public void addDisabledSellItem(ShopItem shopItem) {
+        this.disabledSellItems.add(shopItem.getName());
     }
 
-    public void removeDisabledSellItem(ShopSellItem shopSellItem) {
+    public void removeDisabledSellItem(ShopItem shopSellItem) {
         this.disabledSellItems.remove(shopSellItem.getName());
     }
 
-    public boolean isDisabledSellItem(ShopSellItem shopSellItem) {
+    public boolean isDisabledSellItem(ShopItem shopSellItem) {
         return this.disabledSellItems.contains(shopSellItem.getName());
     }
 
@@ -502,5 +502,44 @@ public class CorePlayer extends DatabaseEntry {
 
     public void setProtection(long protection) {
         this.protection = protection;
+    }
+
+    @Override
+    public String toString() {
+        return "CorePlayer{" +
+                "uuid=" + uuid +
+                ", name='" + name + '\'' +
+                ", ip='" + ip + '\'' +
+                ", money=" + money +
+                ", earnedMoney=" + earnedMoney +
+                ", spendMoney=" + spendMoney +
+                ", points=" + points +
+                ", kills=" + kills +
+                ", deaths=" + deaths +
+                ", assists=" + assists +
+                ", killStreak=" + killStreak +
+                ", turboDrop=" + turboDrop +
+                ", spentTime=" + spentTime +
+                ", protection=" + protection +
+                ", ignoredPlayers=" + ignoredPlayers +
+                ", disabledSellItems=" + disabledSellItems +
+                ", disabledDropItems=" + disabledDropItems +
+                ", guildHistory=" + guildHistory +
+                ", claimedAchievements=" + claimedAchievements.toString() +
+                ", homes=" + homes.toString() +
+                ", minedDropItems=" + minedDropItems.toString() +
+                ", depositItems=" + depositItems.toString() +
+                ", kitCooldowns=" + kitCooldowns.toString() +
+                ", achievementProgress=" + achievementProgress.toString() +
+                ", lastTimeMeasurement=" + lastTimeMeasurement +
+                ", vanish=" + vanish +
+                ", incognito=" + incognito +
+                ", reply=" + reply +
+                ", combat=" + combat.toString() +
+                ", teleport=" + teleport.toString() +
+                ", cooldown=" + cooldown.toString() +
+                ", teleportRequests=" + teleportRequests +
+                ", lastDeaths=" + lastDeaths +
+                '}';
     }
 }

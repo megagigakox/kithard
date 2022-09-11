@@ -33,6 +33,29 @@ public class KitManageCommand {
         TextUtil.message(player, "&8» &f/kitmanage create (name) (icon) (slot) (time)");
         TextUtil.message(player, "&8» &f/kitmanage edit (name)");
         TextUtil.message(player, "&8» &f/kitmanage delete (name)");
+        TextUtil.message(player, "&8» &f/kitmanage status (name)");
+        TextUtil.message(player, "&8» &f/kitmanage cooldown (name) (cooldown)");
+    }
+
+    @FunnyCommand(
+            name = "kitmanage cooldown",
+            permission = "kithard.commands.kitmanage",
+            acceptsExceeded = true
+    )
+    public void handleCooldown(Player player, String[] args) {
+        if (args.length < 2) {
+            return;
+        }
+
+        String name = args[0];
+        Kit kit = this.plugin.getKitConfiguration().findByName(name);
+        if (kit == null) {
+            return;
+        }
+        long time = TimeUtil.timeFromString(args[1]);
+        kit.setCooldown(time);
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getKitConfiguration().save());
+
     }
 
     @FunnyCommand(
@@ -57,6 +80,7 @@ public class KitManageCommand {
                         slot,
                         "kithard.kits." + name,
                         time,
+                        true,
                         new ItemStack(material),
                         new ArrayList<>()));
     }
@@ -96,7 +120,7 @@ public class KitManageCommand {
                 kit.getItems().add(content);
             }
 
-            this.plugin.getExecutorService().execute(() -> this.plugin.getKitConfiguration().save());
+            this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getKitConfiguration().save());
 
         });
 
@@ -128,9 +152,28 @@ public class KitManageCommand {
         }
 
         this.plugin.getKitConfiguration().getKits().remove(kit.getName());
-        this.plugin.getExecutorService().execute(() -> this.plugin.getKitConfiguration().save());
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getKitConfiguration().save());
         TextUtil.message(player, "Usunieto kit " + kit.getName());
     }
 
+    @FunnyCommand(
+            name = "kitmanage status",
+            permission = "kithard.commands.kitmanage",
+            acceptsExceeded = true
+    )
+    public void handleStatus(Player player, String[] args) {
+        if (args.length < 1) {
+            return;
+        }
 
+        String name = args[0];
+        Kit kit = this.plugin.getKitConfiguration().findByName(name);
+        if (kit == null) {
+            return;
+        }
+
+        kit.setEnable(!kit.isEnable());
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getKitConfiguration().save());
+
+    }
 }

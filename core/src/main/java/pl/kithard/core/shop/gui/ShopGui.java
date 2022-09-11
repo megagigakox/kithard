@@ -9,14 +9,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import pl.kithard.core.shop.item.ShopSellItem;
-import pl.kithard.core.shop.item.ShopVillagerItem;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.CorePlayer;
-import pl.kithard.core.shop.ShopVillager;
-import pl.kithard.core.shop.item.ShopBuyItem;
+import pl.kithard.core.settings.ServerSettingsType;
+import pl.kithard.core.shop.ShopUtil;
+import pl.kithard.core.shop.item.ShopItem;
+import pl.kithard.core.shop.item.ShopItemType;
+import pl.kithard.core.shop.item.ShopVillager;
+import pl.kithard.core.shop.item.ShopVillagerItem;
 import pl.kithard.core.util.GuiHelper;
 import pl.kithard.core.util.InventoryUtil;
+import pl.kithard.core.util.ItemStackBuilder;
 import pl.kithard.core.util.TextUtil;
 
 import java.util.*;
@@ -32,7 +35,7 @@ public class ShopGui {
     public void open(Player player) {
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             Gui gui = Gui.gui()
-                    .title(TextUtil.component("&7Sklep:"))
+                    .title(TextUtil.component("&3&lSklep"))
                     .rows(5)
                     .create();
 
@@ -48,7 +51,16 @@ public class ShopGui {
                             "",
                             " &8» &7Kliknij &faby zobaczyc &7oferte!")))
                     .glow(true)
-                    .asGuiItem(event -> openBuy(player)));
+                    .asGuiItem(event -> {
+
+                        if (!this.plugin.getServerSettings().isEnabled(ServerSettingsType.SHOP) && !player.hasPermission("shop.bypass")) {
+                            TextUtil.message(player, "&cChwilowo wylaczone!");
+                            player.closeInventory();
+                            return;
+                        }
+
+                        openBuy(player);
+                    }));
 
             gui.setItem(3, 5, ItemBuilder.from(new ItemStack(351, 1, (short) 1))
                     .name(TextUtil.component("&c&lSprzedaz Itemkow"))
@@ -66,7 +78,16 @@ public class ShopGui {
                             "",
                             " &8» &7Kliknij &faby zobaczyc &7oferte!")))
                     .glow(true)
-                    .asGuiItem(inventoryClickEvent -> openVillagers(player)));
+                    .asGuiItem(inventoryClickEvent -> {
+
+                        if (!this.plugin.getServerSettings().isEnabled(ServerSettingsType.SHOP) && !player.hasPermission("shop.bypass")) {
+                            TextUtil.message(player, "&cChwilowo wylaczone!");
+                            player.closeInventory();
+                            return;
+                        }
+
+                        openVillagers(player);
+                    }));
 
             gui.setItem(1,5, ItemBuilder.from(Material.PAPER)
                     .name(TextUtil.component(" "))
@@ -87,7 +108,7 @@ public class ShopGui {
 
     public void openBuy(Player player) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Sklep (kupno)"))
+                .title(TextUtil.component("&3&lSklep &8(kupno)"))
                 .rows(6)
                 .create();
 
@@ -98,22 +119,25 @@ public class ShopGui {
         gui.setItem(6, 5, ItemBuilder.from(GuiHelper.BACK_ITEM)
                 .asGuiItem(inventoryClickEvent -> open(player)));
 
-        for (ShopBuyItem buyItem : this.plugin.getShopItemCache().getBuyItems()) {
+        for (ShopItem buyItem : this.plugin.getShopConfiguration().getItems()) {
+            if (buyItem.getType() != ShopItemType.BUY) {
+                continue;
+            }
 
-            gui.addItem(ItemBuilder.from(buyItem.getInGui())
-                    .lore(TextUtil.component(Arrays.asList(
+            gui.addItem(ItemStackBuilder.of(buyItem.getItem().clone())
+                    .appendLore(
                             "",
                             "  &7Po zakupie otrzymasz...",
-                            "  &8» &f&l" + buyItem.getName() + "&8, &f&l" + buyItem.getInGui().getAmount() + "x &8- &3&l" + buyItem.getPrice() + "zl",
+                            "  &8» &f&l" + buyItem.getName() + "&8, &f&l" + buyItem.getItem().getAmount() + "x &8- &3&l" + buyItem.getPrice() + "zl",
                             "",
                             "  &fAby zakupic...",
                             "  &8» &aNacisnij na ten przedmiot!",
                             "",
-                            " &7Aktualnie posiadasz: &b&n" + corePlayer.getMoney())))
+                            "&7Twoj aktualny stan konta wynosi&8: &3" + corePlayer.getMoney())
                     .asGuiItem(inventoryClickEvent -> {
 
                         if (corePlayer.getMoney() >= buyItem.getPrice()) {
-                            InventoryUtil.addItem(player, buyItem.getAfterBuy());
+                            InventoryUtil.addItem(player, buyItem.getItem());
                             corePlayer.setMoney(corePlayer.getMoney() - buyItem.getPrice());
                             corePlayer.setSpendMoney(corePlayer.getSpendMoney() + buyItem.getPrice());
                             corePlayer.setNeedSave(true);
@@ -148,10 +172,13 @@ public class ShopGui {
         gui.setItem(6, 5, ItemBuilder.from(GuiHelper.BACK_ITEM)
                 .asGuiItem(inventoryClickEvent -> open(player)));
 
-        for (ShopSellItem sellItem : this.plugin.getShopItemCache().getSellItems()) {
+        for (ShopItem sellItem : this.plugin.getShopConfiguration().getItems()) {
+            if (sellItem.getType() != ShopItemType.SELL) {
+                continue;
+            }
 
-            gui.addItem(ItemBuilder.from(sellItem.getItem())
-                    .lore(TextUtil.component(Arrays.asList(
+            gui.addItem(ItemStackBuilder.of(sellItem.getItem().clone())
+                    .appendLore(
                             "",
                             "  &7Oferta sprzedazy...",
                             "  &8» &f&l" + sellItem.getName() + "&8, &f&l" + sellItem.getItem().getAmount() + "x &8- &3&l" + sellItem.getPrice() + "zl",
@@ -161,7 +188,7 @@ public class ShopGui {
                             "",
                             (corePlayer.isDisabledSellItem(sellItem) ? " &7Ten item &a&nnie jest &7w liscie sprzedazy wiec.." : " &7Ten item &c&njest w liscie &7sprzedaży wiec.."),
                             (corePlayer.isDisabledSellItem(sellItem) ? " &a&lNie sprzedasz &7go uzywajac sprzedazy &c&nwszystkiego!" : " &c&lSprzedasz go &7uzywajac sprzedazy &c&nwszystkiego!"),
-                            "          &8(Kliknij prawym aby to zmienic!)")))
+                            "          &8(Kliknij prawym aby to zmienic!)")
                     .asGuiItem(event -> {
 
                         if (event.getClick() == ClickType.LEFT) {
@@ -194,28 +221,7 @@ public class ShopGui {
                         "        &8ktore nie sa zignorowane!",
                         "    &8Sprawdz to najeżdzajac na itemki u gory!)")))
                 .asGuiItem(event -> {
-                    int i = 0;
-                    for (ShopSellItem sellItem : this.plugin.getShopItemCache().getSellItems()) {
-                        while (InventoryUtil.hasItem(player, sellItem.getItem().getType(), sellItem.getItem().getAmount())) {
-
-                            if (corePlayer.isDisabledSellItem(sellItem)) {
-                                break;
-                            }
-
-                            i++;
-                            InventoryUtil.removeItem(player, sellItem.getItem().getType(), sellItem.getItem().getAmount());
-                            corePlayer.setMoney(corePlayer.getMoney() + sellItem.getPrice());
-                            corePlayer.setEarnedMoney(corePlayer.getEarnedMoney() + sellItem.getPrice());
-                        }
-                    }
-
-                    if (i == 0) {
-                        TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz żadnych itemkow do sprzedania!");
-                    }
-                    else {
-                        TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie sprzedano &f" + i + " &7itemkow! &7Twoj nowy stan konta wynosi: &3" + corePlayer.getMoney());
-                        corePlayer.setNeedSave(true);
-                    }
+                    ShopUtil.sellAll(player, corePlayer, plugin);
                 }));
 
 
@@ -225,21 +231,21 @@ public class ShopGui {
 
     public void openVillagers(Player player) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Sklep (kupno za emeraldy)"))
-                .rows(4)
+                .title(TextUtil.component("&3&lSklep &8(kupno za emeraldy)"))
+                .rows(3)
                 .create();
 
-        gui.getFiller().fillBorder(ItemBuilder.from(GuiHelper.BLACK_STAINED_GLASS_PANE).asGuiItem());
+        GuiHelper.fillColorGui3(gui);
 
-        gui.setItem(4, 5, ItemBuilder.from(GuiHelper.BACK_ITEM)
+        gui.setItem(3, 5, ItemBuilder.from(GuiHelper.BACK_ITEM)
                 .asGuiItem(inventoryClickEvent -> open(player)));
 
-        for (ShopVillager villager : this.plugin.getShopItemCache().getVillagers()) {
-            gui.addItem(ItemBuilder.from(villager.getItem())
-                    .name(TextUtil.component("&b&l" + villager.getName()))
-                    .lore(TextUtil.component(Arrays.asList(
+        for (ShopVillager villager : this.plugin.getShopConfiguration().getVillagers()) {
+            gui.addItem(ItemStackBuilder.of(villager.getIcon().clone())
+                    .name("&3&l" + villager.getName())
+                    .lore(
                             "",
-                            " &8» &7Kliknij &faby zobaczyc &7oferte!")))
+                            " &7Kliknij &flewym &7aby zobaczyc oferte!")
                     .asGuiItem(inventoryClickEvent -> openVillagerItems(player, villager)));
         }
 
@@ -249,7 +255,7 @@ public class ShopGui {
 
     public void openVillagerItems(Player player, ShopVillager shopVillager) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Sklep " + shopVillager.getName()))
+                .title(TextUtil.component("&3&lVillager &8(" + shopVillager.getName() + "&8)"))
                 .rows(6)
                 .create();
 
@@ -259,19 +265,18 @@ public class ShopGui {
                 .asGuiItem(inventoryClickEvent -> openVillagers(player)));
 
         for (ShopVillagerItem villagerItem : shopVillager.getItems()) {
-            gui.addItem(ItemBuilder.from(villagerItem.getInGui())
-                    .name(TextUtil.component("&b&l✖"))
-                    .lore(TextUtil.component(Arrays.asList(
+            gui.addItem(ItemStackBuilder.of(villagerItem.getItem().clone())
+                    .appendLore(
                             "",
                             "  &7Po zakupie otrzymasz...",
-                            "  &8» &f&l" + villagerItem.getName() + "&8, &f&l" + villagerItem.getInGui().getAmount() + "x &8- &3&l" + villagerItem.getPrice() + " blokow eme", "",
+                            "  &8» &f&l" + villagerItem.getName() + "&8, &f&l" + villagerItem.getItem().getAmount() + "x &8- &3&l" + villagerItem.getPrice() + " blokow eme", "",
                             "  &fAby zakupic...",
-                            "  &8» &aNacisnij na ten przedmiot!")))
+                            "  &8» &aNacisnij na ten przedmiot!")
                     .asGuiItem(event -> {
 
-                        if (player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD_BLOCK), villagerItem.getPrice())) {
-                            player.getInventory().removeItem(new ItemStack(Material.EMERALD_BLOCK, villagerItem.getPrice()));
-                            InventoryUtil.addItem(player, villagerItem.getAfterBuy());
+                        if (player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD_BLOCK), (int) villagerItem.getPrice())) {
+                            player.getInventory().removeItem(new ItemStack(Material.EMERALD_BLOCK, (int) villagerItem.getPrice()));
+                            InventoryUtil.addItem(player, villagerItem.getItem());
                         }
                     }));
         }

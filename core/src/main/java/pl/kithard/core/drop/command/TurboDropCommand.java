@@ -36,7 +36,7 @@ public class TurboDropCommand {
             ServerSettings serverSettings = this.plugin.getServerSettings();
 
             serverSettings.setTurboDrop(time);
-            this.plugin.getExecutorService().execute(() -> this.plugin.getServerSettingsService().save(serverSettings));
+            this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getServerSettingsService().save(serverSettings));
 
             Bukkit.getOnlinePlayers().forEach(it -> TitleUtil.title(it, "", "&b&lT&3&lu&f&lr&b&lb&3&lo&f&lD&b&lr&3&lo&f&lp &7zostal aktywowany na: &3" +
                     TimeUtil.formatTimeMillis(time - System.currentTimeMillis()), 20, 40, 20));
@@ -50,8 +50,14 @@ public class TurboDropCommand {
             return;
         }
 
-        long time2 = TimeUtil.timeFromString(args[1]) + System.currentTimeMillis();
-        corePlayer.setTurboDrop((corePlayer.getTurboDrop() - System.currentTimeMillis()) + time2);
+        long time2 = TimeUtil.timeFromString(args[1]);
+        if (corePlayer.getTurboDrop() > System.currentTimeMillis()) {
+            corePlayer.setTurboDrop(corePlayer.getTurboDrop() + time2);
+        }
+        else {
+            corePlayer.setTurboDrop(time2 + System.currentTimeMillis());
+        }
+
         if (corePlayer.source() != null) {
             TextUtil.message(corePlayer.source(), "&8[&3&l!&8] &7Aktywowano &b&lT&3&lu&f&lr&b&lb&3&lo&f&lD&b&lr&3&lo&f&lp &7dla ciebie na: &f" +
                     TimeUtil.formatTimeMillis(corePlayer.getTurboDrop() - System.currentTimeMillis()));

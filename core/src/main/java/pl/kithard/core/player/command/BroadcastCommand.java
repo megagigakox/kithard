@@ -25,7 +25,7 @@ public class BroadcastCommand {
         }
 
         String message = TextUtil.color(StringUtils.join(args, " ", 1, args.length));
-        switch (args[0]) {
+        switch (args[0].toLowerCase()) {
 
             case "title": {
 

@@ -11,7 +11,7 @@ import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.util.TextUtil;
 
 @FunnyComponent
-public class PrivateMessageCommand {
+public class    PrivateMessageCommand {
 
     private final CorePlugin plugin;
 
@@ -24,7 +24,7 @@ public class PrivateMessageCommand {
             aliases = {"privatemessage", "pm", "tell"},
             acceptsExceeded = true,
             playerOnly = true,
-            completer = "online-players:5"
+            completer = "online-players:500"
     )
     public void handle(Player player, CorePlayer corePlayer, String[] args) {
         if (args.length < 2) {
@@ -54,7 +54,6 @@ public class PrivateMessageCommand {
         }
 
         String message = ChatColor.stripColor(StringUtils.join(args, " ", 1, args.length));
-
         corePlayer.setReply(targetCorePlayer.getUuid());
         targetCorePlayer.setReply(corePlayer.getUuid());
 

@@ -32,7 +32,7 @@ public class PlayerBackupGui {
     }
 
     public void open(Player viewer, CorePlayer target) {
-        this.plugin.getExecutorService().execute(() -> {
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
 
             PaginatedGui gui = Gui.paginated()
                     .title(TextUtil.component("&7Backupy gracza: &3" + target.getName()))

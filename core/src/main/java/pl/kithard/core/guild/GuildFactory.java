@@ -113,7 +113,7 @@ public class GuildFactory {
                 .setType(Material.AIR);
         guild.getHologram().delete();
 
-        this.plugin.getExecutorService().execute(() -> this.plugin.getMongoService().delete(guild));
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getMongoService().delete(guild));
         this.plugin.getGuildCache().remove(guild);
 
     }
@@ -124,7 +124,6 @@ public class GuildFactory {
 
                     this.plugin.getGuildCache().add(guild);
                     guild.initialize();
-                    updateHologram(guild);
 
                 });
     }

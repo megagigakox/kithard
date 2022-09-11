@@ -11,7 +11,7 @@ import java.util.List;
 public final class CoreConstants {
 
     public final static int MIN_DISTANCE_FROM_SPAWN = 250;
-    public final static int MIN_DISTANCE_FROM_OTHER_GUILD = 40 * 2 + 50;
+    public final static int MIN_DISTANCE_FROM_OTHER_GUILD = 45 * 2 + 50;
     public final static int SPAWN_AREA_DISTANCE = 75;
 
     public final static List<ItemStack> PLAYER_GUILD_ITEMS = Arrays.asList(

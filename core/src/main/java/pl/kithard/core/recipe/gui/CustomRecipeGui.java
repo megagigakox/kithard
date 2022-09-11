@@ -300,7 +300,7 @@ public class CustomRecipeGui {
 
         gui.setItem(3, 2, ItemBuilder.from(Material.GOLD_BLOCK)
                 .asGuiItem());
-        gui.setItem(3, 3, ItemBuilder.from(Material.DIAMOND_BOOTS)
+        gui.setItem(3, 3, ItemBuilder.from(Material.GOLD_BOOTS)
                 .asGuiItem());
         gui.setItem(3, 4, ItemBuilder.from(Material.GOLD_BLOCK)
                 .asGuiItem());
@@ -324,7 +324,7 @@ public class CustomRecipeGui {
                 .asGuiItem(inventoryClickEvent ->
                         craft(
                                 player,
-                                Arrays.asList(new ItemStack(Material.GOLD_BLOCK, 8), new ItemStack(Material.DIAMOND_BOOTS)),
+                                Arrays.asList(new ItemStack(Material.GOLD_BLOCK, 8), new ItemStack(Material.GOLD_BOOTS)),
                                 CustomRecipe.ANTI_LEGS)));
 
 

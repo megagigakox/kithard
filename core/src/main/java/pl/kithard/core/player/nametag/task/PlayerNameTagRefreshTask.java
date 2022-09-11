@@ -11,7 +11,7 @@ public class PlayerNameTagRefreshTask extends BukkitRunnable {
 
     public PlayerNameTagRefreshTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimerAsynchronously(plugin, 100L,100L);
+        this.runTaskTimerAsynchronously(plugin, 200L,200L);
     }
 
     @Override

@@ -1,14 +1,17 @@
 package pl.kithard.core.settings.listener;
 
 import org.bukkit.Material;
+import org.bukkit.WeatherType;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -26,10 +29,17 @@ public class ServerSettingsListeners implements Listener {
     }
 
     @EventHandler
-    public void onWeatherChange(WeatherChangeEvent event) {
-        World ew = event.getWorld();
-        if (ew.hasStorm()) {
-            ew.setWeatherDuration(0);
+    public void onInteract(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
+
+        if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) {
+            return;
+        }
+
+        if (event.getClickedBlock().getType() == Material.LEVER) {
+            event.setCancelled(true);
         }
     }
 
@@ -62,6 +72,11 @@ public class ServerSettingsListeners implements Listener {
             event.setCancelled(true);
 
         }
+    }
+
+    @EventHandler
+    public void onWeatherChange(WeatherChangeEvent event) {
+        event.setCancelled(true);
     }
 
     @EventHandler

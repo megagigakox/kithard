@@ -12,7 +12,8 @@ public enum ServerSettingsType {
     MAGIC_CHEST("Magiczne skrzynki", Material.CHEST),
     ENCHANT("Enchant", Material.ENCHANTMENT_TABLE),
     BEACON("Beacon", Material.BEACON),
-    FISHING_RODS("Wedki", Material.FISHING_ROD);
+    FISHING_RODS("Wedki", Material.FISHING_ROD),
+    SHOP("Sklep", Material.NETHER_STAR);
 
     private final String name;
     private final Material icon;

@@ -21,7 +21,8 @@ public class PlayerInfoCommand {
     @FunnyCommand(
             name = "gracz",
             playerOnly = true,
-            acceptsExceeded = true
+            acceptsExceeded = true,
+            completer = "online-players:500"
     )
     public void handle(Player player, CorePlayer corePlayer, String[] args) {
 
@@ -39,7 +40,6 @@ public class PlayerInfoCommand {
 
         Guild guild = this.plugin.getGuildCache().findByPlayerName(args[0]);
         getInfoOfPlayer(player, targetCorePlayer, guild);
-
     }
 
     private void getInfoOfPlayer(Player player, CorePlayer corePlayer, Guild guild) {

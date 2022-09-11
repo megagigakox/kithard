@@ -26,6 +26,9 @@ public class ServerSettingGui {
 
         GuiHelper.fillColorGui3(gui);
 
+        gui.setItem(3, 3, ItemStackBuilder.of(GuiHelper.BACK_ITEM).asGuiItem(inventoryClickEvent -> gui.previous()));
+        gui.setItem(3, 7, ItemStackBuilder.of(GuiHelper.BACK_ITEM).asGuiItem(inventoryClickEvent -> gui.next()));
+
         for (ServerSettingsType value : ServerSettingsType.values()) {
             boolean status = this.plugin.getServerSettings().isEnabled(value);
             gui.addItem(ItemStackBuilder.of(value.getIcon())
@@ -46,7 +49,7 @@ public class ServerSettingGui {
                             this.plugin.getServerSettings().addEnabledSetting(value);
                         }
 
-                        this.plugin.getExecutorService().execute(() ->
+                        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
                                 this.plugin.getServerSettingsService().save(plugin.getServerSettings()));
                         open(player);
 

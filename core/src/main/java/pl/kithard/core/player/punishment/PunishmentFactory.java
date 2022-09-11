@@ -33,7 +33,7 @@ public class PunishmentFactory {
         Ban ban = new Ban(punished, admin, time, reason);
         this.plugin.getPunishmentCache().addBan(ban);
 
-        this.plugin.getExecutorService().execute(() ->
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
                 this.plugin.getMongoService().save(ban));
 
         Player player = this.plugin.getServer().getPlayerExact(punished);
@@ -49,7 +49,7 @@ public class PunishmentFactory {
         BanIP ban = new BanIP(punishedIP, admin, reason);
         this.plugin.getPunishmentCache().addBanIP(ban);
 
-        this.plugin.getExecutorService().execute(() ->
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
                 this.plugin.getMongoService().save(ban));
 
         Player player = this.plugin.getServer().getPlayerExact(punishedName);
@@ -65,7 +65,7 @@ public class PunishmentFactory {
         Mute mute = new Mute(punished, admin, time, reason);
         this.plugin.getPunishmentCache().addMute(mute);
 
-        this.plugin.getExecutorService().execute(() ->
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
                 this.plugin.getMongoService().save(mute));
 
         Player player = this.plugin.getServer().getPlayerExact(punished);
@@ -82,7 +82,7 @@ public class PunishmentFactory {
         Ban ban = this.plugin.getPunishmentCache().findBan(punished);
 
         this.plugin.getPunishmentCache().removeBan(ban);
-        this.plugin.getExecutorService().execute(() ->
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
                 this.plugin.getMongoService().delete(ban));
 
     }
@@ -92,7 +92,7 @@ public class PunishmentFactory {
         BanIP ban = this.plugin.getPunishmentCache().findBanIP(punished);
 
         this.plugin.getPunishmentCache().removeBanIP(ban);
-        this.plugin.getExecutorService().execute(() ->
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
                 this.plugin.getMongoService().delete(ban));
 
     }
@@ -102,7 +102,7 @@ public class PunishmentFactory {
         Mute mute = this.plugin.getPunishmentCache().findMute(punished);
 
         this.plugin.getPunishmentCache().removeMute(mute);
-        this.plugin.getExecutorService().execute(() ->
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
                 this.plugin.getMongoService().delete(mute));
 
     }

@@ -39,7 +39,7 @@ public class RegenGui {
                 .asGuiItem(event -> new GuildPanelGui(plugin).openPanel(player, guild)));
 
         Set<RegenBlock> regenBlocks = guild.getRegenBlocks();
-        int cost = (int) (regenBlocks.size() / 1.5);
+        int cost = (int) (regenBlocks.size() / 1.7);
 
         ItemStackBuilder itemStackBuilder = ItemStackBuilder.of(Material.LEVER)
                 .name("&3&lRegeneracja");

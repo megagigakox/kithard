@@ -13,7 +13,7 @@ public class FreezeTask extends BukkitRunnable {
 
     public FreezeTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimerAsynchronously(plugin, 20L, 20L);
+//        this.runTaskTimerAsynchronously(plugin, 20L, 20L);
     }
 
     @Override

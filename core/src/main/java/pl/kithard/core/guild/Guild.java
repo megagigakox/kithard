@@ -50,6 +50,7 @@ public class Guild extends DatabaseEntry {
     private final List<GuildPermissionScheme> permissionSchemes;
     private final Inventory warehouse;
 
+    private transient long guildWarDelay;
     private transient Set<UUID> memberInvites;
     private transient Set<String> allyInvites;
     private transient Hologram hologram;
@@ -358,5 +359,13 @@ public class Guild extends DatabaseEntry {
 
     public void setEmeraldBlocks(int emeraldBlocks) {
         this.emeraldBlocks = emeraldBlocks;
+    }
+
+    public long getGuildWarDelay() {
+        return guildWarDelay;
+    }
+
+    public void setGuildWarDelay(long guildWarDelay) {
+        this.guildWarDelay = guildWarDelay;
     }
 }

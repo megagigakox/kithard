@@ -35,11 +35,7 @@ public class GuildAdminGiveItemsCommand {
             return;
         }
 
-        for (ItemStack itemStack : CoreConstants.PLAYER_GUILD_ITEMS) {
-
-            InventoryUtil.addItem(target, itemStack);
-
-        }
+        InventoryUtil.addItem(player, CoreConstants.PLAYER_GUILD_ITEMS);
 
     }
 

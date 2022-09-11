@@ -12,7 +12,7 @@ public class PlayerSpentTimeTask extends BukkitRunnable {
 
     public PlayerSpentTimeTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimerAsynchronously(plugin, 20 * 25, 20 * 25);
+        this.runTaskTimerAsynchronously(plugin, 20 * 30, 20 * 30);
     }
 
     @Override

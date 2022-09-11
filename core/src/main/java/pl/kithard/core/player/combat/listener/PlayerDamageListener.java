@@ -64,6 +64,11 @@ public class PlayerDamageListener implements Listener {
         CorePlayer attackedPlayer = this.plugin.getCorePlayerCache().findByPlayer(attacked);
         CorePlayer attackerPlayer = this.plugin.getCorePlayerCache().findByPlayer(attacker);
 
+        if (attackerPlayer.getCooldown().getGtpFightDelay() > System.currentTimeMillis()) {
+            event.setCancelled(true);
+            return;
+        }
+
         if (attackedPlayer.getProtection() > System.currentTimeMillis()) {
             TextUtil.message(attacker, "&8[&4&l!&8] &cZaatakowany gracz posiada ochrone startowa jeszcze przez: &4" + TimeUtil.formatTimeMillis(attackedPlayer.getProtection() - System.currentTimeMillis()));
             event.setCancelled(true);

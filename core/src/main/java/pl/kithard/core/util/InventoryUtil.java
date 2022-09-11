@@ -52,22 +52,11 @@ public final class InventoryUtil {
 
             if (is == null) continue;
 
-            if (item.getType() == Material.TNT) {
-                if (is.getType() == item.getType()
-                        && is.getDurability() == item.getDurability()
-                        && is.getData().equals(item.getData())
-                        && is.getItemMeta().toString().equals(item.getItemMeta().toString())) {
+            if (is.getType() == item.getType()
+                    && is.getDurability() == item.getDurability()
+                    && is.getData().equals(item.getData())) {
 
-                    amount += is.getAmount();
-                }
-            } else {
-
-                if (is.getType() == item.getType()
-                        && is.getDurability() == item.getDurability()
-                        && is.getData().equals(item.getData())) {
-
-                    amount += is.getAmount();
-                }
+                amount += is.getAmount();
             }
         }
         return amount;

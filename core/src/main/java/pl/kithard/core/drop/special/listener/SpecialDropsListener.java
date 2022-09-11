@@ -1,6 +1,5 @@
 package pl.kithard.core.drop.special.listener;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,16 +10,13 @@ import pl.kithard.core.CorePlugin;
 import pl.kithard.core.drop.special.SpecialDropItem;
 import pl.kithard.core.drop.special.SpecialDropItemType;
 import pl.kithard.core.player.CorePlayer;
+import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.player.settings.PlayerSettings;
 import pl.kithard.core.recipe.CustomRecipe;
 import pl.kithard.core.settings.ServerSettingsType;
 import pl.kithard.core.util.InventoryUtil;
 import pl.kithard.core.util.RandomUtil;
 import pl.kithard.core.util.TextUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SpecialDropsListener implements Listener {
 
@@ -41,7 +37,6 @@ public class SpecialDropsListener implements Listener {
         }
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
-
         if (itemInHand.getItemMeta().getLore().equals(CustomRecipe.MAGIC_CHEST.getItem().getItemMeta().getLore())) {
 
             if (corePlayer.getCombat().hasFight()) {
@@ -54,10 +49,11 @@ public class SpecialDropsListener implements Listener {
                 return;
             }
 
+            corePlayer.addAchievementProgress(AchievementType.OPENED_CASE, 1);
+
             int i = 0;
             do {
                 for (SpecialDropItem dropItem : this.plugin.getDropItemConfiguration().getSpecialDropItems()) {
-
                     if (dropItem.getType() != SpecialDropItemType.MAGIC_CHEST) {
                         continue;
                     }
@@ -78,7 +74,6 @@ public class SpecialDropsListener implements Listener {
                             if (itPlayer.isDisabledSetting(PlayerSettings.MAGIC_CHEST_MESSAGES)) {
                                 continue;
                             }
-
 
                             TextUtil.message(it, "&8» &7Gracz &f" + player.getName() + " &7otworzyl &b&lMagiczna Skrzynke &7i wydropil: &b" + dropItem.getName() + " &7(&f" + itemStack.getAmount() + "x&7)");
                         }

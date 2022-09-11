@@ -23,7 +23,7 @@ public class PlayerBackupFactory {
                 ((CraftPlayer)player).getHandle().ping,
                 lostPoints);
 
-        this.plugin.getExecutorService().execute(() -> this.plugin.getMongoService().save(playerBackup));
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getMongoService().save(playerBackup));
 
         return playerBackup;
     }
