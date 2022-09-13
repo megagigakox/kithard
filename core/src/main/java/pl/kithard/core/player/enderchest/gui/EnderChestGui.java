@@ -44,7 +44,7 @@ public class EnderChestGui {
                         "&cBlad! Nie masz uprawnien do tego enderchesta!",
                         "",
                         "&7Zeby uzyskac do niego dostep",
-                        "&7zakup minimalnie range " + this.plugin.getConfig().getString("prefix." + enderChest.getRequiredRank())
+                        "&7zakup minimalnie range " + this.plugin.getConfig().getString("prefix." + PlayerEnderChest.REQUIRED_RANK.get(enderChest.getId()))
                 );
             }
             else {

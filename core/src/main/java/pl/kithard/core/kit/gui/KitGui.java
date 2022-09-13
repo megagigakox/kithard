@@ -58,7 +58,7 @@ public class KitGui {
         kit.getItems().forEach(kitItem -> gui.addItem(ItemBuilder.from(kitItem).asGuiItem()));
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
-        long time = corePlayer.getTime(kit.getName());
+        long time = corePlayer.getCooldown().getKitCooldown(kit.getName());
 
         ItemStackBuilder builder = ItemStackBuilder.of(new ItemStack(Material.getMaterial(351), 1, (short) 10))
                 .name("&b&lOdbierz zestaw.");
@@ -83,14 +83,15 @@ public class KitGui {
 
             if (player.hasPermission(kit.getPermission())) {
 
-                if (corePlayer.getTime(kit.getName()) < System.currentTimeMillis()) {
+                if (corePlayer.getCooldown().getKitCooldown(kit.getName()) < System.currentTimeMillis()) {
                     kit.getItems().forEach(kitItem -> InventoryUtil.addItem(player, kitItem));
                     gui.close(player);
-                    corePlayer.getKitCooldowns().put(kit.getName(), kit.getCooldown() + System.currentTimeMillis());
+                    corePlayer.getCooldown().getKitCooldowns().put(kit.getName(), kit.getCooldown() + System.currentTimeMillis());
 
                 } else {
 
-                    TextUtil.message(player, "&8[&4&l!&8] &cTen zestaw mozesz odebrac dopiero za &4" + TimeUtil.formatTimeMillis(corePlayer.getTime(kit.getName()) - System.currentTimeMillis()));
+                    TextUtil.message(player, "&8[&4&l!&8] &cTen zestaw mozesz odebrac dopiero za &4" +
+                            TimeUtil.formatTimeMillis(corePlayer.getCooldown().getKitCooldown(kit.getName()) - System.currentTimeMillis()));
 
                 }
 

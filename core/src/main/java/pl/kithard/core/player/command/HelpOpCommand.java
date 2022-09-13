@@ -25,9 +25,9 @@ public class HelpOpCommand {
             return;
         }
 
-        if (corePlayer.getCooldown().getHelpOpDelay() > System.currentTimeMillis()) {
+        if (corePlayer.getCooldown().getHelpopCooldown() > System.currentTimeMillis()) {
             TextUtil.message(player, "&8[&4&l!&8] &cWiadomosc do administracji możesz wyslac ponownie za &4" +
-                    TimeUtil.formatTimeMillis(corePlayer.getCooldown().getHelpOpDelay() - System.currentTimeMillis()));
+                    TimeUtil.formatTimeMillis(corePlayer.getCooldown().getHelpopCooldown() - System.currentTimeMillis()));
             return;
         }
 
@@ -44,7 +44,7 @@ public class HelpOpCommand {
             }
         }
 
-        corePlayer.getCooldown().setHelpOpDelay(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(30));
+        corePlayer.getCooldown().setHelpopCooldown(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(30));
         TextUtil.message(player, "&8[&3&l!&8] &7Twoja &fwiadomosc &7zostala wyslana!");
     }
 

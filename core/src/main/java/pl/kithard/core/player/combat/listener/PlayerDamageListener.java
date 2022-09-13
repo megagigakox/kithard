@@ -64,7 +64,7 @@ public class PlayerDamageListener implements Listener {
         CorePlayer attackedPlayer = this.plugin.getCorePlayerCache().findByPlayer(attacked);
         CorePlayer attackerPlayer = this.plugin.getCorePlayerCache().findByPlayer(attacker);
 
-        if (attackerPlayer.getCooldown().getGtpFightDelay() > System.currentTimeMillis()) {
+        if (attackerPlayer.getCooldown().getGroupTeleportCombatCooldown() > System.currentTimeMillis()) {
             event.setCancelled(true);
             return;
         }

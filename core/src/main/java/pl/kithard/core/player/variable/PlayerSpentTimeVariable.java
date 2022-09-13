@@ -16,6 +16,6 @@ public class PlayerSpentTimeVariable extends Variable {
 
     public String getReplacement(Player player) {
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
-        return TimeUtil.formatTimeMillis(corePlayer.getSpentTime());
+        return TimeUtil.formatTimeMillis(corePlayer.getSpendTime());
     }
 }

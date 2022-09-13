@@ -5,7 +5,9 @@ import java.util.concurrent.TimeUnit;
 public class xd {
 
     public static void main(String[] args) {
-        System.out.println(TimeUnit.MILLISECONDS.toHours(TimeUnit.MINUTES.toMillis(11)));
+        for (int i = 0; i < 5; i++) {
+            System.out.println(i + 1);
+        }
     }
 
 }

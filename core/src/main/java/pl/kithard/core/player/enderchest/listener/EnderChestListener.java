@@ -31,6 +31,7 @@ public class EnderChestListener implements Listener {
 
         for (PlayerEnderChest enderChest : corePlayer.getEnderChests()) {
             if (inventory.getName().equalsIgnoreCase(TextUtil.color(enderChest.getInventory().getName()))) {
+                enderChest.closeInventory();
                 corePlayer.setNeedSave(true);
             }
         }

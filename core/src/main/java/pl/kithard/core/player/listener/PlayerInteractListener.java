@@ -106,7 +106,7 @@ public class PlayerInteractListener implements Listener {
                 }
 
                 CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(radius);
-                corePlayer.getCooldown().setGtpFightDelay(TimeUnit.SECONDS.toMillis(3) + System.currentTimeMillis());
+                corePlayer.getCooldown().setGroupTeleportCombatCooldown(TimeUnit.SECONDS.toMillis(3) + System.currentTimeMillis());
                 corePlayer.getCombat().setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
                 radius.getActivePotionEffects().forEach(potionEffect -> radius.removePotionEffect(potionEffect.getType()));
                 radius.setAllowFlight(false);
@@ -157,11 +157,11 @@ public class PlayerInteractListener implements Listener {
             player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
             player.teleport(LocationUtil.getRadnomLocation());
             CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
-            corePlayer.getCooldown().setGtpFightDelay(TimeUnit.SECONDS.toMillis(3) + System.currentTimeMillis());
+            corePlayer.getCooldown().setGroupTeleportCombatCooldown(TimeUnit.SECONDS.toMillis(3) + System.currentTimeMillis());
             corePlayer.getCombat().setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
             for (Player radius : playersInRadius) {
                 CorePlayer radiusCorePlayer = this.plugin.getCorePlayerCache().findByPlayer(radius);
-                radiusCorePlayer.getCooldown().setGtpFightDelay(TimeUnit.SECONDS.toMillis(3) + System.currentTimeMillis());
+                radiusCorePlayer.getCooldown().setGroupTeleportCombatCooldown(TimeUnit.SECONDS.toMillis(3) + System.currentTimeMillis());
                 radiusCorePlayer.getCombat().setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
                 radius.teleport(player.getLocation());
                 radius.setAllowFlight(false);
@@ -211,7 +211,7 @@ public class PlayerInteractListener implements Listener {
             Player player = event.getPlayer();
             CorePlayer killerCorePlayer = plugin.getCorePlayerCache().findByPlayer(player);
 
-            if (killerCorePlayer.getCooldown().getPointsInfoDelay() > System.currentTimeMillis()) {
+            if (killerCorePlayer.getCooldown().getPointsInfoCooldown() > System.currentTimeMillis()) {
                 return;
             }
 
@@ -231,9 +231,13 @@ public class PlayerInteractListener implements Listener {
                 add = 20;
             }
 
-            killerCorePlayer.getCooldown().setPointsInfoDelay(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(3));
-            TextUtil.message(player, "&7Jezeli zabijesz tego gracza dostaniesz&8: &b&l+" + (clickedCorePlayer.getLastDeaths().containsKey(killerCorePlayer.getUuid()) ? "0" : add) + " &7punktow!");
-            TextUtil.message(player, "&7Natomiast za zginiecie zostanie ci odebrane: &c&l-" + (killerCorePlayer.getLastDeaths().containsKey(clickedCorePlayer.getUuid()) ? "0" : toRemoveClicked) + " &7punktow!");
+            killerCorePlayer.getCooldown().setPointsInfoCooldown(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(3));
+            TextUtil.message(player, "&7Jezeli zabijesz tego gracza dostaniesz&8: &b&l+"
+                    + (clickedCorePlayer.getCooldown().getLastKillersCooldown().containsKey(killerCorePlayer.getUuid()) ? "0" : add)
+                    + " &7punktow!");
+            TextUtil.message(player, "&7Natomiast za zginiecie zostanie ci odebrane: &c&l-"
+                    + (killerCorePlayer.getCooldown().getLastKillersCooldown().containsKey(clickedCorePlayer.getUuid()) ? "0" : toRemoveClicked)
+                    + " &7punktow!");
         }
     }
 }

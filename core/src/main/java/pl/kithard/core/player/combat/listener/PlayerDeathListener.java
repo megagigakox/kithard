@@ -8,8 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.guild.Guild;
@@ -67,7 +65,12 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
-        if (loserCorePlayer.getLastDeaths().containsKey(victimCorePlayer.getUuid()) && loserCorePlayer.getLastDeaths().get(victimCorePlayer.getUuid()) + TimeUnit.MINUTES.toMillis(30) > System.currentTimeMillis()) {
+        if (loserCorePlayer.getCooldown()
+                .getLastKillersCooldown()
+                .containsKey(victimCorePlayer.getUuid())
+                && loserCorePlayer.getCooldown().getLastKillersCooldown().get(victimCorePlayer.getUuid())
+                + TimeUnit.MINUTES.toMillis(30) > System.currentTimeMillis()
+        ) {
             TextUtil.message(victim, "&8[&4&l!&8] &cZabiles ostatnio tego gracza, punkty nie zostaja przyznane!");
             TextUtil.message(loser, "&8[&4&l!&8] &cZostales zabity ostatnio przez tego gracza, punkty nie zostaja odebrane!");
             this.plugin.getPlayerBackupFactory().create(
@@ -167,7 +170,9 @@ public class PlayerDeathListener implements Listener {
         loserCorePlayer.addDeaths(1);
         loserCorePlayer.addAchievementProgress(AchievementType.DEATHS, 1);
         loserCorePlayer.setKillStreak(0);
-        loserCorePlayer.getLastDeaths().put(victimCorePlayer.getUuid(), System.currentTimeMillis());
+        loserCorePlayer.getCooldown()
+                .getLastKillersCooldown()
+                .put(victimCorePlayer.getUuid(), System.currentTimeMillis());
         loserCorePlayer.setNeedSave(true);
 
         this.plugin.getPlayerNameTagService().updateDummy(loserCorePlayer);

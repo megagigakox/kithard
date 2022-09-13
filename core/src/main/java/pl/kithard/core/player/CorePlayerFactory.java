@@ -2,10 +2,15 @@ package pl.kithard.core.player;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.api.database.entry.DatabaseEntry;
+import pl.kithard.core.player.enderchest.PlayerEnderChest;
+import pl.kithard.core.player.home.PlayerHome;
 import pl.kithard.core.util.TextUtil;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CorePlayerFactory {
 
@@ -20,12 +25,11 @@ public class CorePlayerFactory {
     }
 
     public void loadAll() {
-        this.plugin.getMongoService().loadAll(CorePlayer.class)
+        this.plugin.getCorePlayerRepository().loadAll()
                 .forEach(corePlayer -> {
 
                     this.plugin.getCorePlayerCache().add(corePlayer);
                     this.plugin.getPlayerRankingService().add(corePlayer);
-                    corePlayer.initialize();
 
                 });
     }
@@ -34,29 +38,20 @@ public class CorePlayerFactory {
 
         long start = System.currentTimeMillis();
 
-        int i = 0;
-        for (Player it : Bukkit.getOnlinePlayers()) {
-            CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByUuid(it.getUniqueId());
-
-            if (withReason) {
-                if (!corePlayer.isNeedSave()) {
-                    continue;
-                }
-            }
-
-            i++;
-            corePlayer.setNeedSave(false);
-            this.plugin.getMongoService().save(corePlayer);
-        }
+        this.plugin.getCorePlayerRepository().updateAll(withReason ? this.plugin.getCorePlayerCache().getValues()
+                        .stream()
+                        .filter(DatabaseEntry::isNeedSave)
+                        .collect(Collectors.toSet())
+                        : this.plugin.getCorePlayerCache().getValues()
+                );
 
         long end = System.currentTimeMillis() - start;
         for (Player it : Bukkit.getOnlinePlayers()) {
-
             if (!it.hasPermission("kithard.admin.notifications")) {
                 continue;
             }
 
-            TextUtil.message(it,"&8[&2&l!&8] &aPomyslnie zapisano dane &2" + i + " graczy online &aktorzy potrzebowali zapisu w czasie: &2" + end + "ms&a!");
+            TextUtil.message(it,"&8[&2&l!&8] &aPomyslnie zapisano dane &2wszystkich graczy online &aktorzy potrzebowali zapisu w czasie: &2" + end + "ms&a!");
         }
 
     }

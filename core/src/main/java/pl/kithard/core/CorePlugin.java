@@ -26,6 +26,7 @@ import pl.kithard.core.antimacro.AntiMacroTask;
 import pl.kithard.core.api.database.MongoService;
 import pl.kithard.core.api.database.RedisService;
 import pl.kithard.core.api.database.config.DatabaseConfig;
+import pl.kithard.core.api.database.mysql.DatabaseService;
 import pl.kithard.core.automessage.config.AutoMessageConfiguration;
 import pl.kithard.core.automessage.task.AutoMessageTask;
 import pl.kithard.core.border.command.BorderCommand;
@@ -89,6 +90,7 @@ import pl.kithard.core.kit.command.KitManageCommand;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.player.CorePlayerCache;
 import pl.kithard.core.player.CorePlayerFactory;
+import pl.kithard.core.player.CorePlayerRepository;
 import pl.kithard.core.player.achievement.AchievementCache;
 import pl.kithard.core.player.achievement.AchievementCommand;
 import pl.kithard.core.player.achievement.AchievementListener;
@@ -107,7 +109,7 @@ import pl.kithard.core.player.command.*;
 import pl.kithard.core.player.command.bind.CorePlayerBind;
 import pl.kithard.core.player.enderchest.command.EnderChestCommand;
 import pl.kithard.core.player.enderchest.listener.EnderChestListener;
-import pl.kithard.core.player.home.command.HomeCommand;
+import pl.kithard.core.player.home.command.PlayerHomeCommand;
 import pl.kithard.core.player.listener.*;
 import pl.kithard.core.player.nametag.PlayerNameTagService;
 import pl.kithard.core.player.nametag.task.PlayerNameTagRefreshTask;
@@ -151,15 +153,18 @@ import pl.kithard.core.warp.command.WarpCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 
 public final class CorePlugin extends JavaPlugin {
 
     private Gson gson;
     private MongoService mongoService;
+    private DatabaseService databaseService;
     private RedisService redisService;
 
     private CorePlayerCache corePlayerCache;
     private CorePlayerFactory corePlayerFactory;
+    private CorePlayerRepository corePlayerRepository;
     private PlayerRankingService playerRankingService;
     private PlayerNameTagService playerNameTagService;
     private PlayerBackupService playerBackupService;
@@ -217,6 +222,7 @@ public final class CorePlugin extends JavaPlugin {
                 .create();
 
         this.redisService = new RedisService(DatabaseConfig.REDIS_URI);
+        this.databaseService = new DatabaseService("51.77.38.198",3306, "kithard", "kithard", "H3FUhzrgMhXKTK6B");
         this.mongoService = new MongoService(DatabaseConfig.MONGO_URI, this.gson);
 
         this.customEffectConfiguration = new CustomEffectConfiguration(this);
@@ -290,12 +296,13 @@ public final class CorePlugin extends JavaPlugin {
         this.autoMessageConfiguration = new AutoMessageConfiguration(this);
         this.autoMessageConfiguration.createConfig();
 
-
         this.serverSettingsService = new ServerSettingsService(this);
         this.serverSettings = this.serverSettingsService.load();
 
         this.playerRankingService = new PlayerRankingService();
 
+        this.corePlayerRepository = new CorePlayerRepository(this.databaseService);
+        this.corePlayerRepository.prepareTable();
         this.corePlayerCache = new CorePlayerCache();
         this.corePlayerFactory = new CorePlayerFactory(this);
         this.corePlayerFactory.loadAll();
@@ -356,6 +363,8 @@ public final class CorePlugin extends JavaPlugin {
         this.guildFactory.saveAll(false);
         this.corePlayerFactory.saveAll(false);
 
+        this.databaseService.shutdown();
+
         System.out.println("Zapisano gildie i userow podczas offania serwera!");
 
     }
@@ -380,7 +389,7 @@ public final class CorePlugin extends JavaPlugin {
                         new TpHereCommand(this),
                         new AdminChatCommand(),
                         new WorkbenchCommand(),
-                        new HomeCommand(this),
+                        new PlayerHomeCommand(this),
                         new RepairCommand(),
                         new ListCommand(),
                         new HealCommand(this),
@@ -722,5 +731,13 @@ public final class CorePlugin extends JavaPlugin {
 
     public ItemShopServiceExecutor getItemShopServiceExecutor() {
         return itemShopServiceExecutor;
+    }
+
+    public CorePlayerRepository getCorePlayerRepository() {
+        return corePlayerRepository;
+    }
+
+    public DatabaseService getDatabaseService() {
+        return databaseService;
     }
 }

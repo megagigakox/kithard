@@ -145,8 +145,8 @@ public class KitManageCommand {
         }
 
         for (CorePlayer corePlayer : this.plugin.getCorePlayerCache().getValues()) {
-            if (corePlayer.getTime(kit.getName()) != 0) {
-                corePlayer.getKitCooldowns().remove(kit.getName());
+            if (corePlayer.getCooldown().getKitCooldown(kit.getName()) != 0) {
+                corePlayer.getCooldown().getKitCooldowns().remove(kit.getName());
                 corePlayer.setNeedSave(true);
             }
         }

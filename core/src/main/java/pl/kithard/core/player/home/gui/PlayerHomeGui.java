@@ -14,11 +14,11 @@ import pl.kithard.core.util.TextUtil;
 
 import java.util.Arrays;
 
-public class HomeGui {
+public class PlayerHomeGui {
 
     private final CorePlugin plugin;
 
-    public HomeGui(CorePlugin plugin) {
+    public PlayerHomeGui(CorePlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -48,7 +48,7 @@ public class HomeGui {
                                 "&cBlad! Nie masz uprawnien do tego domu!",
                                 "",
                                 "&7Zeby uzyskac do niego dostep",
-                                "&7zakup minimalnie range " + this.plugin.getConfig().getString("prefix." + home.getRequiredRank())
+                                "&7zakup minimalnie range " + this.plugin.getConfig().getString("prefix." + PlayerHome.REQUIRED_RANK.get(home.getId()))
                         )))
                         .asGuiItem();
 

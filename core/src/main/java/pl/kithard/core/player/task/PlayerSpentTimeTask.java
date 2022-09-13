@@ -21,8 +21,8 @@ public class PlayerSpentTimeTask extends BukkitRunnable {
         for (Player player : this.plugin.getServer().getOnlinePlayers()) {
 
             CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
-            long time = corePlayer.getSpentTime() + (currentTimeMillis - corePlayer.getLastTimeMeasurement());
-            corePlayer.setSpentTime(time);
+            long time = corePlayer.getSpendTime() + (currentTimeMillis - corePlayer.getLastTimeMeasurement());
+            corePlayer.setSpendTime(time);
             corePlayer.setAchievementProgress(AchievementType.SPEND_TIME, time);
             corePlayer.setLastTimeMeasurement(System.currentTimeMillis());
 

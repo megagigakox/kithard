@@ -1,59 +1,77 @@
 package pl.kithard.core.player.cooldown;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class PlayerCooldown {
 
-    private long helpOpDelay;
-    private long chatDelay;
-    private long commandsDelay;
-    private long pointsInfoDelay;
-    private long rankResetDelay;
-    private long gtpFightDelay;
+    private long helpopCooldown;
+    private long chatCooldown;
+    private long commandsCooldown;
+    private long pointsInfoCooldown;
+    private long rankResetCooldown;
+    private long groupTeleportCombatCooldown;
+    private final Map<String, Long> kitCooldowns = new HashMap<>();
+    private final Map<UUID, Long> lastKillersCooldown = new HashMap<>();
 
-    public long getHelpOpDelay() {
-        return helpOpDelay;
+    public long getHelpopCooldown() {
+        return helpopCooldown;
     }
 
-    public void setHelpOpDelay(long helpOpDelay) {
-        this.helpOpDelay = helpOpDelay;
+    public void setHelpopCooldown(long helpopCooldown) {
+        this.helpopCooldown = helpopCooldown;
     }
 
-    public long getChatDelay() {
-        return chatDelay;
+    public long getChatCooldown() {
+        return chatCooldown;
     }
 
-    public void setChatDelay(long chatDelay) {
-        this.chatDelay = chatDelay;
+    public void setChatCooldown(long chatCooldown) {
+        this.chatCooldown = chatCooldown;
     }
 
-    public long getCommandsDelay() {
-        return commandsDelay;
+    public long getCommandsCooldown() {
+        return commandsCooldown;
     }
 
-    public void setCommandsDelay(long commandsDelay) {
-        this.commandsDelay = commandsDelay;
+    public void setCommandsCooldown(long commandsCooldown) {
+        this.commandsCooldown = commandsCooldown;
     }
 
-    public long getPointsInfoDelay() {
-        return pointsInfoDelay;
+    public long getPointsInfoCooldown() {
+        return pointsInfoCooldown;
     }
 
-    public void setPointsInfoDelay(long pointsInfoDelay) {
-        this.pointsInfoDelay = pointsInfoDelay;
+    public void setPointsInfoCooldown(long pointsInfoCooldown) {
+        this.pointsInfoCooldown = pointsInfoCooldown;
     }
 
-    public long getRankResetDelay() {
-        return rankResetDelay;
+    public long getRankResetCooldown() {
+        return rankResetCooldown;
     }
 
-    public void setRankResetDelay(long rankResetDelay) {
-        this.rankResetDelay = rankResetDelay;
+    public void setRankResetCooldown(long rankResetCooldown) {
+        this.rankResetCooldown = rankResetCooldown;
     }
 
-    public long getGtpFightDelay() {
-        return gtpFightDelay;
+    public long getGroupTeleportCombatCooldown() {
+        return groupTeleportCombatCooldown;
     }
 
-    public void setGtpFightDelay(long gtpFightDelay) {
-        this.gtpFightDelay = gtpFightDelay;
+    public void setGroupTeleportCombatCooldown(long groupTeleportCombatCooldown) {
+        this.groupTeleportCombatCooldown = groupTeleportCombatCooldown;
+    }
+
+    public Map<String, Long> getKitCooldowns() {
+        return kitCooldowns;
+    }
+
+    public long getKitCooldown(String kitName){
+        return this.kitCooldowns.getOrDefault(kitName, (long) 0);
+    }
+
+    public Map<UUID, Long> getLastKillersCooldown() {
+        return lastKillersCooldown;
     }
 }

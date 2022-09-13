@@ -73,15 +73,15 @@ public class PlayerCommandPreprocessListener implements Listener {
         Player player = event.getPlayer();
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
 
-        if (corePlayer.getCooldown().getCommandsDelay() > System.currentTimeMillis() && !player.hasPermission("kithard.commands.delay.bypass")) {
+        if (corePlayer.getCooldown().getCommandsCooldown() > System.currentTimeMillis() && !player.hasPermission("kithard.commands.delay.bypass")) {
             TextUtil.message(player,
                     "&8[&4&l!&8] &cNastepnym razem komende możesz użyc za &4" +
-                            TimeUtil.formatTimeMillis(corePlayer.getCooldown().getCommandsDelay() - System.currentTimeMillis()));
+                            TimeUtil.formatTimeMillis(corePlayer.getCooldown().getCommandsCooldown() - System.currentTimeMillis()));
             event.setCancelled(true);
             return;
         }
 
-        corePlayer.getCooldown().setCommandsDelay(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(1));
+        corePlayer.getCooldown().setCommandsCooldown(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(1));
     }
 
     private void disableTabulation() {

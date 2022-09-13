@@ -60,10 +60,10 @@ public class AsyncPlayerChatListener implements Listener {
         }
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
-        if (corePlayer.getCooldown().getChatDelay() > currentTimeMillis && !player.hasPermission("kithard.commands.chatmanage")) {
+        if (corePlayer.getCooldown().getChatCooldown() > currentTimeMillis && !player.hasPermission("kithard.commands.chatmanage")) {
             TextUtil.message(player,
                     "&8[&4&l!&8] &cNastepnym razem na chacie możesz napisac za &4" +
-                            TimeUtil.formatTimeMillis(corePlayer.getCooldown().getChatDelay() - currentTimeMillis));
+                            TimeUtil.formatTimeMillis(corePlayer.getCooldown().getChatCooldown() - currentTimeMillis));
             event.setCancelled(true);
             return;
         }
@@ -81,7 +81,7 @@ public class AsyncPlayerChatListener implements Listener {
                 .replace("{RANK}", this.plugin.getConfig().getString("prefix." + group))
                 .replace("{MESSAGE}", ChatColor.stripColor(event.getMessage().replace("%", "%%").replace("&", ""))));
 
-        corePlayer.getCooldown().setChatDelay(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(2));
+        corePlayer.getCooldown().setChatCooldown(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(2));
         event.setFormat(format);
     }
 

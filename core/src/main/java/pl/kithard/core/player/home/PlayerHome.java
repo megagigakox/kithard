@@ -3,23 +3,31 @@ package pl.kithard.core.player.home;
 
 import org.bukkit.Location;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PlayerHome {
 
+    public static final Map<Integer, String> REQUIRED_RANK = new HashMap<>();
+
+    static {
+        REQUIRED_RANK.put(1, "default");
+        REQUIRED_RANK.put(2, "vip");
+        REQUIRED_RANK.put(3, "svip");
+        REQUIRED_RANK.put(4, "sponsor");
+        REQUIRED_RANK.put(5, "legenda");
+    }
+
     private final int id;
-    private final String requiredRank;
     private Location location;
 
-    public PlayerHome(int id, String requiredRank) {
+    public PlayerHome(int id, Location location) {
         this.id = id;
-        this.requiredRank = requiredRank;
+        this.location = location;
     }
 
     public int getId() {
         return id;
-    }
-
-    public String getRequiredRank() {
-        return requiredRank;
     }
 
     public Location getLocation() {
@@ -28,14 +36,5 @@ public class PlayerHome {
 
     public void setLocation(Location location) {
         this.location = location;
-    }
-
-    @Override
-    public String toString() {
-        return "PlayerHome{" +
-                "id=" + id +
-                ", requiredRank='" + requiredRank + '\'' +
-                ", location=" + location +
-                '}';
     }
 }

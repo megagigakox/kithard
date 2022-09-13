@@ -1,11 +1,19 @@
 package pl.kithard.core.api.database.mysql;
 
-import java.util.Set;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.Map;
 
-public abstract class DatabaseRepository<T> {
+public interface DatabaseRepository<V> {
 
-    public abstract Set<T> loadAll();
+    void prepareTable();
 
-    public abstract void batchUpdate(Set<T> toUpdate);
+    void insert(V data);
+
+    void delete(V data);
+
+    Collection<V> loadAll();
+
+    void updateAll(Collection<V> toUpdate);
 
 }
