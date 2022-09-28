@@ -32,7 +32,7 @@ public class FreeSpaceGui {
             PaginatedGui gui = Gui.paginated()
                     .rows(6)
                     .pageSize(28)
-                    .title(TextUtil.component("&7Wolne miejsca:"))
+                    .title(TextUtil.component("&3&lWolne miejsca"))
                     .create();
 
             GuiHelper.fillColorGui6(gui);
@@ -64,7 +64,7 @@ public class FreeSpaceGui {
                             if (!player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD_BLOCK), distance / 6)) {
                                 TextUtil.message(
                                         player,
-                                        "&8[&4&l!&8] &cNie posiadasz wystarczajacej ilosci blokow emeraldow! &4(" + distance / 6 + " blokow)"
+                                        "&8(&4&l!&8) &cNie posiadasz wystarczajacej ilosci blokow emeraldow! &4(" + distance / 6 + " blokow)"
                                 );
                                 return;
                             }

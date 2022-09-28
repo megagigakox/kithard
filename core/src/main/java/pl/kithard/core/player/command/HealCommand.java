@@ -30,7 +30,7 @@ public class HealCommand {
 
             player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
 
-            TextUtil.message(player, "&8[&3&l!&8] &7Zostales pomyslnie &buleczony!");
+            TextUtil.message(player, "&8(&3&l!&8) &7Zostales pomyslnie &buleczony!");
             return;
         }
 
@@ -41,7 +41,7 @@ public class HealCommand {
 
         Player target = this.plugin.getServer().getPlayerExact(args[0]);
         if (target == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz jest aktualnie &4offline&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz jest aktualnie &4offline&c!");
             return;
         }
 
@@ -51,7 +51,7 @@ public class HealCommand {
 
         target.getActivePotionEffects().forEach(potionEffect -> target.removePotionEffect(potionEffect.getType()));
 
-        TextUtil.message(player, "&8[&3&l!&8]  &7Pomyslnie &3uleczono &7gracza &b" + target.getName() + "&7!");
+        TextUtil.message(player, "&8(&3&l!&8)  &7Pomyslnie &3uleczono &7gracza &b" + target.getName() + "&7!");
     }
 
 }

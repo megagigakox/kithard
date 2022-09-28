@@ -37,7 +37,7 @@ public class ItemShopCommand {
 
         ItemShopService itemShopService = itemShopServiceConfiguration.findByKey(args[1]);
         if (itemShopService == null) {
-            TextUtil.message(sender, "&8[&4&l!&8] &cUsluga o nazwie &4" + args[1] + " &cnie istnieje!");
+            TextUtil.message(sender, "&8(&4&l!&8) &cUsluga o nazwie &4" + args[1] + " &cnie istnieje!");
             TextUtil.message(sender, "&7Dostepne uslugi:");
             for (ItemShopService service : this.plugin.getItemShopServiceConfiguration().getServices()) {
                 TextUtil.message(sender, " &8- &b" + service.getName());
@@ -46,6 +46,6 @@ public class ItemShopCommand {
         }
 
         this.plugin.getItemShopServiceExecutor().execute(args[0], itemShopService);
-        TextUtil.message(sender, "&8[&3&l!&8] &7Pomyslnie nadano usluge &b" + itemShopService.getName() + " &7dla gracza &f" + args[0]);
+        TextUtil.message(sender, "&8(&3&l!&8) &7Pomyslnie nadano usluge &b" + itemShopService.getName() + " &7dla gracza &f" + args[0]);
     }
 }

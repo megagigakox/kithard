@@ -23,13 +23,13 @@ public class RankingResetCommand {
     )
     public void handle(Player player, CorePlayer corePlayer) {
         if (corePlayer.getCooldown().getRankResetCooldown() > System.currentTimeMillis()) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNastepny raz ranking bedziesz mogl zresetowac za &4" +
+            TextUtil.message(player, "&8(&4&l!&8) &cNastepny raz ranking bedziesz mogl zresetowac za &4" +
                     TimeUtil.formatTimeMillis(corePlayer.getCooldown().getRankResetCooldown() - System.currentTimeMillis()));
             return;
         }
 
         if (!InventoryUtil.hasItem(player, Material.EMERALD_BLOCK, 256)) {
-            TextUtil.message(player, "&8[&4&l!&8] &cAby zresetowac swoj ranking potrzebujesz &4256 blokow emeraldow&c! Aktualnie posiadasz: &4" +
+            TextUtil.message(player, "&8(&4&l!&8) &cAby zresetowac swoj ranking potrzebujesz &4256 blokow emeraldow&c! Aktualnie posiadasz: &4" +
                     InventoryUtil.countItemsIgnoreItemMeta(player, new ItemStack(Material.EMERALD_BLOCK, 256)) + "&8/&4256&c!");
             return;
         }
@@ -44,6 +44,6 @@ public class RankingResetCommand {
         corePlayer.getCooldown().setRankResetCooldown(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(3));
         corePlayer.setNeedSave(true);
 
-        TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie zresetowano twoj ranking!");
+        TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie zresetowano twoj ranking!");
     }
 }

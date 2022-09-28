@@ -11,53 +11,38 @@ import java.util.Map;
 
 public class PlayerEnderChest {
 
-    public static final Map<Integer, String> REQUIRED_RANK = new HashMap<>();
+    private Inventory inventory;
+    private ItemStack[] contents;
 
-    static {
-        REQUIRED_RANK.put(1, "default");
-        REQUIRED_RANK.put(2, "vip");
-        REQUIRED_RANK.put(3, "svip");
-        REQUIRED_RANK.put(4, "sponsor");
-        REQUIRED_RANK.put(5, "legenda");
-    }
-
-    private final int id;
-    private final ItemStack[] contents;
-    private final Inventory inventory;
-    private String lore;
-
-    public PlayerEnderChest(int id, ItemStack[] contents, String lore) {
-        this.id = id;
-        this.lore = lore;
+    public PlayerEnderChest(ItemStack[] contents) {
         this.contents = contents;
-        this.inventory = Bukkit.createInventory(null, 45, TextUtil.color("&7Enderchest: &8&l#&e&l" + this.id));
     }
 
-    public int getId() {
-        return id;
+    public ItemStack[] getContents() {
+        return contents;
     }
 
-    public String getPermission() {
-        return "kithard.enderchest.access." + this.id;
-    }
-
-    public String getLore() {
-        return lore;
-    }
-
-    public void setLore(String lore) {
-        this.lore = lore;
-    }
-
-    public void closeInventory() {
-        this.inventory.setContents(contents);
+    public void setContents(ItemStack[] contents) {
+        this.contents = contents;
     }
 
     public void openInventory(Player player) {
-        if (contents != null) {
-            this.inventory.setContents(contents);
+
+        int rows = 3;
+        if (player.hasPermission("kithard.enderchests.6")) {
+            rows = 6;
+        }
+        else if (player.hasPermission("kithard.enderchests.5")) {
+            rows = 5;
+        }
+        else if (player.hasPermission("kithard.enderchests.4")) {
+            rows = 4;
         }
 
+        this.inventory = Bukkit.createInventory(null, rows * 9, "Ender Chest");
+        if (contents != null) {
+            this.inventory.setContents(this.contents);
+        }
         player.openInventory(inventory);
     }
 

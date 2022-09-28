@@ -32,18 +32,18 @@ public class PrivateMessageReplyCommand {
         }
 
         if (corePlayer.getReply() == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie masz komu odpisac!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie masz komu odpisac!");
             return;
         }
 
         CorePlayer targetCorePlayer = this.plugin.getCorePlayerCache().findByUuid(corePlayer.getReply());
         if (targetCorePlayer == null || targetCorePlayer.source() == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie masz komu odpisac!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie masz komu odpisac!");
             return;
         }
 
         if (targetCorePlayer.isDisabledSetting(PlayerSettings.PRIVATE_MESSAGES) || targetCorePlayer.isIgnoredUuid(player.getUniqueId())) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz Cie ignoruje lub ma wylaczone prywatne wiadomosci!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz Cie ignoruje lub ma wylaczone prywatne wiadomosci!");
             return;
         }
 

@@ -4,16 +4,16 @@ import net.dzikoysk.funnycommands.stereotypes.FunnyCommand;
 import net.dzikoysk.funnycommands.stereotypes.FunnyComponent;
 import org.bukkit.entity.Player;
 import pl.kithard.core.guild.permission.GuildPermission;
-import pl.kithard.core.guild.regen.gui.RegenGui;
+import pl.kithard.core.guild.regen.gui.GuildRegenGui;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.guild.Guild;
 
 @FunnyComponent
-public class RegenCommand {
+public class GuildRegenCommand {
 
     private final CorePlugin plugin;
 
-    public RegenCommand(CorePlugin plugin) {
+    public GuildRegenCommand(CorePlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -27,7 +27,7 @@ public class RegenCommand {
             return;
         }
 
-        new RegenGui(plugin).open(player, guild);
+        new GuildRegenGui(plugin).open(player, guild);
 
     }
 

@@ -23,11 +23,11 @@ public class DisableProtectionCommand {
     )
     public void handle(Player player, CorePlayer corePlayer) {
         if (corePlayer.getProtection() <= System.currentTimeMillis()) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie masz ochrony!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie masz ochrony!");
             return;
         }
 
         corePlayer.setProtection(0);
-        TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie wylaczono ochrone!");
+        TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie wylaczono ochrone!");
     }
 }

@@ -62,7 +62,7 @@ public class PlayerCommandPreprocessListener implements Listener {
         for (String it : DISALLOWED_COMMANDS) {
             if (splitMessage[0].equalsIgnoreCase("/" + it)) {
                 event.setCancelled(true);
-                TextUtil.message(event.getPlayer(), "&8[&4&l!&8] &cTa komenda zostala zablokowana!");
+                TextUtil.message(event.getPlayer(), "&8(&3&l!&8) &7Ta komenda niestety &3nie istnieje&7! Aby sprawdzic &bnajpotrzebniejsze &7komendy na serwerze uzyj&8: /&fpomoc");
                 break;
             }
         }
@@ -75,7 +75,7 @@ public class PlayerCommandPreprocessListener implements Listener {
 
         if (corePlayer.getCooldown().getCommandsCooldown() > System.currentTimeMillis() && !player.hasPermission("kithard.commands.delay.bypass")) {
             TextUtil.message(player,
-                    "&8[&4&l!&8] &cNastepnym razem komende możesz użyc za &4" +
+                    "&8(&4&l!&8) &cNastepnym razem komende mozesz uzyc za &4" +
                             TimeUtil.formatTimeMillis(corePlayer.getCooldown().getCommandsCooldown() - System.currentTimeMillis()));
             event.setCancelled(true);
             return;

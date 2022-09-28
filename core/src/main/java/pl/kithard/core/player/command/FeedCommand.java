@@ -25,7 +25,7 @@ public class FeedCommand {
     public void handle(Player player, String[] args) {
         if (args.length < 1) {
             player.setFoodLevel(20);
-            TextUtil.message(player, "&8[&3&l!&8] &7Twoj glod zostal pomyslnie &bzaspokojony&7!");
+            TextUtil.message(player, "&8(&3&l!&8) &7Twoj glod zostal pomyslnie &bzaspokojony&7!");
             return;
         }
 
@@ -36,12 +36,12 @@ public class FeedCommand {
 
         Player target = this.plugin.getServer().getPlayerExact(args[0]);
         if (target == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz jest aktualnie &4offline&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz jest aktualnie &4offline&c!");
             return;
         }
 
         target.setFoodLevel(20);
-        TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &3zaspokojono &7glod gracza &b" + target.getName() + "&7!");
+        TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &3zaspokojono &7glod gracza &b" + target.getName() + "&7!");
     }
 
 }

@@ -116,7 +116,7 @@ public class GuildCache {
         }
 
         if (guildMember.isNotAllowed(permission)) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz uprawnien do &4" + permission.getName() + "&c! Popros lidera o nadanie uprawnien.");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie posiadasz uprawnien do &4" + permission.getName() + "&c! Popros lidera o nadanie uprawnien.");
             return true;
         }
 
@@ -142,7 +142,7 @@ public class GuildCache {
         }
 
         if (guildMember.isNotAllowed(permission)) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz uprawnien do &4" + permission.getName() + "&c! Popros lidera o nadanie uprawnien.");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie posiadasz uprawnien do &4" + permission.getName() + "&c! Popros lidera o nadanie uprawnien.");
             return true;
         }
 

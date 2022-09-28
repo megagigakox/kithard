@@ -33,9 +33,9 @@ public class ShopUtil {
         }
 
         if (i == 0) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz żadnych itemkow do sprzedania!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie posiadasz żadnych itemkow do sprzedania!");
         } else {
-            TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie sprzedano &f" + i + " &7itemkow! &7Twoj nowy stan konta wynosi: &3" + corePlayer.getMoney());
+            TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie sprzedano &f" + i + " &7itemkow! &7Twoj nowy stan konta wynosi: &3" + corePlayer.getMoney());
             corePlayer.setNeedSave(true);
         }
     }

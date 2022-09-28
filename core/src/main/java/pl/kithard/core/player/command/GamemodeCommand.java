@@ -45,19 +45,19 @@ public class GamemodeCommand {
         switch (args.length) {
             case 1: {
                 player.setGameMode(gameMode);
-                TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &3ustawiono &7tryb gry na: &b" +
+                TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &3ustawiono &7tryb gry na: &b" +
                         gameMode.name().toUpperCase() + "&7!");
                 return;
             }
             case 2: {
                 Player target = this.plugin.getServer().getPlayerExact(args[1]);
                 if (target == null) {
-                    TextUtil.message(player, "&8[&4&l!&8] &cTen gracz jest aktualnie &4offline&c!");
+                    TextUtil.message(player, "&8(&4&l!&8) &cTen gracz jest aktualnie &4offline&c!");
                     return;
                 }
 
                 target.setGameMode(gameMode);
-                TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &3ustawiono &7tryb gry na: &b" +
+                TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &3ustawiono &7tryb gry na: &b" +
                         gameMode.name().toUpperCase() + " &7dla gracza &f" + target.getName() + "&7!");
             }
         }

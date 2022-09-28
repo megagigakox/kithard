@@ -7,10 +7,11 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.guild.log.GuildLog;
 import pl.kithard.core.guild.log.GuildLogType;
 import pl.kithard.core.guild.permission.GuildPermissionScheme;
-import pl.kithard.core.guild.regen.RegenBlock;
+import pl.kithard.core.guild.regen.GuildRegenBlock;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.api.database.entity.DatabaseEntity;
 import pl.kithard.core.api.database.entry.DatabaseEntry;
@@ -21,10 +22,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-@DatabaseEntity(database = "core", collection = "guilds")
 public class Guild extends DatabaseEntry {
 
-    @SerializedName("_id")
     private final String tag;
 
     private final String name;
@@ -34,27 +33,49 @@ public class Guild extends DatabaseEntry {
     private int lives,
             points,
             kills,
-            deaths,
-            emeraldBlocks;
-    private long expireDate,
-            createDate,
-            lastAttackDate,
-            lastExplodeDate;
+            deaths;
+    private long expireTime,
+            createTime,
+            lastAttackTime,
+            lastExplodeTime;
     private boolean friendlyFire, allyFire;
 
-    private final Set<RegenBlock> regenBlocks;
-    private final Map<GuildLogType, List<GuildLog>> logTypes;
-    private final Set<GuildMember> members;
-    private final Set<GuildMember> deputies;
-    private final Set<String> allies;
-    private final List<GuildPermissionScheme> permissionSchemes;
-    private final Inventory warehouse;
+    private final LinkedList<GuildRegenBlock> regenBlocks = new LinkedList<>();
+    private final Map<GuildLogType, List<GuildLog>> logs = new HashMap<>();
+    private final Set<GuildMember> members = new HashSet<>();
+    private final List<GuildPermissionScheme> permissionSchemes = new ArrayList<>();
+    private Set<UUID> deputies = new HashSet<>();
+    private Set<String> allies = new HashSet<>();
+    private ItemStack[] warehouseContents;
+    private Inventory warehouse;
 
-    private transient long guildWarDelay;
-    private transient Set<UUID> memberInvites;
-    private transient Set<String> allyInvites;
-    private transient Hologram hologram;
+    private long guildWarCooldown;
+    private Set<UUID> memberInvites;
+    private Set<String> allyInvites;
+    private Hologram hologram;
 
+    public Guild(String tag, String name, UUID owner, GuildRegion region, Location home, int lives, int points, int kills, int deaths, long expireTime, long createTime, long lastAttackTime, long lastExplodeTime, boolean friendlyFire, boolean allyFire, Set<UUID> deputies, Set<String> allies, ItemStack[] warehouseContents) {
+        this.tag = tag;
+        this.name = name;
+        this.owner = owner;
+        this.region = region;
+        this.home = home;
+        this.lives = lives;
+        this.points = points;
+        this.kills = kills;
+        this.deaths = deaths;
+        this.expireTime = expireTime;
+        this.createTime = createTime;
+        this.lastAttackTime = lastAttackTime;
+        this.lastExplodeTime = lastExplodeTime;
+        this.friendlyFire = friendlyFire;
+        this.allyFire = allyFire;
+        this.deputies = deputies;
+        this.allies = allies;
+        this.warehouseContents = warehouseContents;
+
+        this.initialize();
+    }
 
     public Guild(String tag, String name, CorePlayer owner, Location home) {
 
@@ -64,21 +85,14 @@ public class Guild extends DatabaseEntry {
         this.owner = owner.getUuid();
         this.home = home;
 
-        this.createDate = System.currentTimeMillis();
-        this.expireDate = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(3);
-        this.lastAttackDate = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24);
+        this.createTime = System.currentTimeMillis();
+        this.expireTime = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(3);
+        this.lastAttackTime = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24);
 
         this.points = 500;
         this.kills = 0;
         this.deaths = 0;
         this.lives = 3;
-
-        this.regenBlocks = new HashSet<>();
-        this.logTypes = new HashMap<>();
-        this.members = new HashSet<>();
-        this.deputies = new HashSet<>();
-        this.allies = new HashSet<>();
-        this.permissionSchemes = new ArrayList<>();
 
         this.warehouse = Bukkit.createInventory(null, 54, TextUtil.color("&7Magazyn gildyjny:"));
         this.initialize();
@@ -187,36 +201,36 @@ public class Guild extends DatabaseEntry {
         return MathUtil.round(this.getKills() / (double)this.getDeaths(), 2);
     }
 
-    public long getExpireDate() {
-        return expireDate;
+    public long getExpireTime() {
+        return expireTime;
     }
 
-    public void setExpireDate(long expireDate) {
-        this.expireDate = expireDate;
+    public void setExpireTime(long expireTime) {
+        this.expireTime = expireTime;
     }
 
-    public long getCreateDate() {
-        return createDate;
+    public long getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateDate(long createDate) {
-        this.createDate = createDate;
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
     }
 
-    public long getLastAttackDate() {
-        return lastAttackDate;
+    public long getLastAttackTime() {
+        return lastAttackTime;
     }
 
-    public void setLastAttackDate(long lastAttackDate) {
-        this.lastAttackDate = lastAttackDate;
+    public void setLastAttackTime(long lastAttackTime) {
+        this.lastAttackTime = lastAttackTime;
     }
 
-    public long getLastExplodeDate() {
-        return lastExplodeDate;
+    public long getLastExplodeTime() {
+        return lastExplodeTime;
     }
 
-    public void setLastExplodeDate(long lastExplodeDate) {
-        this.lastExplodeDate = lastExplodeDate;
+    public void setLastExplodeTime(long lastExplodeTime) {
+        this.lastExplodeTime = lastExplodeTime;
     }
 
     public boolean isFriendlyFire() {
@@ -266,7 +280,7 @@ public class Guild extends DatabaseEntry {
         return this.findMemberByUuid(uuid) != null;
     }
 
-    public Set<GuildMember> getDeputies() {
+    public Set<UUID> getDeputies() {
         return deputies;
     }
 
@@ -275,11 +289,11 @@ public class Guild extends DatabaseEntry {
     }
 
     public boolean isDeputyOrOwner(UUID uuid) {
-        return deputies.contains(findMemberByUuid(uuid)) || this.getOwner().equals(uuid);
+        return deputies.contains(uuid) || this.getOwner().equals(uuid);
     }
 
     public boolean isDeputy(UUID uuid) {
-        return deputies.contains(findMemberByUuid(uuid));
+        return deputies.contains(uuid);
     }
 
     public Set<String> getAllies() {
@@ -330,17 +344,22 @@ public class Guild extends DatabaseEntry {
 
     }
 
-    public Set<RegenBlock> getRegenBlocks() {
+    public LinkedList<GuildRegenBlock> getRegenBlocks() {
         return regenBlocks;
     }
 
-    public List<GuildLog> getLogsByType(GuildLogType type) {
-        return this.logTypes.computeIfAbsent(type, x -> new ArrayList<>());
+    public Map<GuildLogType, List<GuildLog>> getLogs() {
+        return logs;
     }
 
-    public void addLog(GuildLog log) {
-        List<GuildLog> logs = this.logTypes.computeIfAbsent(log.getType(), x -> new ArrayList<>());
+    public List<GuildLog> getLogsByType(GuildLogType type) {
+        return this.logs.computeIfAbsent(type, x -> new ArrayList<>());
+    }
+
+    public GuildLog addLog(GuildLog log) {
+        List<GuildLog> logs = this.logs.computeIfAbsent(log.getType(), x -> new ArrayList<>());
         logs.add(log);
+        return log;
     }
 
     public void openWarehouse(Player player) {
@@ -353,19 +372,15 @@ public class Guild extends DatabaseEntry {
         this.memberInvites = new HashSet<>();
     }
 
-    public int getEmeraldBlocks() {
-        return emeraldBlocks;
+    public long getGuildWarCooldown() {
+        return guildWarCooldown;
     }
 
-    public void setEmeraldBlocks(int emeraldBlocks) {
-        this.emeraldBlocks = emeraldBlocks;
+    public void setGuildWarCooldown(long guildWarCooldown) {
+        this.guildWarCooldown = guildWarCooldown;
     }
 
-    public long getGuildWarDelay() {
-        return guildWarDelay;
-    }
-
-    public void setGuildWarDelay(long guildWarDelay) {
-        this.guildWarDelay = guildWarDelay;
+    public ItemStack[] getWarehouseContents() {
+        return warehouseContents;
     }
 }

@@ -33,7 +33,7 @@ public class GuildEnlargeCommand {
         }
 
         if (guild.getRegion().getSize() >= 45) {
-            TextUtil.message(player, "&8[&4&l!&8] &cGildia posiada juz &4maksymalny &crozmiar!");
+            TextUtil.message(player, "&8(&4&l!&8) &cGildia posiada juz &4maksymalny &crozmiar!");
             return;
         }
 
@@ -54,19 +54,22 @@ public class GuildEnlargeCommand {
         if (player.getInventory().containsAtLeast(item, item.getAmount())) {
             player.getInventory().removeItem(item);
             guild.getRegion().setSize(guild.getRegion().getSize() + 5);
+            guild.setNeedSave(true);
 
-            guild.addLog(new GuildLog(
+            GuildLog guildLog = guild.addLog(new GuildLog(
+                    guild.getTag(),
                     GuildLogType.GUILD_ENLARGE,
                     "&f" + player.getName() + " &7powiekszyl teren gildii.")
             );
-
-            guild.setNeedSave(true);
+            this.plugin.getServer()
+                    .getScheduler()
+                    .runTaskAsynchronously(this.plugin, () -> this.plugin.getGuildRepository().insertLog(guildLog));
 
             int size = guild.getRegion().getSize() * 2;
-            TextUtil.message(player,"&8[&3&l!&8] &7Powiekszyles rozmiar gildii do &f" + size + "&7x&f" + size);
+            TextUtil.message(player,"&8(&3&l!&8) &7Powiekszyles rozmiar gildii do &f" + size + "&7x&f" + size);
             return;
         }
 
-        TextUtil.message(player, "&8[&4&l!&8] &cMusisz posiadac &4" + item.getAmount() + " &cblokow emeraldow aby powiekszyc gildie!!");
+        TextUtil.message(player, "&8(&4&l!&8) &cMusisz posiadac &4" + item.getAmount() + " &cblokow emeraldow aby powiekszyc gildie!!");
     }
 }

@@ -23,32 +23,32 @@ public class LoginCommand extends Command {
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
         AuthPlayer authPlayer = this.plugin.getAuthPlayerCache().findByName(player.getName());
         if (authPlayer.isPremium()) {
-            player.sendMessage(new TextComponent(TextUtil.color("&cJestes graczem premium!")));
+            player.sendMessage(TextUtil.component("&cJestes graczem premium!"));
             return;
         }
 
         if (!authPlayer.isRegistered()) {
-            player.sendMessage(new TextComponent(TextUtil.color("&cNajpierw musisz sie zarejestrowac!")));
+            player.sendMessage(TextUtil.component("&cNajpierw musisz sie zarejestrowac!"));
             return;
         }
 
         if (authPlayer.isLogged()) {
-            player.sendMessage(new TextComponent(TextUtil.color("&cJestes juz zalogowany!")));
+            player.sendMessage(TextUtil.component("&cJestes juz zalogowany!"));
             return;
         }
 
         if (args.length < 1) {
-            player.sendMessage(new TextComponent(TextUtil.color("&cPoprawne uzycie: &b/login (haslo)")));
+            player.sendMessage(TextUtil.component("&cPoprawne uzycie: &b/login (haslo)"));
             return;
         }
 
         String password = args[0];
         if (!password.equals(authPlayer.getPassword())) {
-            player.sendMessage(new TextComponent(TextUtil.color("&cPodane haslo jest nieprawidlowe.")));
+            player.sendMessage(TextUtil.component("&cPodane haslo jest nieprawidlowe."));
             return;
         }
 
-        player.sendMessage(new TextComponent(TextUtil.color("&aPomyslnie zalogowano!")));
+        player.sendMessage(TextUtil.component("&aPomyslnie zalogowano!"));
         authPlayer.setLogged(true);
         BungeeUtil.sendCustomData(player, player.getUniqueId().toString(), "main");
     }

@@ -38,18 +38,18 @@ public class    PrivateMessageCommand {
 
         CorePlayer targetCorePlayer = this.plugin.getCorePlayerCache().findByName(args[0]);
         if (targetCorePlayer == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz &4nie istnieje &cw bazie danych!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz &4nie istnieje &cw bazie danych!");
             return;
         }
 
         Player targetPlayer = targetCorePlayer.source();
         if (targetPlayer == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz jest aktualnie &4offline&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz jest aktualnie &4offline&c!");
             return;
         }
 
         if (targetCorePlayer.isIgnoredUuid(player.getUniqueId()) || targetCorePlayer.isDisabledSetting(PlayerSettings.PRIVATE_MESSAGES)) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz Cie ignoruje lub ma wylaczone prywatne wiadomosci!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz Cie ignoruje lub ma wylaczone prywatne wiadomosci!");
             return;
         }
 

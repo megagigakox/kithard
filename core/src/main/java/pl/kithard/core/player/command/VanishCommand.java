@@ -35,7 +35,7 @@ public class VanishCommand {
                 corePlayer.setVanish(false);
             }
 
-            TextUtil.message(player,"&8[&3&l!&8] &7Pomyslnie &3zmieniles &7tryb vanisha na: " + (corePlayer.isVanish() ? "&aON" : "&cOFF"));
+            TextUtil.message(player,"&8(&3&l!&8) &7Pomyslnie &3zmieniles &7tryb vanisha na: " + (corePlayer.isVanish() ? "&aON" : "&cOFF"));
         }
     }
 

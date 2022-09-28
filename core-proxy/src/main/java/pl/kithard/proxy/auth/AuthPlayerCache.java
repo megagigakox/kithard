@@ -1,19 +1,14 @@
 package pl.kithard.proxy.auth;
 
-import pl.kithard.proxy.ProxyPlugin;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AuthPlayerCache {
 
-    private final ProxyPlugin plugin;
     private final Map<String, AuthPlayer> authPlayerMap = new ConcurrentHashMap<>();
 
-    public AuthPlayerCache(ProxyPlugin plugin) {
-        this.plugin = plugin;
+    public void add(AuthPlayer authPlayer) {
+        this.authPlayerMap.put(authPlayer.getName(), authPlayer);
     }
 
     public AuthPlayer create(String name) {
@@ -27,20 +22,22 @@ public class AuthPlayerCache {
     }
 
     public boolean hasMaxAccountsPerIP(String ip) {
-        int accounts = 0;
+        List<AuthPlayer> authPlayers = findAccountsByIP(ip);
+        if (authPlayers == null || authPlayers.isEmpty()) {
+            return false;
+        }
+        return authPlayers.size() > 2;
+    }
+
+    public List<AuthPlayer> findAccountsByIP(String ip) {
+        List<AuthPlayer> authPlayers = new ArrayList<>();
         for (AuthPlayer authPlayer : this.authPlayerMap.values()) {
             if (authPlayer.getIp().equals(ip)) {
-                accounts++;
+                authPlayers.add(authPlayer);
             }
         }
 
-        return accounts > 3;
-    }
-
-    public void load() {
-        this.plugin.getMongoService()
-                .loadAll(AuthPlayer.class)
-                .forEach(authPlayer -> this.authPlayerMap.put(authPlayer.getName().toLowerCase(), authPlayer));
+        return authPlayers;
     }
 
     public Collection<AuthPlayer> values() {

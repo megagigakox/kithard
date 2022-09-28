@@ -6,13 +6,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.guild.Guild;
-import pl.kithard.core.guild.regen.RegenBlock;
+import pl.kithard.core.guild.regen.GuildRegenBlock;
 
-public class RegenListener implements Listener {
+public class GuildRegenListener implements Listener {
 
     private final CorePlugin plugin;
 
-    public RegenListener(CorePlugin plugin) {
+    public GuildRegenListener(CorePlugin plugin) {
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -30,7 +30,7 @@ public class RegenListener implements Listener {
             }
 
             guild.getRegenBlocks().add(
-                    new RegenBlock(block.getLocation(), block.getType(), block.getData())
+                    new GuildRegenBlock(guild.getTag(), block.getLocation(), block.getType(), block.getData())
             );
         }
 

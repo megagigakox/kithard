@@ -36,29 +36,45 @@ public class DropGui {
                 .rows(5)
                 .create();
 
-        GuiHelper.fillColorGui5(gui);
+        GuiHelper.fillColorMain(gui);
 
-        gui.setItem(3, 5, ItemBuilder.from(Material.DIAMOND_PICKAXE)
-                .name(TextUtil.component("&7Drop z &8kamienia&7!"))
+        gui.setItem(3, 3, ItemBuilder.from(Material.DIAMOND_PICKAXE)
+                .name(TextUtil.component("&7Drop z &8&lkamienia&7!"))
                 .lore(TextUtil.component(Arrays.asList(
                         "",
-                        " &7Kliknij aby &fprzejsc &7dalej!"
+                        " &7Kliknij aby &fzobaczyc podglad &7tego dropu!"
                 )))
                 .asGuiItem(inventoryClickEvent -> openStone(player)));
 
-        gui.setItem(3, 7, ItemBuilder.from(Material.CHEST)
-                .name(TextUtil.component("&7Drop z &bmagicznych skrzynek&7!"))
+        gui.setItem(3, 5, ItemBuilder.from(Material.CHEST)
+                .name(TextUtil.component("&7Drop z &b&lmagicznych skrzynek&7!"))
                 .lore(TextUtil.component(Arrays.asList(
                         "",
-                        " &7Kliknij aby &fprzejsc &7dalej!"
+                        " &7Kliknij aby &fzobaczyc podglad &7tego dropu!"
                 )))
                 .asGuiItem(inventoryClickEvent -> openMagicChest(player)));
 
-        gui.setItem(3, 3, ItemBuilder.from(Material.MOSSY_COBBLESTONE)
-                .name(TextUtil.component("&7Drop z &2cobblex&7!"))
+        gui.setItem(3, 4, ItemBuilder.from(Material.MOSSY_COBBLESTONE)
+                .name(TextUtil.component("&7Drop z &2&lcobblex&7!"))
                 .lore(TextUtil.component(Arrays.asList(
                         "",
-                        " &7Kliknij aby &fprzejsc &7dalej!"
+                        " &7Kliknij aby &fzobaczyc podglad &7tego dropu!"
+                )))
+                .asGuiItem(inventoryClickEvent -> openCobbleX(player)));
+
+        gui.setItem(3, 6, ItemBuilder.from(new ItemStack(397, 1, (short) 2))
+                .name(TextUtil.component("&7Drop z &3&lbossa&7!"))
+                .lore(TextUtil.component(Arrays.asList(
+                        "",
+                        " &7Kliknij aby &fzobaczyc podglad &7tego dropu!"
+                )))
+                .asGuiItem(inventoryClickEvent -> openCobbleX(player)));
+
+        gui.setItem(3, 7, ItemBuilder.from(new ItemStack(397, 1, (short) 3))
+                .name(TextUtil.component("&7Drop z &a&lglowek graczy&7!"))
+                .lore(TextUtil.component(Arrays.asList(
+                        "",
+                        " &7Kliknij aby &fzobaczyc podglad &7tego dropu!"
                 )))
                 .asGuiItem(inventoryClickEvent -> openCobbleX(player)));
 
@@ -260,7 +276,7 @@ public class DropGui {
                     .amount(dropItem.getMax())
                     .appendLore(
                             "",
-                            " &7Od&8: &f" + dropItem.getMin() + " &7Do&8: &f" + dropItem.getMax()
+                            " &7Przedmiot dropi w ilosciach&8: &f" + dropItem.getMin() + " &7- &f" + dropItem.getMax()
                     )
                     .asGuiItem());
 
@@ -292,7 +308,7 @@ public class DropGui {
                     .amount(dropItem.getMax())
                     .lore(TextUtil.component(Arrays.asList(
                             "",
-                            " &7Od&8: &f" + dropItem.getMin() + " &7Do&8: &f" + dropItem.getMax()
+                            " &7Przedmiot dropi w ilosciach&8: &f" + dropItem.getMin() + " &7- &f" + dropItem.getMax()
                     )))
                     .asGuiItem());
 

@@ -31,30 +31,30 @@ public class GuildDeputyCommand {
         }
 
         if (!guild.isOwner(player.getUniqueId())) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie jestes zalozycielem gildii!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie jestes zalozycielem gildii!");
             return;
         }
 
         GuildMember guildMember = guild.findMemberByName(args[0]);
         if (guildMember == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz nie jest w twojej gildii!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz nie jest w twojej gildii!");
             return;
         }
 
-        if (guild.getDeputies().contains(guildMember)) {
-            guild.getDeputies().remove(guildMember);
-            TextUtil.message(player, "&8[&3&l!&8] &7Gracz &f" + args[0] + " &7nie posiada od teraz zastepcy!");
+        if (guild.getDeputies().contains(guildMember.getUuid())) {
+            guild.getDeputies().remove(guildMember.getUuid());
+            TextUtil.message(player, "&8(&3&l!&8) &7Gracz &f" + args[0] + " &7nie posiada od teraz zastepcy!");
             return;
         }
 
         if (guild.getDeputies().size() == 3) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTwoja gildia posiada juz maksymalna ilosc zastepcow!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTwoja gildia posiada juz maksymalna ilosc zastepcow!");
             return;
         }
 
-        guild.getDeputies().add(guildMember);
+        guild.getDeputies().add(guildMember.getUuid());
         guild.setNeedSave(true);
-        TextUtil.message(player, "&8[&4&l!&8] &cPamietaj że nadanie zastepcy powoduje nadanie dostepu do &4wszystkich &cuprawnien gildyjnych!");
-        TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &bnadales &7zastepce czlonkowi &f" + args[0]);
+        TextUtil.message(player, "&8(&4&l!&8) &cPamietaj że nadanie zastepcy powoduje nadanie dostepu do &4wszystkich &cuprawnien gildyjnych!");
+        TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &bnadales &7zastepce czlonkowi &f" + args[0]);
     }
 }

@@ -30,12 +30,12 @@ public class TpCommand {
 
                 Player targetPlayer = this.plugin.getServer().getPlayerExact(args[0]);
                 if (targetPlayer == null) {
-                    TextUtil.message(player, "&8[&4&l!&8] &cTen gracz jest aktualnie &4offline&c!");
+                    TextUtil.message(player, "&8(&4&l!&8) &cTen gracz jest aktualnie &4offline&c!");
                     return;
                 }
 
                 player.teleport(targetPlayer);
-                TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &3przeteleportowano &7do gracza &b" + targetPlayer.getName() + "&7!");
+                TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &3przeteleportowano &7do gracza &b" + targetPlayer.getName() + "&7!");
                 return;
             }
 
@@ -44,12 +44,12 @@ public class TpCommand {
                 Player targetPlayer1 = this.plugin.getServer().getPlayerExact(args[0]);
                 Player targetPlayer2 = this.plugin.getServer().getPlayerExact(args[1]);
                 if (targetPlayer1 == null || targetPlayer2 == null) {
-                    TextUtil.message(player, "&8[&4&l!&8] &cTen gracz &4nie istnieje &cw bazie danych!");
+                    TextUtil.message(player, "&8(&4&l!&8) &cTen gracz &4nie istnieje &cw bazie danych!");
                     return;
                 }
 
                 targetPlayer1.teleport(targetPlayer2);
-                TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &3przeteleportowano &7gracza &b" + targetPlayer1.getName() + " &7do &b" + targetPlayer2.getName());
+                TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &3przeteleportowano &7gracza &b" + targetPlayer1.getName() + " &7do &b" + targetPlayer2.getName());
                 return;
             }
 
@@ -59,7 +59,7 @@ public class TpCommand {
                 double z = Double.parseDouble(args[2]);
 
                 player.teleport(new Location(player.getWorld(), x, y, z));
-                TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &3przeteleportowano &7na kordynaty: &bx:" + x + ", y:" + y + ", z:" + z);
+                TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &3przeteleportowano &7na kordynaty: &bx:" + x + ", y:" + y + ", z:" + z);
                 return;
             }
 

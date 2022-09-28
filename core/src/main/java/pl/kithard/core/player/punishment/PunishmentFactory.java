@@ -71,7 +71,7 @@ public class PunishmentFactory {
         Player player = this.plugin.getServer().getPlayerExact(punished);
         if (player != null) {
             TextUtil.message(player,
-                    "&8[&4&l!&8] &cZostales wyciszony na &4"
+                    "&8(&4&l!&8) &cZostales wyciszony na &4"
                             + (mute.getTime() == 0L ? "zawsze" : TimeUtil.formatTimeMillis(mute.getTime() - System.currentTimeMillis()))
                             + " &cprzez &4" + admin + " &cz powodem: &4" + reason);
         }

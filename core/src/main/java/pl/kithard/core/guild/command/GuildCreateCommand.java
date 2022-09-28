@@ -34,7 +34,7 @@ public class GuildCreateCommand {
         GuildCache guildCache = this.plugin.getGuildCache();
         Guild playerGuild = guildCache.findByPlayer(player);
         if (playerGuild != null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cPosiadasz juz gildie!");
+            TextUtil.message(player, "&8(&4&l!&8) &cPosiadasz juz gildie!");
             return;
         }
 
@@ -47,34 +47,34 @@ public class GuildCreateCommand {
         String name = args[1];
 
         if (tag.length() > 5 || tag.length() < 2 || name.length() > 32 || name.length() < 4) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie poprawna dlugosc nazwy lub tagu gildii. Tag 2-5 liter, nazwa 4-32");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie poprawna dlugosc nazwy lub tagu gildii. Tag 2-5 liter, nazwa 4-32");
             return;
         }
 
         if (guildCache.findByTag(tag) != null || guildCache.findByName(name) != null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cGildia o takim tagu lub nazwie juz istnieje!");
+            TextUtil.message(player, "&8(&4&l!&8) &cGildia o takim tagu lub nazwie juz istnieje!");
             return;
         }
 
         if (!tag.matches("^[a-zA-Z0-9_]*$") || !name.matches("^[a-zA-Z0-9_]*$")) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTag gildii musi byc alfanumeryczny!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTag gildii musi byc alfanumeryczny!");
             return;
         }
 
         if (!guildCache.canCreateGuildBySpawnLocation(player.getLocation())) {
-            TextUtil.message(player, "&8[&4&l!&8] &cJestes za blisko spawna, minimalna ilosc kratek od spawna to: &4"
+            TextUtil.message(player, "&8(&4&l!&8) &cJestes za blisko spawna, minimalna ilosc kratek od spawna to: &4"
                     + CoreConstants.MIN_DISTANCE_FROM_SPAWN);
             return;
         }
 
         if (!guildCache.canCreateGuildByGuildLocation(player.getLocation())) {
-            TextUtil.message(player, "&8[&4&l!&8] &cJestes za blisko innej gldii, minimalna ilosc kratek od innej gildii to: &4"
+            TextUtil.message(player, "&8(&4&l!&8) &cJestes za blisko innej gldii, minimalna ilosc kratek od innej gildii to: &4"
                     + CoreConstants.MIN_DISTANCE_FROM_OTHER_GUILD);
             return;
         }
 
         if (BorderUtil.isBorderNear(player.getLocation(), 120)) {
-            TextUtil.message(player, "&8[&4&l!&8] &cJestes za blisko borderu mapy!");
+            TextUtil.message(player, "&8(&4&l!&8) &cJestes za blisko borderu mapy!");
             return;
         }
 
@@ -86,7 +86,8 @@ public class GuildCreateCommand {
         }
 
         if (!InventoryUtil.hasItems(player, itemsForGuildCreate)) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz &4wszystkich itemow &cna zalożenie gildii!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie posiadasz &4wszystkich itemow &cna zalożenie gildii!");
+            return;
         }
 
         InventoryUtil.removeItems(player, itemsForGuildCreate);
@@ -95,7 +96,7 @@ public class GuildCreateCommand {
         owner.getGuildHistory().add(tag);
         Guild newGuild = this.plugin.getGuildFactory().create(tag, name, owner);
 
-        Bukkit.broadcastMessage(TextUtil.color("&8[&3&l!&8] &7Gracz &f" + player.getName() + " &7zalożyl gildie &8[&3" + tag + "&8] &b" + name + "&7!"));
+        Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gracz &f" + player.getName() + " &7zalożyl gildie &8[&3" + tag + "&8] &b" + name + "&7!"));
         TitleUtil.title(player,
                 "&3&lZalożyles gildie " +
                         "&8[&f" +

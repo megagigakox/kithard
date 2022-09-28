@@ -25,7 +25,7 @@ public class RepairCommand {
                 itemInHand.setDurability((short) 0);
                 TextUtil.message(player, "&aNaprawiono przedmiot.");
             } else {
-                TextUtil.message(player,"&8[&4&l!&8] &cNie możesz naprawic tego przedmiotu.");
+                TextUtil.message(player,"&8(&4&l!&8) &cNie możesz naprawic tego przedmiotu.");
             }
             return;
         }

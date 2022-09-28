@@ -19,9 +19,10 @@ import pl.kithard.core.guild.Guild;
 import pl.kithard.core.guild.GuildCache;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.player.CorePlayerCache;
-import pl.kithard.core.player.CorePlayerFactory;
 import pl.kithard.core.player.backup.PlayerBackupType;
+import pl.kithard.core.safe.Safe;
 import pl.kithard.core.util.InventoryUtil;
+import pl.kithard.core.util.ItemStackBuilder;
 import pl.kithard.core.util.LocationUtil;
 import pl.kithard.core.util.TextUtil;
 
@@ -30,19 +31,9 @@ import java.util.Arrays;
 public class PlayerDataListener implements Listener {
 
     private final CorePlugin plugin;
-    private final CorePlayerCache corePlayerCache;
-    private final CorePlayerFactory corePlayerFactory;
-    private final PlayerRankingService playerRankingService;
-    private final PlayerNameTagService playerNameTagService;
-    private final GuildCache guildCache;
 
     public PlayerDataListener(CorePlugin plugin) {
         this.plugin = plugin;
-        this.corePlayerCache = plugin.getCorePlayerCache();
-        this.corePlayerFactory = plugin.getCorePlayerFactory();
-        this.playerRankingService = plugin.getPlayerRankingService();
-        this.playerNameTagService = plugin.getPlayerNameTagService();
-        this.guildCache = plugin.getGuildCache();
         this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -50,37 +41,48 @@ public class PlayerDataListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         this.plugin.getAntiMacroCache().getUuidClicksPerSecondMap().put(player.getUniqueId(), 0);
-        CorePlayer corePlayer = this.corePlayerCache.findByUuid(player.getUniqueId());
+        CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByUuid(player.getUniqueId());
         event.setJoinMessage(null);
 
         if (corePlayer == null) {
-            corePlayer = this.corePlayerFactory.create(
+            corePlayer = new CorePlayer(
                     player.getUniqueId(),
                     player.getName(),
                     player.getAddress().getHostString()
             );
-            corePlayer.setNeedSave(true);
             corePlayer.setProtection(TimeUtil.timeFromString("5m") + System.currentTimeMillis());
-
-            this.corePlayerCache.add(corePlayer);
-            this.playerRankingService.add(corePlayer);
+            this.plugin.getCorePlayerCache().add(corePlayer);
+            this.plugin.getPlayerRankingService().add(corePlayer);
 
             player.getInventory().clear();
             player.getInventory().setArmorContents(null);
             player.setGameMode(GameMode.SURVIVAL);
             player.setAllowFlight(false);
-
             player.teleport(LocationUtil.getRadnomLocation());
+
+            Safe safe = this.plugin.getSafeCache().create(player.getUniqueId(), player.getName());
+            CorePlayer finalCorePlayer = corePlayer;
+            this.plugin.getServer()
+                    .getScheduler()
+                    .runTaskAsynchronously(
+                            this.plugin,
+                            () -> {
+                                this.plugin.getCorePlayerRepository().insert(finalCorePlayer);
+                                this.plugin.getSafeRepository().insert(safe);
+                            }
+                    );
+
             InventoryUtil.addItem(
                     player,
                     Arrays.asList(
-                            ItemBuilder.from(new ItemStack(Material.IRON_PICKAXE))
-                            .enchant(Enchantment.DIG_SPEED, 3)
-                            .enchant(Enchantment.DURABILITY, 1)
-                            .build(),
+                            ItemStackBuilder.of(Material.IRON_PICKAXE)
+                                    .enchantment(Enchantment.DIG_SPEED, 3)
+                                    .enchantment(Enchantment.DURABILITY, 1)
+                                    .asItemStack(),
                             new ItemStack(Material.WOOD, 32),
                             new ItemStack(Material.ENDER_CHEST),
-                            new ItemStack(Material.COOKED_BEEF, 64)
+                            new ItemStack(Material.COOKED_BEEF, 64),
+                            safe.getItem()
                     )
             );
 
@@ -88,9 +90,9 @@ public class PlayerDataListener implements Listener {
 
         if (!corePlayer.getName().equalsIgnoreCase(player.getName())) {
             String newUsername = player.getName();
-            this.corePlayerCache.updateUsername(corePlayer, newUsername);
+            this.plugin.getCorePlayerCache().updateUsername(corePlayer, newUsername);
 
-            Guild guild = this.guildCache.findByPlayer(player);
+            Guild guild = this.plugin.getGuildCache().findByPlayer(player);
             if (guild != null) {
                 guild.findMemberByUuid(player.getUniqueId()).setName(newUsername);
                 guild.setNeedSave(true);
@@ -99,7 +101,7 @@ public class PlayerDataListener implements Listener {
 
         for (Player it : Bukkit.getOnlinePlayers()) {
 
-            CorePlayer itCorePlayer = this.corePlayerCache.findByPlayer(it);
+            CorePlayer itCorePlayer = this.plugin.getCorePlayerCache().findByPlayer(it);
             if (itCorePlayer.isVanish()) {
                 player.hidePlayer(it);
             }
@@ -119,17 +121,18 @@ public class PlayerDataListener implements Listener {
         Player player = event.getPlayer();
 
         for (Player it : Bukkit.getOnlinePlayers()) {
-            this.playerNameTagService.delete(player, it);
+            this.plugin.getPlayerNameTagService().delete(player, it);
         }
 
-        CorePlayer corePlayer = this.corePlayerCache.findByPlayer(player);
+        CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
         if (corePlayer.getCombat().hasFight()) {
             player.setHealth(0);
-            Bukkit.broadcastMessage(TextUtil.color("&8[&4&l!&8] &cGracz &4" + player.getName() + " &cwylogowal sie podczas walki!"));
+            Bukkit.broadcastMessage(TextUtil.color("&8(&4&l!&8) &cGracz &4" + player.getName() + " &cwylogowal sie podczas walki!"));
+            return;
         }
 
         this.plugin.getPlayerBackupFactory().create(player, PlayerBackupType.QUIT, "null", 0);
-        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getMongoService().save(corePlayer));
+
     }
 
 }

@@ -1,8 +1,6 @@
 package pl.kithard.core.api.database.mysql;
 
-import java.sql.SQLException;
 import java.util.Collection;
-import java.util.Map;
 
 public interface DatabaseRepository<V> {
 

@@ -6,13 +6,20 @@ import java.util.Set;
 
 public class GuildPermissionScheme {
 
-    private final String name;
-    private final Set<GuildPermission> allowedPermissions;
+    private final String guild;
 
-    public GuildPermissionScheme(String name) {
+    private final String name;
+    private Set<GuildPermission> allowedPermissions;
+
+    public GuildPermissionScheme(String guild, String name) {
+        this.guild = guild;
         this.name = name;
 
         this.allowedPermissions = new HashSet<>();
+    }
+
+    public String getGuild() {
+        return guild;
     }
 
     public void togglePermissions(boolean on) {
@@ -39,5 +46,9 @@ public class GuildPermissionScheme {
 
     public Set<GuildPermission> getAllowedPermissions() {
         return allowedPermissions;
+    }
+
+    public void setAllowedPermissions(Set<GuildPermission> allowedPermissions) {
+        this.allowedPermissions = allowedPermissions;
     }
 }

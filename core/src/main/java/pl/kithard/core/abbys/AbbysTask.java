@@ -24,16 +24,16 @@ public class AbbysTask extends BukkitRunnable {
         TIME++;
 
         if (TIME == 350) {
-            Bukkit.broadcastMessage(TextUtil.color("&8[&3&l!&8] &7Usuwanie itemow z mapy nastapi za&8: &f10 sekund"));
+            Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Usuwanie itemow z mapy nastapi za&8: &f10 sekund"));
         }
         else if (TIME == 357) {
-            Bukkit.broadcastMessage(TextUtil.color("&8[&3&l!&8] &7Usuwanie itemow z mapy nastapi za&8: &f3 sekundy"));
+            Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Usuwanie itemow z mapy nastapi za&8: &f3 sekundy"));
         }
         else if (TIME == 358) {
-            Bukkit.broadcastMessage(TextUtil.color("&8[&3&l!&8] &7Usuwanie itemow z mapy nastapi za&8: &f2 sekundy"));
+            Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Usuwanie itemow z mapy nastapi za&8: &f2 sekundy"));
         }
         else if (TIME == 359) {
-            Bukkit.broadcastMessage(TextUtil.color("&8[&3&l!&8] &7Usuwanie itemow z mapy nastapi za&8: &f1 sekunde"));
+            Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Usuwanie itemow z mapy nastapi za&8: &f1 sekunde"));
         }
         else if (TIME >= 360) {
 
@@ -44,7 +44,7 @@ public class AbbysTask extends BukkitRunnable {
                 }
             }
 
-            Bukkit.broadcastMessage(TextUtil.color("&8[&2&l!&8] &aPomyslnie usunieto wszystkie itemy!"));
+            Bukkit.broadcastMessage(TextUtil.color("&8(&2&l!&8) &aPomyslnie usunieto wszystkie itemy!"));
             TIME = 0;
         }
 

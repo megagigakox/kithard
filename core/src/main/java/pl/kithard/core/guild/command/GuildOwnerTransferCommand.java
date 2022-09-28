@@ -29,29 +29,29 @@ public class GuildOwnerTransferCommand {
         }
 
         if (!guild.isOwner(player.getUniqueId())) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie jestes liderem gildii!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie jestes liderem gildii!");
             return;
         }
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByName(args[0]);
 
         if (args[0].equalsIgnoreCase(player.getName())) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie mozesz oddac lidera samemu sobie!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie mozesz oddac lidera samemu sobie!");
             return;
         }
 
         if (corePlayer == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz &4nie istnieje &cw bazie danych!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz &4nie istnieje &cw bazie danych!");
             return;
         }
 
         if (!guild.isMember(corePlayer.getUuid())) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz nie jest w twojej gildii!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz nie jest w twojej gildii!");
             return;
         }
 
         guild.setOwner(corePlayer.getUuid());
         guild.setNeedSave(true);
-        TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie przekazano lidera graczowi &2" + corePlayer.getName());
+        TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie przekazano lidera graczowi &2" + corePlayer.getName());
     }
 }

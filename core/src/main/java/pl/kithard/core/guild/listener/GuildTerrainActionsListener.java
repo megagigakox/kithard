@@ -82,7 +82,7 @@ public class GuildTerrainActionsListener implements Listener {
             return false;
         }
 
-        TextUtil.message(player, "&8[&4&l!&8] &cNie możesz tego zrobic na terenie wrogiej gildii!");
+        TextUtil.message(player, "&8(&4&l!&8) &cNie możesz tego zrobic na terenie wrogiej gildii!");
         return true;
 
     }

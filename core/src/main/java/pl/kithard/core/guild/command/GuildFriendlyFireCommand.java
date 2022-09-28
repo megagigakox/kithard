@@ -31,7 +31,7 @@ public class GuildFriendlyFireCommand {
         guild.setFriendlyFire(!guild.isFriendlyFire());
         guild.setNeedSave(true);
 
-        TextUtil.message(player, "&8[&3&l!&8] &7Zmieniono tryb pvp w gildii na: " + (guild.isFriendlyFire() ? "&awlaczony" : "&cwylaczony"));
+        TextUtil.message(player, "&8(&3&l!&8) &7Zmieniono tryb pvp w gildii na: " + (guild.isFriendlyFire() ? "&awlaczony" : "&cwylaczony"));
 
     }
 }

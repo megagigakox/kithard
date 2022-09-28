@@ -37,7 +37,7 @@ public class GuildHeartListener implements Listener {
 
         if (guild.getRegion().isInHeart(event.getBlock().getLocation())) {
             event.setCancelled(true);
-            TextUtil.message(event.getPlayer(), "&8[&4&l!&8] &cNie możesz niszczyc w sercu gildii!");
+            TextUtil.message(event.getPlayer(), "&8(&4&l!&8) &cNie możesz niszczyc w sercu gildii!");
         }
     }
 
@@ -51,7 +51,7 @@ public class GuildHeartListener implements Listener {
 
         if (guild.getRegion().isInHeart(event.getBlock().getLocation())) {
             event.setCancelled(true);
-            TextUtil.message(event.getPlayer(), "&8[&4&l!&8] &cNie możesz stawiac w sercu gildii!");
+            TextUtil.message(event.getPlayer(), "&8(&4&l!&8) &cNie możesz stawiac w sercu gildii!");
         }
     }
 
@@ -77,7 +77,7 @@ public class GuildHeartListener implements Listener {
         Guild playerGuild = this.plugin.getGuildCache().findByPlayer(player);
 
         if (playerGuild == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz swojej gildii aby moc podbic wroga gildie!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie posiadasz swojej gildii aby moc podbic wroga gildie!");
             return;
         }
 
@@ -85,9 +85,9 @@ public class GuildHeartListener implements Listener {
             return;
         }
 
-        if (guild.getLastAttackDate() > System.currentTimeMillis()) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTa gildie możesz podbic dopiero za &4" +
-                    TimeUtil.formatTimeMillis(guild.getLastAttackDate() - System.currentTimeMillis()));
+        if (guild.getLastAttackTime() > System.currentTimeMillis()) {
+            TextUtil.message(player, "&8(&4&l!&8) &cTa gildie możesz podbic dopiero za &4" +
+                    TimeUtil.formatTimeMillis(guild.getLastAttackTime() - System.currentTimeMillis()));
             return;
         }
 
@@ -101,11 +101,11 @@ public class GuildHeartListener implements Listener {
                 playerGuild.setNeedSave(true);
             }
 
-            Bukkit.broadcastMessage(TextUtil.color("&8[&3&l!&8] &7Gildia &8[&b" + guild.getTag() + "&8] &7zostala zniszczona przez &8[&b" + playerGuild.getTag() + "&8] &f" + player.getName()));
+            Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gildia &8[&b" + guild.getTag() + "&8] &7zostala zniszczona przez &8[&b" + playerGuild.getTag() + "&8] &f" + player.getName()));
 
         } else {
 
-            guild.setLastAttackDate(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24));
+            guild.setLastAttackTime(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24));
             guild.setLives(guild.getLives() - 1);
             guild.setNeedSave(true);
 
@@ -114,7 +114,7 @@ public class GuildHeartListener implements Listener {
             }
             playerGuild.setNeedSave(true);
 
-            Bukkit.broadcastMessage(TextUtil.color("&8[&3&l!&8] &7Gildia &8[&b" + guild.getTag() + "&8] &7zostala oslabiona o jedno życie przez &8[&b" + playerGuild.getTag() + "&8] &f" + player.getName()));
+            Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gildia &8[&b" + guild.getTag() + "&8] &7zostala oslabiona o jedno życie przez &8[&b" + playerGuild.getTag() + "&8] &f" + player.getName()));
         }
 
     }

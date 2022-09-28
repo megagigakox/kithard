@@ -36,7 +36,7 @@ public class AsyncPlayerChatListener implements Listener {
         ServerSettings serverSettings = this.plugin.getServerSettings();
 
         if (!serverSettings.isEnabled(ServerSettingsType.CHAT) && !player.hasPermission("kithard.commands.chatmanage"))  {
-            TextUtil.message(player, "&8[&4&l!&8] &cChat jest aktualnie &4wylaczony&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cChat jest aktualnie &4wylaczony&c!");
             event.setCancelled(true);
             return;
         }
@@ -52,7 +52,7 @@ public class AsyncPlayerChatListener implements Listener {
             }
 
             TextUtil.message(player,
-                    "&8[&4&l!&8] &cJestes wyciszony na &4"
+                    "&8(&4&l!&8) &cJestes wyciszony na &4"
                             + (mute.getTime() == 0L ? "zawsze" : TimeUtil.formatTimeMillis(mute.getTime() - currentTimeMillis))
                             + " &cprzez &4" + mute.getAdmin() + " &cz powodem: &4" + mute.getReason());
             event.setCancelled(true);
@@ -62,7 +62,7 @@ public class AsyncPlayerChatListener implements Listener {
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
         if (corePlayer.getCooldown().getChatCooldown() > currentTimeMillis && !player.hasPermission("kithard.commands.chatmanage")) {
             TextUtil.message(player,
-                    "&8[&4&l!&8] &cNastepnym razem na chacie możesz napisac za &4" +
+                    "&8(&4&l!&8) &cNastepnym razem na chacie możesz napisac za &4" +
                             TimeUtil.formatTimeMillis(corePlayer.getCooldown().getChatCooldown() - currentTimeMillis));
             event.setCancelled(true);
             return;

@@ -13,16 +13,16 @@ import pl.kithard.core.api.util.TimeUtil;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class RegenTask extends BukkitRunnable {
+public class GuildRegenTask extends BukkitRunnable {
 
     private final CorePlugin plugin;
-    private final Set<RegenBlock> regenBlocks;
+    private final LinkedList<GuildRegenBlock> regenBlocks;
     private final UUID player;
     private final Guild guild;
     private final int maxSize;
     private int y;
 
-    public RegenTask(CorePlugin plugin, Set<RegenBlock> regenBlocks, UUID player, Guild guild) {
+    public GuildRegenTask(CorePlugin plugin, LinkedList<GuildRegenBlock> regenBlocks, UUID player, Guild guild) {
         this.plugin = plugin;
         this.regenBlocks = regenBlocks;
         this.player = player;
@@ -61,7 +61,7 @@ public class RegenTask extends BukkitRunnable {
             return;
         }
 
-        RegenBlock regenBlock = get(y);
+        GuildRegenBlock regenBlock = get(y);
         Location location = regenBlock.getLocation();
         location.getBlock().setType(regenBlock.getMaterial());
         location.getBlock().setData(regenBlock.getData());
@@ -69,16 +69,16 @@ public class RegenTask extends BukkitRunnable {
 
     }
 
-    public RegenBlock get(int y) {
-        for (RegenBlock regenBlock : getRegenBlocks(y)) {
+    public GuildRegenBlock get(int y) {
+        for (GuildRegenBlock regenBlock : getRegenBlocks(y)) {
             return regenBlock;
         }
         return null;
     }
 
-    public List<RegenBlock> getRegenBlocks(int y) {
-        List<RegenBlock> regenBlocks = new ArrayList<>();
-        for (RegenBlock regenBlock : this.regenBlocks) {
+    public List<GuildRegenBlock> getRegenBlocks(int y) {
+        List<GuildRegenBlock> regenBlocks = new ArrayList<>();
+        for (GuildRegenBlock regenBlock : this.regenBlocks) {
             if (regenBlock.getLocation().getY() == y) {
                 regenBlocks.add(regenBlock);
             }

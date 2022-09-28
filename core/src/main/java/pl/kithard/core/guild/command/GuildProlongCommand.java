@@ -34,25 +34,30 @@ public class GuildProlongCommand {
             return;
         }
 
-        if (guild.getExpireDate() + TimeUnit.DAYS.toMillis(1) > System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)) {
-            TextUtil.message(player, "&8[&4&l!&8] &cGildia jest przedluzona na maksymalny okres &47 dni&c!");
+        if (guild.getExpireTime() + TimeUnit.DAYS.toMillis(1) > System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)) {
+            TextUtil.message(player, "&8(&4&l!&8) &cGildia jest przedluzona na maksymalny okres &47 dni&c!");
             return;
         }
 
         if (player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD_BLOCK), 64)) {
             player.getInventory().removeItem(new ItemStack(Material.EMERALD_BLOCK, 64));
-            guild.setExpireDate(guild.getExpireDate() + TimeUnit.DAYS.toMillis(1));
+            guild.setExpireTime(guild.getExpireTime() + TimeUnit.DAYS.toMillis(1));
 
-            guild.addLog(new GuildLog(
+            GuildLog guildLog = new GuildLog(
+                    guild.getTag(),
                     GuildLogType.GUILD_PROLONG,
-                    "&f" + player.getName() + " &7przedluzyl waznosc gildii.")
+                    "&f" + player.getName() + " &7przedluzyl waznosc gildii."
             );
+            guild.addLog(guildLog);
+            this.plugin.getServer()
+                    .getScheduler()
+                    .runTaskAsynchronously(this.plugin, () -> this.plugin.getGuildRepository().insertLog(guildLog));
 
             guild.setNeedSave(true);
-            TextUtil.message(player, "&8[&3&l!&8] &7Przedluzylesz waznosc gildii o &f1 dzien&7!");
+            TextUtil.message(player, "&8(&3&l!&8) &7Przedluzylesz waznosc gildii o &f1 dzien&7!");
             return;
         }
 
-        TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz &464x blokow emeraldow &cdo przedluzenia gildii!");
+        TextUtil.message(player, "&8(&4&l!&8) &cNie posiadasz &464x blokow emeraldow &cdo przedluzenia gildii!");
     }
 }

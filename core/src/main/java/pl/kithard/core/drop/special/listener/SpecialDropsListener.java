@@ -75,16 +75,14 @@ public class SpecialDropsListener implements Listener {
                                 continue;
                             }
 
-                            TextUtil.message(it, "&8» &7Gracz &f" + player.getName() + " &7otworzyl &b&lMagiczna Skrzynke &7i wydropil: &b" + dropItem.getName() + " &7(&f" + itemStack.getAmount() + "x&7)");
+                            TextUtil.message(it, "&8(&3&l!&8) &7Gracz &3" + player.getName() + " &7otworzyl &bmagiczna skrzynke &7i wylosowal: &3" + dropItem.getName() + " &7(&f" + itemStack.getAmount() + "x&7)");
                         }
                     }
                 }
 
             } while (i == 0);
 
-
             event.setCancelled(true);
-
             if (itemInHand.getAmount() > 1) {
                 itemInHand.setAmount(itemInHand.getAmount() - 1);
             }
@@ -120,7 +118,7 @@ public class SpecialDropsListener implements Listener {
                         ItemStack itemStack = dropItem.getItem().clone();
                         itemStack.setAmount(RandomUtil.getRandInt(dropItem.getMin(), dropItem.getMax()));
                         InventoryUtil.addItem(player, itemStack);
-                        TextUtil.message(player, "&8» &7Otworzyles &2&lCobbleX &7i droplo ci: &b" + dropItem.getName() + " &7(&f" + itemStack.getAmount() + "x&7)");
+                        TextUtil.message(player, "&8(&3&l!&8) &7Otworzyles &2CobbleX &7i wylosowales: &3" + dropItem.getName() + " &7(&f" + itemStack.getAmount() + "x&7)");
                     }
                 }
 

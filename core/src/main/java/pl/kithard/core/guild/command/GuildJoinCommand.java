@@ -35,34 +35,40 @@ public class GuildJoinCommand {
 
         Guild playerGuild = this.plugin.getGuildCache().findByPlayer(player);
         if (playerGuild != null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cPosiadasz już gildie!");
+            TextUtil.message(player, "&8(&4&l!&8) &cPosiadasz już gildie!");
             return;
         }
 
         Guild guild = this.plugin.getGuildCache().findByTag(args[0]);
         if (guild == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cPodana gildia &4nie istnieje&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cPodana gildia &4nie istnieje&c!");
             return;
         }
 
         if (!guild.getMemberInvites().contains(player.getUniqueId())) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie masz &4zaproszenia &cdo tej gildii!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie masz &4zaproszenia &cdo tej gildii!");
             return;
         }
 
-        GuildMember guildMember = new GuildMember(player.getUniqueId(), player.getName());
+        GuildMember guildMember = new GuildMember(guild.getTag(), player.getUniqueId(), player.getName());
         guild.getMemberInvites().remove(player.getUniqueId());
         guild.getMembers().add(guildMember);
-
-        guild.addLog(new GuildLog(
+        GuildLog guildLog = guild.addLog(new GuildLog(
+                guild.getTag(),
                 GuildLogType.MEMBER_JOIN,
                 "&f" + player.getName() + " &7dolaczyl do gildii.")
         );
 
-        corePlayer.getGuildHistory().add(guild.getTag());
+        this.plugin.getServer()
+                .getScheduler()
+                .runTaskAsynchronously(this.plugin, () -> {
+                    this.plugin.getGuildRepository().insertLog(guildLog);
+                    this.plugin.getGuildRepository().insertMember(guildMember);
+                });
 
+        corePlayer.getGuildHistory().add(guild.getTag());
         guild.setNeedSave(true);
-        Bukkit.broadcastMessage(TextUtil.color("&8[&3&l!&8] &7Gracz &f" + player.getName() + " &7dolaczyl do gildii &8[&b" + guild.getTag() + "&8]&7!"));
+        Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gracz &f" + player.getName() + " &7dolaczyl do gildii &8[&b" + guild.getTag() + "&8]&7!"));
 
     }
 

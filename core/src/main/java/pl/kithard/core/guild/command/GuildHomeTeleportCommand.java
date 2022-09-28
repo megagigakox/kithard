@@ -15,9 +15,7 @@ public class GuildHomeTeleportCommand {
             acceptsExceeded = true
     )
     public void handle(CorePlayer player, Guild guild) {
-
         player.teleport(guild.getHome(), 10);
-
     }
 
 }

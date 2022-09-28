@@ -10,6 +10,7 @@ import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.player.home.PlayerHome;
 import pl.kithard.core.util.GuiHelper;
+import pl.kithard.core.util.LocationUtil;
 import pl.kithard.core.util.TextUtil;
 
 import java.util.Arrays;
@@ -63,9 +64,9 @@ public class PlayerHomeGui {
                         .asGuiItem(event -> {
 
                             if (event.getClick() == ClickType.RIGHT) {
-                                corePlayer.setHome(home.getId(), player.getLocation());
+                                corePlayer.setHome(home.getId(), LocationUtil.toCenter(player.getLocation()));
                                 corePlayer.setNeedSave(true);
-                                TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie stworzono domek!");
+                                TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie stworzono domek!");
                                 open(player);
                             }
 
@@ -85,7 +86,7 @@ public class PlayerHomeGui {
                             if (event.getClick() == ClickType.RIGHT) {
                                 corePlayer.setHome(home.getId(), player.getLocation());
                                 corePlayer.setNeedSave(true);
-                                TextUtil.message(player, "&8[&3&l!&8] &aPomyslnie stworzono domek!");
+                                TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie stworzono domek!");
                                 open(player);
                             }
                             else if (event.getClick() == ClickType.LEFT) {

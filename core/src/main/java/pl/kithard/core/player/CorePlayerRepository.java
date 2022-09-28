@@ -1,22 +1,72 @@
 package pl.kithard.core.player;
 
+import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Location;
 import pl.kithard.core.api.database.mysql.DatabaseRepository;
 import pl.kithard.core.api.database.mysql.DatabaseService;
+import pl.kithard.core.player.enderchest.PlayerEnderChest;
 import pl.kithard.core.player.home.PlayerHome;
 import pl.kithard.core.util.CollectionSerializer;
 import pl.kithard.core.util.ItemStackSerializer;
 import pl.kithard.core.util.LocationSerializer;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
+
+    private final static String PREPARE_TABLE =
+            "CREATE TABLE IF NOT EXISTS kithard_core_players (" +
+                    "uuid CHAR(36) PRIMARY KEY NOT NULL, " +
+                    "name VARCHAR(16) NOT NULL, " +
+                    "ip TEXT NOT NULL, " +
+                    "money DOUBLE PRECISION, " +
+                    "earned_money DOUBLE PRECISION, " +
+                    "spend_money DOUBLE PRECISION, " +
+                    "points INT, " +
+                    "kills INT, " +
+                    "deaths INT, " +
+                    "assists INT, " +
+                    "kill_streak INT, " +
+                    "turbo_drop BIGINT, " +
+                    "spend_time BIGINT, " +
+                    "protection BIGINT, " +
+                    "vanish BOOLEAN, " +
+                    "incognito BOOLEAN, " +
+                    "rank_reset_cooldown BIGINT, " +
+                    "kit_cooldowns TEXT, " +
+                    "ignored_players TEXT, " +
+                    "disabled_sell_items TEXT, " +
+                    "disabled_settings TEXT, " +
+                    "disabled_drop_items TEXT, " +
+                    "guild_history TEXT, " +
+                    "claimed_achievements TEXT, " +
+                    "homes TEXT, " +
+                    "mined_drops TEXT, " +
+                    "deposit_items TEXT, " +
+                    "achievement_progress TEXT, " +
+                    "ender_chest MEDIUMTEXT)";
+
+    private final static String INSERT =
+            "INSERT INTO kithard_core_players (" +
+                    "uuid, name, ip, money, earned_money, spend_money, points, kills, deaths, assists, kill_streak, " +
+                    "turbo_drop, spend_time, protection, vanish, incognito, rank_reset_cooldown, kit_cooldowns, " +
+                    "ignored_players, disabled_sell_items, disabled_settings, disabled_drop_items, guild_history, claimed_achievements, " +
+                    "homes, mined_drops, deposit_items, achievement_progress, ender_chest) " +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    private final static String UPDATE =
+            "UPDATE kithard_core_players SET" +
+                    "`name` = ?, `ip` = ?, `money` = ?, `earned_money` = ?, `spend_money` = ?, `points` = ?, `kills` = ?, `deaths` = ?, `assists` = ?, `kill_streak` = ?, " +
+                    "`turbo_drop` = ?, `spend_time` = ?, `protection` = ?, `vanish` = ?, `incognito` = ?, `rank_reset_cooldown` = ?, `kit_cooldowns` = ?, " +
+                    "`ignored_players` = ?, `disabled_sell_items` = ?, `disabled_settings` = ?, `disabled_drop_items` = ?, `guild_history` = ?, `claimed_achievements` = ?, " +
+                    "`homes` = ?,  `mined_drops` = ?, `deposit_items` = ?, `achievement_progress` = ?, `ender_chest` = ? WHERE `uuid` = ?";
 
     private final DatabaseService databaseService;
 
@@ -26,47 +76,12 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
 
     @Override
     public void prepareTable() {
-        try (Connection connection = this.databaseService.getConnection()) {
-
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(
-                            "CREATE TABLE IF NOT EXISTS kithard_core_players (" +
-                                    "uuid CHAR(36) PRIMARY KEY NOT NULL, " +
-                                    "name VARCHAR(16) NOT NULL, " +
-                                    "ip TEXT NOT NULL, " +
-                                    "money DOUBLE PRECISION, " +
-                                    "earned_money DOUBLE PRECISION, " +
-                                    "spend_money DOUBLE PRECISION, " +
-                                    "points INT, " +
-                                    "kills INT, " +
-                                    "deaths INT, " +
-                                    "assists INT, " +
-                                    "kill_streak INT, " +
-                                    "turbo_drop BIGINT, " +
-                                    "spend_time BIGINT, " +
-                                    "protection BIGINT, " +
-                                    "vanish BOOLEAN, " +
-                                    "incognito BOOLEAN, " +
-                                    "rank_reset_cooldown BIGINT, " +
-                                    "kit_cooldowns TEXT, " +
-                                    "ignored_players TEXT, " +
-                                    "disabled_sell_items TEXT, " +
-                                    "disabled_drop_items TEXT, " +
-                                    "guild_history TEXT, " +
-                                    "claimed_achievements TEXT, " +
-                                    "homes TEXT, " +
-                                    "ender_chest_1 TEXT, " +
-                                    "ender_chest_2 TEXT, " +
-                                    "ender_chest_3 TEXT, " +
-                                    "ender_chest_4 TEXT, " +
-                                    "ender_chest_5 TEXT, " +
-                                    "mined_drops TEXT, " +
-                                    "deposit_items TEXT, " +
-                                    "achievement_progress TEXT)");
-
+        try (
+                Connection connection = this.databaseService.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(PREPARE_TABLE)
+        ) {
             preparedStatement.execute();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -76,14 +91,7 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
     public void insert(CorePlayer data) {
         try (
                 Connection connection = this.databaseService.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                        "INSERT INTO kithard_core_players (" +
-                                "uuid, name, ip, money, earned_money, spend_money, points, kills, deaths, assists, kill_streak, " +
-                                "turbo_drop, spend_time, protection, vanish, incognito, rank_reset_cooldown, kit_cooldowns, " +
-                                "ignored_players, disabled_sell_items, disabled_drop_items, guild_history, claimed_achievements, " +
-                                "homes, ender_chest_1, ender_chest_2, ender_chest_3, ender_chest_4, ender_chest_5, mined_drops, " +
-                                "deposit_items, achievement_progress) " +
-                                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+                PreparedStatement preparedStatement = connection.prepareStatement(INSERT)
         ) {
 
             preparedStatement.setString(1, data.getUuid().toString());
@@ -114,13 +122,9 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
             preparedStatement.setString(26, null);
             preparedStatement.setString(27, null);
             preparedStatement.setString(28, null);
-            preparedStatement.setString(29, null);
-            preparedStatement.setString(30, null);
-            preparedStatement.setString(31, null);
-            preparedStatement.setString(32, null);
+            preparedStatement.setString(29, ItemStackSerializer.itemStackArrayToBase64(data.getEnderChest().getContents()));
 
             preparedStatement.execute();
-
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -129,37 +133,88 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
 
     @Override
     public void delete(CorePlayer data) {
-
+        throw new NotImplementedException();
     }
 
     @Override
     public Collection<CorePlayer> loadAll() {
+        Set<CorePlayer> corePlayers = new HashSet<>();
         try (
                 Connection connection = this.databaseService.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                        "SELECT * FROM kithard_core_players")
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM `kithard_core_players`");
+                ResultSet resultSet = preparedStatement.executeQuery()
         ) {
 
+            while (resultSet.next()) {
 
+                Set<UUID> ignoredPlayers = new HashSet<>();
+                if (!StringUtils.isEmpty(resultSet.getString("ignored_players"))) {
+                    for (String stringUUID : CollectionSerializer.deserializeCollection("ignored_players")) {
+                        if (stringUUID == null || stringUUID.isEmpty()) {
+                            continue;
+                        }
 
+                        ignoredPlayers.add(UUID.fromString(stringUUID));
+                    }
+                }
+
+                CorePlayer corePlayer = new CorePlayer(
+                        UUID.fromString(resultSet.getString("uuid")),
+                        resultSet.getString("name"),
+                        resultSet.getString("ip"),
+                        resultSet.getDouble("money"),
+                        resultSet.getDouble("earned_money"),
+                        resultSet.getDouble("spend_money"),
+                        resultSet.getInt("points"),
+                        resultSet.getInt("kills"),
+                        resultSet.getInt("deaths"),
+                        resultSet.getInt("assists"),
+                        resultSet.getInt("kill_streak"),
+                        resultSet.getLong("turbo_drop"),
+                        resultSet.getLong("spend_time"),
+                        resultSet.getLong("protection"),
+                        resultSet.getBoolean("vanish"),
+                        resultSet.getBoolean("incognito"),
+                        ignoredPlayers,
+                        CollectionSerializer.deserializeCollection(resultSet.getString("disabled_sell_items")),
+                        CollectionSerializer.deserializeCollection(resultSet.getString("disabled_settings")),
+                        CollectionSerializer.deserializeCollection(resultSet.getString("disabled_drop_items")),
+                        CollectionSerializer.deserializeCollection(resultSet.getString("guild_history")),
+                        CollectionSerializer.deserializeCollection("claimed_achievements"),
+                        CollectionSerializer.deserializeMap(resultSet.getString("mined_drops")),
+                        CollectionSerializer.deserializeMap(resultSet.getString("deposit_items")),
+                        CollectionSerializer.deserializeMapLong(resultSet.getString("achievement_progress")),
+                        new PlayerEnderChest(ItemStackSerializer.itemStackArrayFromBase64(resultSet.getString("ender_chest")))
+                );
+
+                String homes = resultSet.getString("homes");
+                for (Map.Entry<Integer, String> entry : CollectionSerializer.deserializeMapInteger(homes).entrySet()) {
+                    int id = entry.getKey();
+                    String locationString = entry.getValue();
+                    if (StringUtils.isEmpty(locationString)) {
+                        continue;
+                    }
+
+                    Location location = LocationSerializer.deserialize(locationString);
+                    corePlayer.setHome(id, location);
+                }
+
+                corePlayer.getCooldown().setRankResetCooldown(resultSet.getLong("rank_reset_cooldown"));
+                corePlayers.add(corePlayer);
+            }
         }
-        catch (SQLException e) {
+        catch (SQLException | IOException e) {
             e.printStackTrace();
         }
-        return null;
+
+        return corePlayers;
     }
 
     @Override
     public void updateAll(Collection<CorePlayer> toUpdate) {
         try (
                 Connection connection = this.databaseService.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                        "UPDATE kithard_core_players SET" +
-                                "`name` = ?, `ip` = ?, `money` = ?, `earned_money` = ?, `spend_money` = ?, `points` = ?, `kills` = ?, `deaths` = ?, `assists` = ?, `kill_streak` = ?, " +
-                                "`turbo_drop` = ?, `spend_time` = ?, `protection` = ?, `vanish` = ?, `incognito` = ?, `rank_reset_cooldown` = ?, `kit_cooldowns` = ?, " +
-                                "`ignored_players` = ?, `disabled_sell_items` = ?, `disabled_drop_items` = ?, `guild_history` = ?, `claimed_achievements` = ?, " +
-                                "`homes` = ?, `ender_chest_1` = ?, `ender_chest_2` = ?, `ender_chest_3` = ?, `ender_chest_4` = ?, `ender_chest_5` = ?, `mined_drops` = ?, " +
-                                "`deposit_items` = ?, `achievement_progress` = ? WHERE `uuid` = ?")
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)
         ) {
 
             for (CorePlayer corePlayer : toUpdate) {
@@ -180,16 +235,17 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
                 preparedStatement.setBoolean(15, corePlayer.isIncognito());
                 preparedStatement.setLong(16, corePlayer.getCooldown().getRankResetCooldown());
                 preparedStatement.setString(17, CollectionSerializer.serializeMapLong(corePlayer.getCooldown().getKitCooldowns()));
+
                 preparedStatement.setString(18, CollectionSerializer.serializeCollection(corePlayer.getIgnoredPlayers()
                         .stream()
                         .map(UUID::toString)
                         .collect(Collectors.toSet())));
-                preparedStatement.setString(19, CollectionSerializer.serializeCollection(corePlayer.getDisabledSellItems()));
-                preparedStatement.setString(20, CollectionSerializer.serializeCollection(corePlayer.getDisabledDropItems()));
-                preparedStatement.setString(21, CollectionSerializer.serializeCollection(corePlayer.getGuildHistory()));
 
-                //Tutaj serializacja odebranych osiagniec
-                preparedStatement.setString(22, "");
+                preparedStatement.setString(19, CollectionSerializer.serializeCollection(corePlayer.getDisabledSellItems()));
+                preparedStatement.setString(20, CollectionSerializer.serializeCollection(corePlayer.getDisabledSettings()));
+                preparedStatement.setString(21, CollectionSerializer.serializeCollection(corePlayer.getDisabledDropItems()));
+                preparedStatement.setString(22, CollectionSerializer.serializeCollection(corePlayer.getGuildHistory()));
+                preparedStatement.setString(23, CollectionSerializer.serializeCollection(corePlayer.getClaimedAchievements()));
 
                 Map<Integer, String> homeIdLocationMap = new HashMap<>();
                 for (PlayerHome playerHome : corePlayer.getHomes()) {
@@ -197,20 +253,15 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
                         continue;
                     }
 
-                    homeIdLocationMap.put(playerHome.getId(), LocationSerializer.serialize(playerHome.getLocation()));
+                    homeIdLocationMap.put(playerHome.getId(), LocationSerializer.serialize(playerHome.getLocation().clone()));
                 }
-                preparedStatement.setString(22, CollectionSerializer.serializeMapInteger(homeIdLocationMap));
-                preparedStatement.setString(23, "");
-                preparedStatement.setString(24, "");
-                preparedStatement.setString(25, "");
-                preparedStatement.setString(26, "");
-                preparedStatement.setString(27, "");
-                preparedStatement.setString(28, "");
-                preparedStatement.setString(29, "");
-                preparedStatement.setString(30, "");
-                preparedStatement.setString(31, "");
-                preparedStatement.setString(32, corePlayer.getUuid().toString());
 
+                preparedStatement.setString(24, CollectionSerializer.serializeMapInteger(homeIdLocationMap));
+                preparedStatement.setString(25, CollectionSerializer.serializeMap(corePlayer.getMinedDrops()));
+                preparedStatement.setString(26, CollectionSerializer.serializeMap(corePlayer.getDepositItems()));
+                preparedStatement.setString(27, CollectionSerializer.serializeMapLong(corePlayer.getAchievementProgress()));
+                preparedStatement.setString(28, ItemStackSerializer.itemStackArrayToBase64(corePlayer.getEnderChest().getContents()));
+                preparedStatement.setString(29, corePlayer.getUuid().toString());
 
                 corePlayer.setNeedSave(false);
                 preparedStatement.addBatch();

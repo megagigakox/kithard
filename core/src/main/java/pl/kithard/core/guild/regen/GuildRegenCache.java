@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class RegenCache {
+public class GuildRegenCache {
 
     private final Set<String> currentlyRegeneratingGuilds = new HashSet<>();
     private final List<Material> disabledMaterial = Arrays.asList(

@@ -31,7 +31,7 @@ public class InvseeCommand {
 
         Player target = this.plugin.getServer().getPlayerExact(args[0]);
         if (target == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz jest aktualnie &4offline&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz jest aktualnie &4offline&c!");
             return;
         }
 

@@ -43,7 +43,7 @@ public class GuildInfoCommand {
         }
 
         if (guild == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cGildia o takim tagu &4nie istnieje&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cGildia o takim tagu &4nie istnieje&c!");
             return;
         }
 
@@ -62,7 +62,7 @@ public class GuildInfoCommand {
                 ? "&fBrak."
                 : guild.getDeputies()
                 .stream()
-                .map(GuildMember::getName)
+                .map(uuid -> guild.findMemberByUuid(uuid).getName())
                 .collect(Collectors.joining("&8,&f "));
 
         info.add("&8» &7Zastepcy: &f" + deputies + " &8(&b" + guild.getDeputies().size() + "&8/&b3&8)");
@@ -72,12 +72,12 @@ public class GuildInfoCommand {
         info.add("&8» &7Zabojstwa: &f" + guild.getKills());
         info.add("&8» &7Smierci: &f" + guild.getDeaths());
         info.add("&8» &7Rozmiar: &f" + size + "x" + size);
-        info.add("&8» &7Utworzona: &f" + TimeUtil.formatTimeMillisToDate(guild.getCreateDate()));
-        info.add("&8» &7Wazna do: &f" + TimeUtil.formatTimeMillisToDate(guild.getExpireDate()));
-        info.add("&8» &7Wygasa za: &f" + TimeUtil.formatTimeMillis(guild.getExpireDate() - System.currentTimeMillis()));
+        info.add("&8» &7Utworzona: &f" + TimeUtil.formatTimeMillisToDate(guild.getCreateTime()));
+        info.add("&8» &7Wazna do: &f" + TimeUtil.formatTimeMillisToDate(guild.getExpireTime()));
+        info.add("&8» &7Wygasa za: &f" + TimeUtil.formatTimeMillis(guild.getExpireTime() - System.currentTimeMillis()));
         info.add("&8» &7Atak mozliwy za: &f" +
-                (guild.getLastAttackDate() > System.currentTimeMillis()
-                        ? TimeUtil.formatTimeMillis(guild.getLastAttackDate() - System.currentTimeMillis())
+                (guild.getLastAttackTime() > System.currentTimeMillis()
+                        ? TimeUtil.formatTimeMillis(guild.getLastAttackTime() - System.currentTimeMillis())
                         : "&aw tym momencie!"));
         info.add("&8» &7Zycia gildii: &c" + guild.getHearts());
 

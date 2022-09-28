@@ -46,7 +46,7 @@ public class TurboDropCommand {
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByName(args[0]);
         if (corePlayer == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz &4nie istnieje &cw bazie danych!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz &4nie istnieje &cw bazie danych!");
             return;
         }
 
@@ -59,7 +59,7 @@ public class TurboDropCommand {
         }
 
         if (corePlayer.source() != null) {
-            TextUtil.message(corePlayer.source(), "&8[&3&l!&8] &7Aktywowano &b&lT&3&lu&f&lr&b&lb&3&lo&f&lD&b&lr&3&lo&f&lp &7dla ciebie na: &f" +
+            TextUtil.message(corePlayer.source(), "&8(&3&l!&8) &7Aktywowano &b&lT&3&lu&f&lr&b&lb&3&lo&f&lD&b&lr&3&lo&f&lp &7dla ciebie na: &f" +
                     TimeUtil.formatTimeMillis(corePlayer.getTurboDrop() - System.currentTimeMillis()));
         }
 

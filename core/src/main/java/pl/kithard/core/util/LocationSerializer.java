@@ -8,10 +8,10 @@ public final class LocationSerializer {
     private LocationSerializer() {}
 
     public static String serialize(Location location) {
-        return location.getWorld() + ":" + location.getX() + ":" + location.getY() + ":" + location.getY() + ":" + location.getYaw() + ":" + location.getPitch();
+        return location.getWorld().getName() + ":" + location.getX() + ":" + location.getY() + ":" + location.getZ() + ":" + location.getYaw() + ":" + location.getPitch();
     }
 
-    public Location deserialize(String locationFromText) {
+    public static Location deserialize(String locationFromText) {
         String[] split = locationFromText.split(":");
         return new Location(
                 Bukkit.getWorld(split[0]),

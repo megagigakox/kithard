@@ -26,13 +26,13 @@ public class BlockPlaceListener implements Listener {
         Guild guild = this.plugin.getGuildCache().findByLocation(event.getBlockPlaced().getLocation());
         if (guild != null && guild.isMember(player.getUniqueId()) && corePlayer.getCombat().hasFight()) {
             event.setCancelled(true);
-            TextUtil.message(player, "&8[&4&l!&8] &cBudowanie podczas pvp na terenie swojej gildii jest zablokowane!");
+            TextUtil.message(player, "&8(&4&l!&8) &cBudowanie podczas pvp na terenie swojej gildii jest zablokowane!");
             return;
         }
 
         if (player.getLocation().getY() > 100 && corePlayer.getCombat().hasFight()) {
             event.setCancelled(true);
-            TextUtil.message(player, "&8[&4&l!&8] &cBudowanie podczas pvp powyzej poziomu 100 jest zablokowane!");
+            TextUtil.message(player, "&8(&4&l!&8) &cBudowanie podczas pvp powyzej poziomu 100 jest zablokowane!");
         }
 
     }

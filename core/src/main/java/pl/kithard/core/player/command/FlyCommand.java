@@ -26,18 +26,18 @@ public class FlyCommand {
         if (args.length < 1) {
 
             player.setAllowFlight(!player.getAllowFlight());
-            TextUtil.message(player, "&8[&3&l!&8] &7Zmieniles tryb latania na: " + (player.getAllowFlight() ? "&awlaczony" : "&cwylaczony"));
+            TextUtil.message(player, "&8(&3&l!&8) &7Zmieniles tryb latania na: " + (player.getAllowFlight() ? "&awlaczony" : "&cwylaczony"));
             return;
         }
 
         Player target = this.plugin.getServer().getPlayerExact(args[0]);
         if (target == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz jest aktualnie &4offline&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz jest aktualnie &4offline&c!");
             return;
         }
 
         target.setAllowFlight(!target.getAllowFlight());
-        TextUtil.message(player, "&8[&3&l!&8] &7Zmieniles tryb latania dla gracza &b " + target.getName() + " &7na:" + (target.getAllowFlight() ? "&awlaczony" : "&cwylaczony"));
+        TextUtil.message(player, "&8(&3&l!&8) &7Zmieniles tryb latania dla gracza &b " + target.getName() + " &7na:" + (target.getAllowFlight() ? "&awlaczony" : "&cwylaczony"));
 
 
     }

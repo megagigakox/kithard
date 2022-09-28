@@ -28,7 +28,7 @@ public class GuildBind implements Bind {
 
             Guild guild = this.plugin.getGuildCache().findByPlayer(corePlayer.source());
             if (guild == null) {
-                throw new ValidationException(TextUtil.color("&8[&4&l!&8] &cNie posiadasz gildii!"));
+                throw new ValidationException(TextUtil.color("&8(&4&l!&8) &cNie posiadasz gildii!"));
             }
 
             return guild;

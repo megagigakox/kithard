@@ -45,11 +45,11 @@ public class CustomEffectGui {
                             }
 
                             player.closeInventory();
-                            TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie zakupiono efekt!");
+                            TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie zakupiono efekt!");
 
                         } else {
 
-                            TextUtil.message(player, "&8[&4&l!&8] &cNie stac cie na kupno!");
+                            TextUtil.message(player, "&8(&4&l!&8) &cNie stac cie na kupno!");
 
                         }
 

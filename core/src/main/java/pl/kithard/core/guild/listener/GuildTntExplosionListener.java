@@ -59,8 +59,8 @@ public class GuildTntExplosionListener implements Listener {
                 return;
             }
 
-            guild.setLastExplodeDate(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1));
-            guild.sendMessageToOnlineMembers("&8[&4&l!&8] &cNa terenie twojej gildi wybuchlo &4&lTNT&c!");
+            guild.setLastExplodeTime(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1));
+            guild.sendMessageToOnlineMembers("&8(&4&l!&8) &cNa terenie twojej gildi wybuchlo &4&lTNT&c!");
         }
 
         if (!destroyedBlocks.isEmpty()) {
@@ -121,9 +121,9 @@ public class GuildTntExplosionListener implements Listener {
         Player player = event.getPlayer();
 
         Guild guild = this.plugin.getGuildCache().findByLocation(event.getBlock().getLocation());
-        if (guild != null && guild.isMember(player.getUniqueId()) && guild.getLastExplodeDate() > System.currentTimeMillis()) {
+        if (guild != null && guild.isMember(player.getUniqueId()) && guild.getLastExplodeTime() > System.currentTimeMillis()) {
             event.setCancelled(true);
-            TextUtil.message(player, "&8[&4&l!&8] &cNie możesz budowac na terenie twojej gildi jeszcze przez &4" + TimeUtil.formatTimeMillis(guild.getLastExplodeDate() - System.currentTimeMillis()));
+            TextUtil.message(player, "&8(&4&l!&8) &cNie możesz budowac na terenie twojej gildi jeszcze przez &4" + TimeUtil.formatTimeMillis(guild.getLastExplodeTime() - System.currentTimeMillis()));
         }
     }
 
@@ -134,7 +134,7 @@ public class GuildTntExplosionListener implements Listener {
 
         if (event.getBlock().getType() == Material.TNT || event.getBlock().getType() == Material.DISPENSER) {
             if (block.getLocation().getY() > 50) {
-                TextUtil.message(player, "&8[&4&l!&8] &cTNT i Dispensery mozna stawiac od 50y w doł!");
+                TextUtil.message(player, "&8(&4&l!&8) &cTNT i Dispensery mozna stawiac od 50y w doł!");
                 event.setCancelled(true);
                 return;
             }
@@ -142,7 +142,7 @@ public class GuildTntExplosionListener implements Listener {
 
         if (event.getBlock().getType() == Material.TNT) {
             if (TimeUtil.getHour(System.currentTimeMillis()) < 18 || TimeUtil.getHour(System.currentTimeMillis()) > 22) {
-                TextUtil.message(player, "&8[&4&l!&8] &cTNT Dziala tylko w godzinach: &418-22&c!");
+                TextUtil.message(player, "&8(&4&l!&8) &cTNT Dziala tylko w godzinach: &418-22&c!");
                 event.setCancelled(true);
             }
         }

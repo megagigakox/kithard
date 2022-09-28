@@ -17,7 +17,6 @@ import pl.kithard.core.guild.panel.gui.GuildPanelGui;
 import pl.kithard.core.guild.permission.GuildPermission;
 import pl.kithard.core.guild.permission.GuildPermissionScheme;
 import pl.kithard.core.util.GuiHelper;
-import pl.kithard.core.util.SkullCreator;
 import pl.kithard.core.util.TextUtil;
 
 import java.util.Arrays;
@@ -70,12 +69,12 @@ public class GuildPermissionGui {
                         }
 
                         if (guild.isDeputyOrOwner(memberFromSkull.getUuid())) {
-                            TextUtil.message(player,"&8[&4&l!&8] &cNie możesz zmienic uprawnien &4lidera/zastepcy &cgildii!");
+                            TextUtil.message(player,"&8(&4&l!&8) &cNie możesz zmienic uprawnien &4lidera/zastepcy &cgildii!");
                             return;
                         }
 
                         if (memberFromSkull.getUuid().equals(player.getUniqueId())) {
-                            TextUtil.message(player,"&8[&4&l!&8] &cNie możesz zmienic swoich uprawnien!");
+                            TextUtil.message(player,"&8(&4&l!&8) &cNie możesz zmienic swoich uprawnien!");
                             return;
                         }
 
@@ -195,17 +194,25 @@ public class GuildPermissionGui {
 
                                 GuildPermissionScheme guildPermissionScheme = guild.findPermissionSchemeByName(text.toUpperCase());
                                 if (guild.getPermissionSchemes().size() >= 7) {
-                                    TextUtil.message(p,"&8[&4&l!&8] &cOsiagnales limit schematow!");
+                                    TextUtil.message(p,"&8(&4&l!&8) &cOsiagnales limit schematow!");
                                     return AnvilGUI.Response.close();
                                 }
 
                                 if (guildPermissionScheme != null) {
-                                    TextUtil.message(p,"&8[&4&l!&8] &cSchemat o tej nazwie juz istnieje!");
+                                    TextUtil.message(p,"&8(&4&l!&8) &cSchemat o tej nazwie juz istnieje!");
                                     return AnvilGUI.Response.close();
                                 }
 
-                                guild.getPermissionSchemes().add(new GuildPermissionScheme(text.toUpperCase()));
-                                guild.setNeedSave(true);
+                                if (text.length() > 16) {
+                                    TextUtil.message(p, "&8(&4&l!&8) &cNazwa moze miec maksymalnie 16 liter!");
+                                    return AnvilGUI.Response.close();
+                                }
+
+                                GuildPermissionScheme scheme = new GuildPermissionScheme(guild.getTag(), text.toUpperCase());
+                                guild.getPermissionSchemes().add(scheme);
+                                this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin,
+                                        () -> this.plugin.getGuildRepository().insertScheme(scheme));
+
                                 this.openPermissionSchemeList(p, guild);
                                 return AnvilGUI.Response.close();
                             })
@@ -239,7 +246,8 @@ public class GuildPermissionGui {
                 .name(TextUtil.component("&cUsun schemat"))
                 .asGuiItem(inventoryClickEvent -> {
                     guild.getPermissionSchemes().remove(scheme);
-                    guild.setNeedSave(true);
+                    this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin,
+                            () -> this.plugin.getGuildRepository().deleteScheme(scheme));
 
                     this.openPermissionSchemeList(player, guild);
                 }));

@@ -88,11 +88,11 @@ public class GeneratorListener implements Listener {
 
             this.plugin.getGeneratorFactory().create(block.getLocation());
             event.getBlock().setType(Material.STONE);
-            TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &astworzono &7generator stone!");
+            TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &astworzono &7generator stone!");
             return;
         }
 
-        TextUtil.message(player, "&8[&4&l!&8] &cW tym miejscu &4jest juz stoniarka&c!");
+        TextUtil.message(player, "&8(&4&l!&8) &cW tym miejscu &4jest juz stoniarka&c!");
         event.setCancelled(true);
         this.plugin.getGeneratorCache().regen(generator);
 

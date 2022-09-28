@@ -103,7 +103,7 @@ public class PlayerBackupGui {
                     } else {
 
                         TextUtil.message(viewer,
-                                "&8[&2&l!&8] &aPomyslnie usunieto kopie zapasowa gracza &2" + target.getName() + " &8(&a"  +
+                                "&8(&2&l!&8) &aPomyslnie usunieto kopie zapasowa gracza &2" + target.getName() + " &8(&a"  +
                                         TimeUtil.formatTimeMillisToDate(playerBackup.getDate()) + "&8, &a" + playerBackup.getUuid() + "&8)");
 
                         this.plugin.getMongoService().delete(playerBackup);
@@ -113,7 +113,7 @@ public class PlayerBackupGui {
                     }
                 }));
             }
-            TextUtil.message(viewer, "&8[&2&l!&8] &aBackupy zostaly zaladowane z bazy danych oraz wyswietlone w czasie: &2" + (System.currentTimeMillis() - currentTimeMillis) + "ms");
+            TextUtil.message(viewer, "&8(&2&l!&8) &aBackupy zostaly zaladowane z bazy danych oraz wyswietlone w czasie: &2" + (System.currentTimeMillis() - currentTimeMillis) + "ms");
 
             Bukkit.getScheduler().runTask(plugin, () -> {
                 gui.setDefaultClickAction(inventoryClickEvent -> inventoryClickEvent.setCancelled(true));

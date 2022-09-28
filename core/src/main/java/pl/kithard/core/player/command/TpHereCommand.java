@@ -30,12 +30,12 @@ public class TpHereCommand {
 
         Player target = this.plugin.getServer().getPlayerExact(args[0]);
         if (target == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz jest aktualnie &4offline&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz jest aktualnie &4offline&c!");
             return;
         }
 
         target.teleport(player);
-        TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &3przeteleportowano &7 gracza &b" + target.getName() + "&7!");
+        TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &3przeteleportowano &7 gracza &b" + target.getName() + "&7!");
     }
 
 }

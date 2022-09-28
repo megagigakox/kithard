@@ -3,14 +3,12 @@ package pl.kithard.core.guild.command.admin;
 import net.dzikoysk.funnycommands.stereotypes.FunnyCommand;
 import net.dzikoysk.funnycommands.stereotypes.FunnyComponent;
 import org.bukkit.command.CommandSender;
-import org.checkerframework.checker.units.qual.C;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.guild.GuildMember;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.util.TextUtil;
 
-import java.lang.reflect.Member;
 import java.util.Arrays;
 
 @FunnyComponent
@@ -109,7 +107,7 @@ public class GuildAdminCommand {
             }
         }
 
-        guild.getMembers().add(new GuildMember(corePlayer.getUuid(), corePlayer.getName()));
+        guild.getMembers().add(new GuildMember(guild.getTag(), corePlayer.getUuid(), corePlayer.getName()));
         guild.setNeedSave(true);
         TextUtil.message(sender, "&aDodano gracza: &b" + corePlayer.getName());
     }

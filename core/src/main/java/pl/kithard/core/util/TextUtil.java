@@ -53,12 +53,12 @@ public final class TextUtil {
     }
 
     public static void correctUsage(CommandSender commandSender, String usage) {
-        message(commandSender, "&8[&3&l!&8] &7Poprawne użycie: &b{USAGE}"
+        message(commandSender, "&8(&3&l!&8) &7Poprawne uzycie&8: &b{USAGE}"
                 .replace("{USAGE}", usage));
     }
 
     public static void insufficientPermission(CommandSender commandSender, String permission) {
-        message(commandSender, "&8[&4&l!&8] &cNie posiadasz uprawnien do wykonania tej czynnosci! &4({PERMISSION})"
+        message(commandSender, "&8(&4&l!&8) &cNie posiadasz uprawnien do wykonania tej czynnosci! &b({PERMISSION})"
                 .replace("{PERMISSION}", permission));
     }
 

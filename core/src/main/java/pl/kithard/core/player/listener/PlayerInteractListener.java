@@ -94,7 +94,7 @@ public class PlayerInteractListener implements Listener {
 
             List<Player> playersInRadius = LocationUtil.getPlayersInRadius(event.getClickedBlock().getLocation(), 5, Material.WOOD_PLATE);
             if (playersInRadius.size() == 1) {
-                TextUtil.message(player, "&8[&4&l!&8] &cNie mozesz sie teleportowac sam!");
+                TextUtil.message(player, "&8(&4&l!&8) &cNie mozesz sie teleportowac sam!");
                 return;
             }
 
@@ -150,7 +150,7 @@ public class PlayerInteractListener implements Listener {
 
             List<Player> playersInRadius = LocationUtil.getPlayersInRadius(event.getClickedBlock().getLocation(), 5, Material.STONE_PLATE);
             if (playersInRadius.size() == 1) {
-                TextUtil.message(event.getPlayer(), "&8[&4&l!&8] &cNie mozesz sie teleportowac sam!");
+                TextUtil.message(event.getPlayer(), "&8(&4&l!&8) &cNie mozesz sie teleportowac sam!");
                 return;
             }
 

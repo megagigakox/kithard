@@ -24,11 +24,11 @@ public class CobbleXCommand {
             while (player.getInventory().containsAtLeast(new ItemStack(Material.COBBLESTONE), 576)){
                 InventoryUtil.removeItem(player, Material.COBBLESTONE, 576);
                 InventoryUtil.addItem(player, CustomRecipe.COBBLEX.getItem());
-                TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie stworzono cobblex!");
+                TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie stworzono cobblex!");
             }
         } else {
 
-            TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz &49x64 cobblestone&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie posiadasz &49x64 cobblestone&c!");
 
         }
 

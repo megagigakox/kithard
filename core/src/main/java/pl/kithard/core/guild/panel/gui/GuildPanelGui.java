@@ -4,7 +4,7 @@ import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.entity.Player;
 import pl.kithard.core.guild.log.gui.GuildLogGui;
 import pl.kithard.core.guild.permission.gui.GuildPermissionGui;
-import pl.kithard.core.guild.regen.gui.RegenGui;
+import pl.kithard.core.guild.regen.gui.GuildRegenGui;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.guild.command.GuildInfoCommand;
@@ -72,7 +72,7 @@ public class GuildPanelGui {
                         return;
                     }
 
-                    new RegenGui(plugin).open(player, guild);
+                    new GuildRegenGui(plugin).open(player, guild);
                 }));
 
         gui.setItem(3,7, ItemStackBuilder.of(SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODEyMmE1MDNkN2E2ZjU3ODAyYjAzYWY3NjI0MTk0YTRjNGY1MDc3YTk5YWUyMWRkMjc2Y2U3ZGI4OGJjMzhhZSJ9fX0="))
@@ -154,7 +154,7 @@ public class GuildPanelGui {
                     }
 
                     if (!guild.getRegion().isInHeart(player.getLocation())) {
-                        TextUtil.message(player, "&8[&4&l!&8] &cAby wejsc w tryb obserwatora musisz w sercu gildii!");
+                        TextUtil.message(player, "&8(&4&l!&8) &cAby wejsc w tryb obserwatora musisz w sercu gildii!");
                         return;
                     }
 

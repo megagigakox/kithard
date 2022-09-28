@@ -47,10 +47,10 @@ public class CustomEnchantGui {
                             player.getItemInHand().addEnchantment(enchantment, customEnchant.getLevel());
                             player.setLevel(player.getLevel() - customEnchant.getCost());
                             player.closeInventory();
-                            TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie zenchantowano!");
+                            TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie zenchantowano!");
                         }
                         else {
-                            TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz wystarczajacej ilosci expa!");
+                            TextUtil.message(player, "&8(&4&l!&8) &cNie posiadasz wystarczajacej ilosci expa!");
                         }
 
                     }));

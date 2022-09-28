@@ -40,7 +40,7 @@ public class CustomEnchantListener implements Listener {
                 }
             }
             if (customEnchantType == null) {
-                TextUtil.message(player, "&8[&4&l!&8] &cNie mozesz tego zenchantowac!");
+                TextUtil.message(player, "&8(&4&l!&8) &cNie mozesz tego zenchantowac!");
                 return;
             }
 

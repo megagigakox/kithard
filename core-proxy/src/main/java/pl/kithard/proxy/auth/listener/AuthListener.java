@@ -34,55 +34,53 @@ public class AuthListener implements Listener {
         event.registerIntent(plugin);
         this.plugin.getProxy().getScheduler().runAsync(plugin, () -> {
 
-            AuthPlayer authPlayer = this.plugin.getAuthPlayerCache().findByName(name);
-            if (authPlayer == null) {
-
-                if (MojangUtil.isLimited()) {
-                    event.setCancelReason(TextComponent.fromLegacyText(TextUtil.color("&CSprobuj ponownie za chwile.")));
-                    event.setCancelled(true);
-                    event.completeIntent(plugin);
-                    return;
-                }
-
-                if (this.plugin.getAuthPlayerCache().hasMaxAccountsPerIP(connection.getAddress().getAddress().getHostAddress())) {
-                    event.setCancelReason(TextComponent.fromLegacyText(TextUtil.color("&cOsiagnales limit kont na tym ip!")));
-                    event.setCancelled(true);
-                    event.completeIntent(plugin);
-                    return;
-                }
-
-                authPlayer = this.plugin.getAuthPlayerCache().create(name);
-                authPlayer.setPremium(MojangUtil.fetchStatus(name));
-                authPlayer.setFirstJoinTime(System.currentTimeMillis());
-                authPlayer.setIp(connection.getAddress().getAddress().getHostAddress());
-                this.plugin.getMongoService().save(authPlayer);
-
+            if (MojangUtil.isLimited()) {
+                event.setCancelReason(TextUtil.component("&CSprobuj ponownie za chwile."));
+                event.setCancelled(true);
+                event.completeIntent(plugin);
+                return;
             }
 
             if (this.plugin.getProxy().getPlayer(name) != null) {
-                event.setCancelReason(TextComponent.fromLegacyText(TextUtil.color("&cTen gracz jest juz online!")));
+                event.setCancelReason(TextUtil.component("&cTen gracz jest juz online!"));
                 event.setCancelled(true);
                 event.completeIntent(plugin);
                 return;
             }
 
             if (name.length() < 3 || name.length() > 16) {
-                event.setCancelReason(TextComponent.fromLegacyText(TextUtil.color("&cNieprawidlowa dlugosc nicku!")));
+                event.setCancelReason(TextUtil.component("&cNieprawidlowa dlugosc nicku!"));
                 event.setCancelled(true);
                 event.completeIntent(plugin);
                 return;
             }
 
+            if (this.plugin.getAuthPlayerCache().hasMaxAccountsPerIP(connection.getAddress().getAddress().getHostAddress())) {
+                event.setCancelReason(TextUtil.component("&cOsiagnales limit kont na tym ip!"));
+                event.setCancelled(true);
+                event.completeIntent(plugin);
+                return;
+            }
+
+            AuthPlayer authPlayer = this.plugin.getAuthPlayerCache().findByName(name);
+            if (authPlayer == null) {
+                authPlayer = this.plugin.getAuthPlayerCache().create(name);
+                authPlayer.setPremium(MojangUtil.fetchStatus(name));
+                authPlayer.setFirstJoinTime(System.currentTimeMillis());
+                authPlayer.setIp(connection.getAddress().getAddress().getHostAddress());
+                this.plugin.getAuthPlayerRepository().insert(authPlayer);
+            }
+
             if (!authPlayer.isPremium() && !authPlayer.getName().equals(connection.getName())) {
                 event.setCancelled(true);
-                event.setCancelReason(TextComponent.fromLegacyText(TextUtil.color("&cNieprawidlowy nick! Wejdz na serwer z nicku: &b" + authPlayer.getName())));
+                event.setCancelReason(TextUtil.component("&cNieprawidlowy nick! Wejdz na serwer z nicku: &b" + authPlayer.getName()));
                 event.completeIntent(plugin);
                 return;
             }
 
             if (authPlayer.getJoinCooldown() > System.currentTimeMillis()) {
                 event.setCancelled(true);
-                event.setCancelReason(TextComponent.fromLegacyText(TextUtil.color("&cKolejny raz bedziesz mogl sie polaczyc za: &b" + TimeUtil.formatTimeMillis(authPlayer.getJoinCooldown() - System.currentTimeMillis()))));
+                event.setCancelReason(TextUtil.component("&cKolejny raz bedziesz mogl sie polaczyc za: &b" + TimeUtil.formatTimeMillis(authPlayer.getJoinCooldown() - System.currentTimeMillis())));
                 event.completeIntent(plugin);
                 return;
             }
@@ -104,31 +102,28 @@ public class AuthListener implements Listener {
 
         if (authPlayer.getIp() == null || !authPlayer.getIp().equals(player.getAddress().getAddress().getHostAddress())) {
             authPlayer.setIp(player.getAddress().getAddress().getHostAddress());
-            this.plugin.getProxy().getScheduler().runAsync(plugin, () -> this.plugin.getMongoService().save(authPlayer));
+            authPlayer.setNeedSave(true);
         }
 
         if (!authPlayer.isPremium()) {
             player.sendMessage(
                     ChatMessageType.ACTION_BAR,
-                    TextComponent.fromLegacyText(TextUtil.color(
-                            !authPlayer.isRegistered()
-                                    ? "&7Musisz sie zarejestrowac! &a/register (haslo) (haslo)"
-                                    : "&7Musisz sie zalogowac! &a/login (haslo)"))
-            );
+                    TextUtil.component(!authPlayer.isRegistered()
+                            ? "&7Musisz sie zarejestrowac! &b/register (haslo) (haslo)"
+                            : "&7Musisz sie zalogowac! &b/login (haslo)"
+                    ));
 
-            player.sendMessage(
-                    TextComponent.fromLegacyText(TextUtil.color(
-                            !authPlayer.isRegistered()
-                                    ? "&7Musisz sie zarejestrowac! &a/register (haslo) (haslo)"
-                                    : "&7Musisz sie zalogowac! &a/login (haslo)"))
-            );
-
+            player.sendMessage(TextUtil.component(
+                    !authPlayer.isRegistered()
+                            ? "&7Musisz sie zarejestrowac! &b/register (haslo) (haslo)"
+                            : "&7Musisz sie zalogowac! &b/login (haslo)"
+                    ));
             return;
         }
 
         authPlayer.setLogged(true);
-        player.sendMessage(TextComponent.fromLegacyText(TextUtil.color("&aPomyslnie zalogowano z konta &2premium&a!")));
-        player.sendMessage(TextComponent.fromLegacyText(TextUtil.color("&aTrwa dodawanie do kolejki...")));
+        player.sendMessage(TextUtil.component("&aPomyslnie zalogowano z konta &bpremium&a!"));
+        player.sendMessage(TextUtil.component("&aTrwa dodawanie do kolejki..."));
         ProxyPlugin.EXECUTOR_SERVICE.schedule(
                 () -> BungeeUtil.sendCustomData(player, player.getUniqueId().toString(), "main"),
                 2500L,

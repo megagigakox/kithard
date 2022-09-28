@@ -28,19 +28,19 @@ public class ClearCommand {
         if (args.length < 1) {
             player.getInventory().setArmorContents(null);
             player.getInventory().clear();
-            TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &fwyczyszczono &7ekwipunek!");
+            TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &fwyczyszczono &7ekwipunek!");
             return;
         }
 
         Player target = this.plugin.getServer().getPlayerExact(args[0]);
         if (target == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz jest aktualnie &4offline&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz jest aktualnie &4offline&c!");
             return;
         }
 
         target.getInventory().setArmorContents(null);
         target.getInventory().clear();
-        TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &fwyczyszczono &7ekwipunek graczowi: &b" + target.getName() + "&7!");
+        TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &fwyczyszczono &7ekwipunek graczowi: &b" + target.getName() + "&7!");
     }
 
 }

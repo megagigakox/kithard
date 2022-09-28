@@ -76,7 +76,7 @@ public class KitGui {
         gui.setItem(5, 8, builder.asGuiItem(event -> {
 
             if (!kit.isEnable()) {
-                TextUtil.message(player, "&8[&4&l!&8] &cTen zestaw jest wylaczony!");
+                TextUtil.message(player, "&8(&4&l!&8) &cTen zestaw jest wylaczony!");
                 player.closeInventory();
                 return;
             }
@@ -90,7 +90,7 @@ public class KitGui {
 
                 } else {
 
-                    TextUtil.message(player, "&8[&4&l!&8] &cTen zestaw mozesz odebrac dopiero za &4" +
+                    TextUtil.message(player, "&8(&4&l!&8) &cTen zestaw mozesz odebrac dopiero za &4" +
                             TimeUtil.formatTimeMillis(corePlayer.getCooldown().getKitCooldown(kit.getName()) - System.currentTimeMillis()));
 
                 }

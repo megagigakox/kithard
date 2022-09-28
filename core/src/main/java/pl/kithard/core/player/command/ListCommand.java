@@ -18,11 +18,13 @@ public class ListCommand {
             acceptsExceeded = true
     )
     public void handle(CommandSender sender) {
-        TextUtil.message(sender,"&8» &fAktuanie na serwerze przebywa &3&l" + Bukkit.getOnlinePlayers().size() + " &fgraczy!");
-        TextUtil.message(sender,"&8» &b" + StringUtils.join(Bukkit.getOnlinePlayers()
-                .stream()
-                .map(HumanEntity::getName)
-                .collect(Collectors.toList()), "&8,&b "));
+        TextUtil.message(sender,"&8(&3&l!&8) &7Aktuanie na serwerze przebywa &3&l" + Bukkit.getOnlinePlayers().size() + " &7graczy!");
+        if (sender.hasPermission("kithard.commands.list")) {
+            TextUtil.message(sender, "&8» &b" + StringUtils.join(Bukkit.getOnlinePlayers()
+                    .stream()
+                    .map(HumanEntity::getName)
+                    .collect(Collectors.toList()), "&8,&b "));
+        }
     }
 
 }

@@ -58,7 +58,7 @@ public class BlocksCommand {
             }
         }
 
-        TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie wymieniono wszystkie sztabki na bloki");
+        TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie wymieniono wszystkie sztabki na bloki");
 
     }
 

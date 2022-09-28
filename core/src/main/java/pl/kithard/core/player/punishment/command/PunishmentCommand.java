@@ -36,7 +36,7 @@ public class PunishmentCommand {
 
         Ban ban = this.plugin.getPunishmentCache().findBan(args[0]);
         if (ban != null) {
-            TextUtil.message(sender, "&8[&4&l!&8] &cTen gracz jest już zbanowany!");
+            TextUtil.message(sender, "&8(&4&l!&8) &cTen gracz jest już zbanowany!");
             return;
         }
 
@@ -51,7 +51,7 @@ public class PunishmentCommand {
 
         Bukkit.broadcastMessage(
                 TextUtil.color(
-                        "&8[&4&l!&8] &cGracz &4"
+                        "&8(&4&l!&8) &cGracz &4"
                                 + args[0]
                                 + " &czostal permanentnie zbanowany przez &4"
                                 + sender.getName() +
@@ -73,7 +73,7 @@ public class PunishmentCommand {
 
         Ban ban = this.plugin.getPunishmentCache().findBan(args[0]);
         if (ban != null) {
-            TextUtil.message(sender, "&8[&4&l!&8] &cTen gracz jest już zbanowany!");
+            TextUtil.message(sender, "&8(&4&l!&8) &cTen gracz jest już zbanowany!");
             return;
         }
 
@@ -88,7 +88,7 @@ public class PunishmentCommand {
 
         Bukkit.broadcastMessage(
                 TextUtil.color(
-                        "&8[&4&l!&8] &cGracz &4"
+                        "&8(&4&l!&8) &cGracz &4"
                                 + args[0]
                                 + " &czostal zbanowany tymczasowo przez &4"
                                 + sender.getName()
@@ -110,7 +110,7 @@ public class PunishmentCommand {
 
         BanIP ban = this.plugin.getPunishmentCache().findBanIP(args[0]);
         if (ban != null) {
-            TextUtil.message(sender, "&8[&4&l!&8] &cTen gracz jest już zbanowany!");
+            TextUtil.message(sender, "&8(&4&l!&8) &cTen gracz jest już zbanowany!");
             return;
         }
 
@@ -119,7 +119,7 @@ public class PunishmentCommand {
         if (punishedPlayer != null) {
             Bukkit.broadcastMessage(
                     TextUtil.color(
-                            "&8[&4&l!&8] &cGracz &4"
+                            "&8(&4&l!&8) &cGracz &4"
                                     + punishedPlayer.getName()
                                     + " &czostal zbanowany na ip przez &4"
                                     + sender.getName()
@@ -137,7 +137,7 @@ public class PunishmentCommand {
 
         Bukkit.broadcastMessage(
                 TextUtil.color(
-                        "&8[&4&l!&8] &cIP &4"
+                        "&8(&4&l!&8) &cIP &4"
                                 + args[0]
                                 .replace("1", "*")
                                 .replace("2", "*")
@@ -170,14 +170,14 @@ public class PunishmentCommand {
 
         Ban ban = this.plugin.getPunishmentCache().findBan(args[0]);
         if (ban == null) {
-            TextUtil.message(sender, "&8[&4&l!&8] &cTen gracz &4nie jest &czbanowany!");
+            TextUtil.message(sender, "&8(&4&l!&8) &cTen gracz &4nie jest &czbanowany!");
             return;
         }
 
         this.plugin.getPunishmentFactory().reassignBanFromPlayer(args[0]);
         Bukkit.broadcastMessage(
                 TextUtil.color(
-                        "&8[&4&l!&8] &cGracz &4"
+                        "&8(&4&l!&8) &cGracz &4"
                                 + args[0]
                                 + " &czostal odbanowany przez &4"
                                 + sender.getName() + "&c!"));
@@ -197,7 +197,7 @@ public class PunishmentCommand {
 
         BanIP ban = this.plugin.getPunishmentCache().findBanIP(args[0]);
         if (ban == null) {
-            TextUtil.message(sender, "&8[&4&l!&8] &cTo IP &4nie jest &czbanowane!");
+            TextUtil.message(sender, "&8(&4&l!&8) &cTo IP &4nie jest &czbanowane!");
             return;
         }
 
@@ -210,7 +210,7 @@ public class PunishmentCommand {
         this.plugin.getPunishmentFactory().reassignBanIPFromPlayer(args[0]);
         Bukkit.broadcastMessage(
                 TextUtil.color(
-                        "&8[&4&l!&8] &cIP &4"
+                        "&8(&4&l!&8) &cIP &4"
                                 + hideIp
                                 + " &czostalo odbanowane przez &4"
                                 + sender.getName() + "&c!"));
@@ -231,7 +231,7 @@ public class PunishmentCommand {
 
         Mute mute = this.plugin.getPunishmentCache().findMute(args[0]);
         if (mute != null) {
-            TextUtil.message(sender, "&8[&4&l!&8] &cTen gracz &4jest już &cwyciszony!");
+            TextUtil.message(sender, "&8(&4&l!&8) &cTen gracz &4jest już &cwyciszony!");
             return;
         }
 
@@ -240,7 +240,7 @@ public class PunishmentCommand {
 
         Bukkit.broadcastMessage(
                 TextUtil.color(
-                        "&8[&4&l!&8] &cGracz &4"
+                        "&8(&4&l!&8) &cGracz &4"
                                 +
                                 args[0]
                                 + " &czostal permanentnie wyciszony przez &4"
@@ -263,7 +263,7 @@ public class PunishmentCommand {
 
         Mute mute = this.plugin.getPunishmentCache().findMute(args[0]);
         if (mute != null) {
-            TextUtil.message(sender, "&8[&4&l!&8] &cTen gracz &4jest już &cwyciszony!");
+            TextUtil.message(sender, "&8(&4&l!&8) &cTen gracz &4jest już &cwyciszony!");
             return;
         }
 
@@ -273,7 +273,7 @@ public class PunishmentCommand {
 
         Bukkit.broadcastMessage(
                 TextUtil.color(
-                                "&8[&4&l!&8] &cGracz &4"
+                                "&8(&4&l!&8) &cGracz &4"
                                         +
                                         args[0]
                                         + " &czostal tymczasowo wyciszony przez &4"
@@ -297,14 +297,14 @@ public class PunishmentCommand {
 
         Mute mute = this.plugin.getPunishmentCache().findMute(args[0]);
         if (mute == null) {
-            TextUtil.message(sender, "&8[&4&l!&8] &cTen gracz &4nie jest &cwyciszony!");
+            TextUtil.message(sender, "&8(&4&l!&8) &cTen gracz &4nie jest &cwyciszony!");
             return;
         }
 
         this.plugin.getPunishmentFactory().reassignMuteFromPlayer(args[0]);
         Bukkit.broadcastMessage(
                 TextUtil.color(
-                        "&8[&4&l!&8] &cGracz &4"
+                        "&8(&4&l!&8) &cGracz &4"
                                 + args[0]
                                 + " &czostal odciszony przez &4"
                                 + sender.getName() + "&c!"));

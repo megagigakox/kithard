@@ -88,12 +88,12 @@ public class AchievementGui {
                     .asGuiItem(event -> {
 
                         if (progress < required) {
-                            TextUtil.message(player, "&8[&4&l!&8] &cNie mozesz tego jeszcze odebrac!");
+                            TextUtil.message(player, "&8(&4&l!&8) &cNie mozesz tego jeszcze odebrac!");
                             return;
                         }
 
                         if (corePlayer.isAchievementClaimed(achievement)) {
-                            TextUtil.message(player, "&8[&4&l!&8] &cOdebrales juz to osiagniecie!");
+                            TextUtil.message(player, "&8(&4&l!&8) &cOdebrales juz to osiagniecie!");
                             return;
                         }
 
@@ -106,7 +106,7 @@ public class AchievementGui {
                                 continue;
                             }
 
-                            TextUtil.message(it, "&8[&3&l!&8] &7Gracz &f" + player.getName() + " &7odebral osiagniecie &7(&8&l#&e&l" + achievement.getId() + " &f" + type.getName() + "&7)");
+                            TextUtil.message(it, "&8(&3&l!&8) &7Gracz &f" + player.getName() + " &7odebral osiagniecie &7(&8&l#&e&l" + achievement.getId() + " &f" + type.getName() + "&7)");
                         }
                         openAchievements(player, type);
                     }));

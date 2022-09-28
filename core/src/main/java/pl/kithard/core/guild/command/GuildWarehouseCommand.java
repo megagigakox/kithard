@@ -28,7 +28,10 @@ public class GuildWarehouseCommand {
             return;
         }
 
-        guild.addLog(new GuildLog(GuildLogType.OTHER, "&f" + player.getName() + " &7otworzyl magazyn gildyjny."));
+        GuildLog guildLog = guild.addLog(new GuildLog(guild.getTag(), GuildLogType.OTHER, "&f" + player.getName() + " &7otworzyl magazyn gildyjny."));
+        this.plugin.getServer()
+                .getScheduler()
+                .runTaskAsynchronously(this.plugin, () -> this.plugin.getGuildRepository().insertLog(guildLog));
         guild.openWarehouse(player);
     }
 }

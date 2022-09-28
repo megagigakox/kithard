@@ -31,7 +31,7 @@ public class FreezeCommand {
         ServerSettings serverSettings = this.plugin.getServerSettings();
         serverSettings.setFreeze(time);
         this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getServerSettingsService().save(serverSettings));
-        TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie ustawiono zamrozenie na: &2" + TimeUtil.formatTimeMillis(time - System.currentTimeMillis()));
+        TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie ustawiono zamrozenie na: &2" + TimeUtil.formatTimeMillis(time - System.currentTimeMillis()));
 
     }
 }

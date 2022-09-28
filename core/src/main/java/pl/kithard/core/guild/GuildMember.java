@@ -6,17 +6,24 @@ import java.util.*;
 
 public class GuildMember {
 
+    private final String guild;
+
     private final UUID uuid;
     private String name;
     private boolean periscope;
 
-    private final Set<GuildPermission> allowedPermissions;
+    private Set<GuildPermission> allowedPermissions;
 
-    public GuildMember(UUID uuid, String name) {
+    public GuildMember(String guild, UUID uuid, String name) {
+        this.guild = guild;
         this.uuid = uuid;
         this.name = name;
 
         this.allowedPermissions = new HashSet<>();
+    }
+
+    public String getGuild() {
+        return guild;
     }
 
     public UUID getUuid() {
@@ -55,6 +62,10 @@ public class GuildMember {
 
     public Set<GuildPermission> getAllowedPermissions() {
         return allowedPermissions;
+    }
+
+    public void setAllowedPermissions(Set<GuildPermission> allowedPermissions) {
+        this.allowedPermissions = allowedPermissions;
     }
 
     public boolean isPeriscope() {

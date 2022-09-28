@@ -23,17 +23,17 @@ public class RegisterCommand extends Command {
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
         AuthPlayer authPlayer = this.plugin.getAuthPlayerCache().findByName(player.getName());
         if (authPlayer.isRegistered()) {
-            player.sendMessage(new TextComponent(TextUtil.color("&cJestes juz zarejestrowany!")));
+            player.sendMessage(TextUtil.component("&cJestes juz zarejestrowany!"));
             return;
         }
 
         if (authPlayer.isPremium()) {
-            player.sendMessage(new TextComponent(TextUtil.color("&cJestes graczem premium!")));
+            player.sendMessage(TextUtil.component("&cJestes graczem premium!"));
             return;
         }
 
         if (args.length < 2) {
-            player.sendMessage(new TextComponent(TextUtil.color("&cPoprawne uzycie: &b/register (haslo) (haslo)")));
+            player.sendMessage(TextUtil.component("&cPoprawne uzycie: &b/register (haslo) (haslo)"));
             return;
         }
 
@@ -41,20 +41,20 @@ public class RegisterCommand extends Command {
         String confirmPassword = args[1];
 
         if (!password.equals(confirmPassword)) {
-            player.sendMessage(new TextComponent(TextUtil.color("&cHasla sie nie zgadzaja!")));
+            player.sendMessage(TextUtil.component("&cHasla sie nie zgadzaja!"));
             return;
         }
 
-        if (password.length() < 6) {
-            player.sendMessage(new TextComponent(TextUtil.color("&cHaslo musi zawierac przynajmniej 6 znakow!")));
+        if (password.length() < 6 || password.length() > 32) {
+            player.sendMessage(TextUtil.component("&cHaslo musi miec 6-32 znakow!"));
             return;
         }
 
-        player.sendMessage(new TextComponent(TextUtil.color("&aPomyslnie zarejestrowano!")));
+        player.sendMessage(TextUtil.component("&aPomyslnie zarejestrowano!"));
         authPlayer.setPassword(password);
         authPlayer.setRegistered(true);
         authPlayer.setLogged(true);
-        this.plugin.getProxy().getScheduler().runAsync(plugin, () -> this.plugin.getMongoService().save(authPlayer));
+        authPlayer.setNeedSave(true);
         BungeeUtil.sendCustomData(player, player.getUniqueId().toString(), "main");
     }
 }

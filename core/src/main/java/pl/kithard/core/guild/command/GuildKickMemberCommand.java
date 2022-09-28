@@ -40,12 +40,12 @@ public class GuildKickMemberCommand {
 
         CorePlayer targetCorePlayer = this.plugin.getCorePlayerCache().findByName(args[0]);
         if (targetCorePlayer == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz &4nie istnieje &cw bazie danych!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz &4nie istnieje &cw bazie danych!");
             return;
         }
 
         if (!guild.isMember(targetCorePlayer.getUuid())) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz &4nie jest &cw twojej gildii!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz &4nie jest &cw twojej gildii!");
             return;
         }
 
@@ -61,22 +61,30 @@ public class GuildKickMemberCommand {
 
         GuildMember guildMember = guild.findMemberByUuid(targetCorePlayer.getUuid());
         if (guild.isDeputy(targetCorePlayer.getUuid())) {
-            guild.getDeputies().remove(guildMember);
+            guild.getDeputies().remove(guildMember.getUuid());
         }
 
-        guild.addLog(new GuildLog(
+        GuildLog guildLog = guild.addLog(new GuildLog(
+                guild.getTag(),
                 GuildLogType.MEMBER_KICK,
                 "&f" + player.getName() + " &7wyrzucil gracza &f" + guildMember.getName() + " &7z gildii.")
         );
+
+        this.plugin.getServer()
+                .getScheduler()
+                .runTaskAsynchronously(this.plugin, () -> this.plugin.getGuildRepository().insertLog(guildLog));
+
         guild.getMembers().remove(guildMember);
         guild.setNeedSave(true);
+
         Bukkit.broadcastMessage(TextUtil.color(
-                "&8[&3&l!&8] &7Gracz &f" +
+                "&8(&3&l!&8) &7Gracz &f" +
                         targetCorePlayer.getName() +
                         " &7zostal wyrzucony z gildii &8[&b" +
                         guild.getTag() +
                         "&8] &7przez &f" +
                         player.getName() +
-                        "&7!"));
+                        "&7!"
+        ));
     }
 }

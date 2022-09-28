@@ -40,12 +40,12 @@ public class GuildAllyInviteCommand {
         Guild otherGuild = this.plugin.getGuildCache().findByTag(args[0]);
 
         if (otherGuild == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cGildia o tym tagu nie istnieje!");
+            TextUtil.message(player, "&8(&4&l!&8) &cGildia o tym tagu nie istnieje!");
             return;
         }
 
         if (guild.getTag().equalsIgnoreCase(otherGuild.getTag())) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie możesz zawrzec sojuszu ze swoja gildia!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie możesz zawrzec sojuszu ze swoja gildia!");
             return;
         }
 
@@ -56,40 +56,46 @@ public class GuildAllyInviteCommand {
             guild.setNeedSave(true);
             otherGuild.setNeedSave(true);
 
-            guild.addLog(new GuildLog(
-                    GuildLogType.ALLY_BREAK,
-                    "&f" + player.getName() + " &7zerwal sojusz z gildia: &8[" + otherGuild.getTag() + "&8]")
-            );
+            this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
 
-            otherGuild.addLog(new GuildLog(
-                    GuildLogType.ALLY_BREAK,
-                    "&f" + player.getName() + " &8[&c" + guild.getTag() +"&8] &7zerwal sojusz z wasza gildia")
-            );
+                guild.addLog(new GuildLog(
+                        guild.getTag(),
+                        GuildLogType.ALLY_BREAK,
+                        "&f" + player.getName() + " &7zerwal sojusz z gildia: &8[" + otherGuild.getTag() + "&8]")
+                );
 
-            Bukkit.broadcastMessage(TextUtil.color("&8[&3&l!&8] &7Gildia &8[&b" + guild.getTag() + "&8] &7zerwala sojusz z gildia &8[&b" + otherGuild.getTag() + "&8]"));
+                otherGuild.addLog(new GuildLog(
+                        guild.getTag(),
+                        GuildLogType.ALLY_BREAK,
+                        "&f" + player.getName() + " &8[&c" + guild.getTag() + "&8] &7zerwal sojusz z wasza gildia")
+                );
+
+            });
+
+            Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gildia &8[&b" + guild.getTag() + "&8] &7zerwala sojusz z gildia &8[&b" + otherGuild.getTag() + "&8]"));
             return;
         }
 
         if (guild.getAllyInvites().contains(otherGuild.getTag())) {
             guild.getAllyInvites().remove(otherGuild.getTag());
 
-            TextUtil.message(player, "&8[&4&l!&8] &cWycofales zaproszenie do sojuszu!");
+            TextUtil.message(player, "&8(&4&l!&8) &cWycofales zaproszenie do sojuszu!");
             return;
         }
 
         if (guild.getAllies().size() == 3) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTwoja gildia posiada maksymalna liczbe sojuszy!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTwoja gildia posiada maksymalna liczbe sojuszy!");
             return;
         }
 
         if (otherGuild.getAllies().size() == 3) {
-            TextUtil.message(player, "&8[&4&l!&8] &cGildia z ktora chcesz zawrzec sojusz posiada maksymalna liczbe sojuszy!");
+            TextUtil.message(player, "&8(&4&l!&8) &cGildia z ktora chcesz zawrzec sojusz posiada maksymalna liczbe sojuszy!");
             return;
         }
 
         if (!otherGuild.getAllyInvites().contains(guild.getTag())) {
             guild.getAllyInvites().add(otherGuild.getTag());
-            TextUtil.message(player, "&8[&3&l!&8] &7Wyslales &3zaproszenie &7do sojuszu z gildia &8[&b" + otherGuild.getTag() + "&8]&7!");
+            TextUtil.message(player, "&8(&3&l!&8) &7Wyslales &3zaproszenie &7do sojuszu z gildia &8[&b" + otherGuild.getTag() + "&8]&7!");
 
             for (GuildMember member : otherGuild.getMembers()) {
                 Player memberPlayer = this.plugin.getServer().getPlayer(member.getUuid());
@@ -112,16 +118,22 @@ public class GuildAllyInviteCommand {
         otherGuild.setNeedSave(true);
         guild.setNeedSave(true);
 
-        guild.addLog(new GuildLog(
-                GuildLogType.ALLY_INCLUDE,
-                "&f" + player.getName() + " &7zawarl sojusz z gildia: &8[" + otherGuild.getTag() + "&8]")
-        );
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
 
-        otherGuild.addLog(new GuildLog(
-                GuildLogType.ALLY_INCLUDE,
-                "&f" + player.getName() + " &8[&c" + guild.getTag() +"&8] &7zawarl sojusz z wasza gildia")
-        );
+            guild.addLog(new GuildLog(
+                    guild.getTag(),
+                    GuildLogType.ALLY_INCLUDE,
+                    "&f" + player.getName() + " &7zawarl sojusz z gildia: &8[" + otherGuild.getTag() + "&8]")
+            );
 
-        Bukkit.broadcastMessage(TextUtil.color("&8[&3&l!&8] &7Gildia &8[&b" + guild.getTag() + "&8] &7zawarla sojusz z gildia &8[&b" + otherGuild.getTag() + "&8]"));
+            otherGuild.addLog(new GuildLog(
+                    guild.getTag(), GuildLogType.ALLY_INCLUDE,
+                    "&f" + player.getName() + " &8[&c" + guild.getTag() +"&8] &7zawarl sojusz z wasza gildia")
+            );
+
+        });
+
+
+        Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gildia &8[&b" + guild.getTag() + "&8] &7zawarla sojusz z gildia &8[&b" + otherGuild.getTag() + "&8]"));
     }
 }

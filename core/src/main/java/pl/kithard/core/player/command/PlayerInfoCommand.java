@@ -34,7 +34,7 @@ public class PlayerInfoCommand {
 
         CorePlayer targetCorePlayer = this.plugin.getCorePlayerCache().findByName(args[0]);
         if (targetCorePlayer == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz &4nie istnieje &cw bazie danych!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz &4nie istnieje &cw bazie danych!");
             return;
         }
 

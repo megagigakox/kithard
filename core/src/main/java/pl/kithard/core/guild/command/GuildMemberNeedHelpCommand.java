@@ -35,6 +35,6 @@ public class GuildMemberNeedHelpCommand {
                         .build())
         );
 
-        TextUtil.message(player, "&8[&2&l!&8] &aWyslano prosbe o pomoc z twoimi kordynatami do czlonkow twojej gildii!");
+        TextUtil.message(player, "&8(&2&l!&8) &aWyslano prosbe o pomoc z twoimi kordynatami do czlonkow twojej gildii!");
     }
 }

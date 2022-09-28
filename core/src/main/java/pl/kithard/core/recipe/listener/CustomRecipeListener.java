@@ -105,7 +105,7 @@ public class CustomRecipeListener implements Listener {
         if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.BOY_FARMER.getItem().getItemMeta().getDisplayName())) {
 
             if (guild == null) {
-                TextUtil.message(player, "&8[&4&l!&8] &cNie możesz &4stawiac &cfarmerow &4poza terenem gidlii!");
+                TextUtil.message(player, "&8(&4&l!&8) &cNie możesz &4stawiac &cfarmerow &4poza terenem gidlii!");
                 event.setCancelled(true);
                 return;
             }
@@ -137,7 +137,7 @@ public class CustomRecipeListener implements Listener {
         else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.SAND_FARMER.getItem().getItemMeta().getDisplayName())) {
 
             if (guild == null) {
-                TextUtil.message(player, "&8[&4&l!&8] &cNie możesz &4stawiac &cfarmerow &4poza terenem gidlii!");
+                TextUtil.message(player, "&8(&4&l!&8) &cNie możesz &4stawiac &cfarmerow &4poza terenem gidlii!");
                 event.setCancelled(true);
                 return;
             }
@@ -169,7 +169,7 @@ public class CustomRecipeListener implements Listener {
         else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.AIR_FARMER.getItem().getItemMeta().getDisplayName())) {
 
             if (guild == null) {
-                TextUtil.message(player, "&8[&4&l!&8] &cNie możesz &4stawiac &cfarmerow &4poza terenem gidlii!");
+                TextUtil.message(player, "&8(&4&l!&8) &cNie możesz &4stawiac &cfarmerow &4poza terenem gidlii!");
                 event.setCancelled(true);
                 return;
             }
@@ -227,7 +227,7 @@ public class CustomRecipeListener implements Listener {
             }
 
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent addtemp vip 21d");
-            TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
+            TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie aktywowano voucher!");
 
         }
 
@@ -240,7 +240,7 @@ public class CustomRecipeListener implements Listener {
             }
 
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent addtemp svip 21d");
-            TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
+            TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie aktywowano voucher!");
 
         }
         else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.SPONSOR_VOUCHER.getItem().getItemMeta().getDisplayName())) {
@@ -252,7 +252,7 @@ public class CustomRecipeListener implements Listener {
             }
 
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent addtemp sponsor 21d");
-            TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
+            TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie aktywowano voucher!");
 
         }
         else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.TURBO_DROP_VOUCHER_30MIN.getItem().getItemMeta().getDisplayName())) {
@@ -264,7 +264,7 @@ public class CustomRecipeListener implements Listener {
             }
 
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "turbo " + player.getName() + " 30m");
-            TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
+            TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie aktywowano voucher!");
         }
         else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.TURBO_DROP_VOUCHER_60MIN.getItem().getItemMeta().getDisplayName())) {
 
@@ -275,7 +275,7 @@ public class CustomRecipeListener implements Listener {
             }
 
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "turbo " + player.getName() + " 1h");
-            TextUtil.message(player, "&8[&2&l!&8] &aPomyslnie aktywowano voucher!");
+            TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie aktywowano voucher!");
         }
     }
 

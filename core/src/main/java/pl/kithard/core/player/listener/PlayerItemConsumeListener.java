@@ -48,7 +48,7 @@ public class PlayerItemConsumeListener implements Listener {
                     player.addPotionEffect(
                             new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1));
                     player.addPotionEffect(
-                            new PotionEffect(PotionEffectType.REGENERATION, 20 * 15, 1));
+                            new PotionEffect(PotionEffectType.REGENERATION, 20 * 15, 0));
                     player.addPotionEffect(
                             new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 120, 0));
                     player.addPotionEffect(

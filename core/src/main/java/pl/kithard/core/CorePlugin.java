@@ -55,6 +55,7 @@ import pl.kithard.core.generator.GeneratorFactory;
 import pl.kithard.core.generator.listener.GeneratorListener;
 import pl.kithard.core.guild.GuildCache;
 import pl.kithard.core.guild.GuildFactory;
+import pl.kithard.core.guild.GuildRepository;
 import pl.kithard.core.guild.command.*;
 import pl.kithard.core.guild.command.admin.GuildAdminCommand;
 import pl.kithard.core.guild.command.admin.GuildAdminGiveItemsCommand;
@@ -71,9 +72,9 @@ import pl.kithard.core.guild.panel.command.GuildPanelCommand;
 import pl.kithard.core.guild.periscope.listener.GuildPeriscopeListener;
 import pl.kithard.core.guild.permission.listener.GuildPermissionListener;
 import pl.kithard.core.guild.ranking.GuildRankingService;
-import pl.kithard.core.guild.regen.RegenCache;
-import pl.kithard.core.guild.regen.command.RegenCommand;
-import pl.kithard.core.guild.regen.listener.RegenListener;
+import pl.kithard.core.guild.regen.GuildRegenCache;
+import pl.kithard.core.guild.regen.command.GuildRegenCommand;
+import pl.kithard.core.guild.regen.listener.GuildRegenListener;
 import pl.kithard.core.guild.task.GuildExpireTask;
 import pl.kithard.core.guild.task.GuildHologramTask;
 import pl.kithard.core.guild.task.GuildShadowBlockProtectionTask;
@@ -89,7 +90,6 @@ import pl.kithard.core.kit.command.KitCommand;
 import pl.kithard.core.kit.command.KitManageCommand;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.player.CorePlayerCache;
-import pl.kithard.core.player.CorePlayerFactory;
 import pl.kithard.core.player.CorePlayerRepository;
 import pl.kithard.core.player.achievement.AchievementCache;
 import pl.kithard.core.player.achievement.AchievementCommand;
@@ -132,6 +132,9 @@ import pl.kithard.core.recipe.command.CobbleXCommand;
 import pl.kithard.core.recipe.command.CustomRecipeCommand;
 import pl.kithard.core.recipe.command.MagicChestGiveCommand;
 import pl.kithard.core.recipe.listener.CustomRecipeListener;
+import pl.kithard.core.safe.SafeCache;
+import pl.kithard.core.safe.SafeListener;
+import pl.kithard.core.safe.SafeRepository;
 import pl.kithard.core.settings.ServerSettings;
 import pl.kithard.core.settings.ServerSettingsService;
 import pl.kithard.core.settings.command.ServerSettingsCommand;
@@ -153,7 +156,6 @@ import pl.kithard.core.warp.command.WarpCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.UUID;
 
 public final class CorePlugin extends JavaPlugin {
 
@@ -163,7 +165,6 @@ public final class CorePlugin extends JavaPlugin {
     private RedisService redisService;
 
     private CorePlayerCache corePlayerCache;
-    private CorePlayerFactory corePlayerFactory;
     private CorePlayerRepository corePlayerRepository;
     private PlayerRankingService playerRankingService;
     private PlayerNameTagService playerNameTagService;
@@ -171,9 +172,10 @@ public final class CorePlugin extends JavaPlugin {
     private PlayerBackupFactory playerBackupFactory;
 
     private GuildCache guildCache;
+    private GuildRepository guildRepository;
     private GuildFactory guildFactory;
     private GuildRankingService guildRankingService;
-    private RegenCache regenCache;
+    private GuildRegenCache regenCache;
 
     private CustomEffectCache customEffectCache;
     private CustomEffectConfiguration customEffectConfiguration;
@@ -209,6 +211,9 @@ public final class CorePlugin extends JavaPlugin {
     private AntiMacroCache antiMacroCache;
     private CustomEnchantConfiguration customEnchantConfiguration;
 
+    private SafeCache safeCache;
+    private SafeRepository safeRepository;
+
     @Override
     public void onEnable() {
         saveDefaultConfig();
@@ -222,7 +227,7 @@ public final class CorePlugin extends JavaPlugin {
                 .create();
 
         this.redisService = new RedisService(DatabaseConfig.REDIS_URI);
-        this.databaseService = new DatabaseService("51.77.38.198",3306, "kithard", "kithard", "H3FUhzrgMhXKTK6B");
+        this.databaseService = new DatabaseService("mysql.titanaxe.com",3306, "srv235179", "srv235179", "CbccNpZ8");
         this.mongoService = new MongoService(DatabaseConfig.MONGO_URI, this.gson);
 
         this.customEffectConfiguration = new CustomEffectConfiguration(this);
@@ -304,18 +309,29 @@ public final class CorePlugin extends JavaPlugin {
         this.corePlayerRepository = new CorePlayerRepository(this.databaseService);
         this.corePlayerRepository.prepareTable();
         this.corePlayerCache = new CorePlayerCache();
-        this.corePlayerFactory = new CorePlayerFactory(this);
-        this.corePlayerFactory.loadAll();
+        this.corePlayerRepository.loadAll().forEach(corePlayer -> {
+            this.corePlayerCache.add(corePlayer);
+            this.playerRankingService.add(corePlayer);
+        });
+
+        this.safeCache = new SafeCache();
+        this.safeRepository = new SafeRepository(databaseService);
+        this.safeRepository.prepareTable();
+        this.safeRepository.loadAll().forEach(safe -> {
+            this.safeCache.add(safe);
+        });
 
         this.playerNameTagService = new PlayerNameTagService(this);
         this.playerBackupFactory = new PlayerBackupFactory(this);
         this.playerBackupService = new PlayerBackupService(this);
 
         this.guildCache = new GuildCache(this);
+        this.guildRepository = new GuildRepository(getLogger(), this.databaseService, guildCache);
+        this.guildRepository.prepareTable();
         this.guildFactory = new GuildFactory(this);
         this.guildFactory.loadAll();
 
-        this.regenCache = new RegenCache();
+        this.regenCache = new GuildRegenCache();
 
         this.guildRankingService = new GuildRankingService(this);
         this.guildRankingService.sort();
@@ -342,6 +358,7 @@ public final class CorePlugin extends JavaPlugin {
 
         this.antiMacroCache = new AntiMacroCache();
 
+
         this.initTabList();
         this.initCommands();
         this.initListeners();
@@ -360,13 +377,10 @@ public final class CorePlugin extends JavaPlugin {
             corePlayer.getCombat().setLastAttackPlayer(null);
         }
 
-        this.guildFactory.saveAll(false);
-        this.corePlayerFactory.saveAll(false);
-
+        this.guildRepository.updateAll(this.guildCache.getValues());
+        this.corePlayerRepository.updateAll(this.corePlayerCache.getValues());
         this.databaseService.shutdown();
-
         System.out.println("Zapisano gildie i userow podczas offania serwera!");
-
     }
 
     private void initCommands() {
@@ -431,7 +445,7 @@ public final class CorePlugin extends JavaPlugin {
                         new PlayerInfoCommand(this),
                         new GuildAllyInviteCommand(this),
                         new GuildDeputyCommand(this),
-                        new GuildLeaveCommand(),
+                        new GuildLeaveCommand(this),
                         new MagicChestGiveCommand(this),
                         new AdminItemsCommand(),
                         new KitCommand(this),
@@ -450,7 +464,7 @@ public final class CorePlugin extends JavaPlugin {
                         new RankingResetCommand(),
                         new BinCommand(),
                         new GuildOwnerTransferCommand(this),
-                        new RegenCommand(this),
+                        new GuildRegenCommand(this),
                         new FreeSpaceCommand(this),
                         new GuildAlertCommand(this),
                         new AchievementCommand(this),
@@ -475,6 +489,8 @@ public final class CorePlugin extends JavaPlugin {
                 .permissionHandler((message, permission) ->
                         TextUtil.insufficientPermission(message.getCommandSender(), permission))
                 .install();
+
+
 
     }
 
@@ -524,11 +540,12 @@ public final class CorePlugin extends JavaPlugin {
         new ServerSettingsListeners(this);
         new GuildChatListener(this);
         new BlockPlaceListener(this);
-        new RegenListener(this);
+        new GuildRegenListener(this);
         new GuildPeriscopeListener(this);
         new AchievementListener(this);
         new AntiMacroListener(this);
         new CustomEnchantListener(this);
+        new SafeListener(this);
     }
 
     private void initRecipes() {
@@ -605,10 +622,6 @@ public final class CorePlugin extends JavaPlugin {
         return corePlayerCache;
     }
 
-    public CorePlayerFactory getCorePlayerFactory() {
-        return corePlayerFactory;
-    }
-
     public CustomEffectCache getCustomEffectCache() {
         return customEffectCache;
     }
@@ -653,7 +666,7 @@ public final class CorePlugin extends JavaPlugin {
         return guildFactory;
     }
 
-    public RegenCache getRegenCache() {
+    public GuildRegenCache getRegenCache() {
         return regenCache;
     }
 
@@ -739,5 +752,17 @@ public final class CorePlugin extends JavaPlugin {
 
     public DatabaseService getDatabaseService() {
         return databaseService;
+    }
+
+    public GuildRepository getGuildRepository() {
+        return guildRepository;
+    }
+
+    public SafeCache getSafeCache() {
+        return safeCache;
+    }
+
+    public SafeRepository getSafeRepository() {
+        return safeRepository;
     }
 }

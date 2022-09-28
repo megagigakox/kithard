@@ -51,12 +51,12 @@ public class TeleportAcceptCommand {
 
         CorePlayer targetCorePlayer = this.plugin.getCorePlayerCache().findByName(args[0]);
         if (targetCorePlayer == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz &4nie istnieje &cw bazie danych!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz &4nie istnieje &cw bazie danych!");
             return;
         }
         Player targetPlayer = targetCorePlayer.source();
         if (targetPlayer == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz jest aktualnie &4offline&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz jest aktualnie &4offline&c!");
             return;
         }
 
@@ -66,7 +66,7 @@ public class TeleportAcceptCommand {
     private void acceptTeleport(CorePlayer corePlayer, CorePlayer request) {
 
         if (!corePlayer.isTeleportRequestFromUuid(request.getUuid())) {
-            TextUtil.message(corePlayer.source(), "&8[&4&l!&8] &cTen gracz nie teleportuje sie do ciebie lub prosba już wygasla!");
+            TextUtil.message(corePlayer.source(), "&8(&4&l!&8) &cTen gracz nie teleportuje sie do ciebie lub prosba już wygasla!");
             corePlayer.removeTeleportRequest(request.getUuid());
             return;
         }
@@ -74,8 +74,8 @@ public class TeleportAcceptCommand {
         corePlayer.removeTeleportRequest(request.getUuid());
         request.teleport(corePlayer.source().getLocation(), 5);
 
-        TextUtil.message(corePlayer.source(), "&8[&3&l!&8] &7Pomyslnie &3zaakceptowano &7prosbe o teleportacja od gracza &b" + request.getName());
-        TextUtil.message(request.source(), "&8[&3&l!&8] &7Gracz &b" + corePlayer.getName() + " &7zaakceptowal twoja &3prosbe &7o teleportacje!");
+        TextUtil.message(corePlayer.source(), "&8(&3&l!&8) &7Pomyslnie &3zaakceptowano &7prosbe o teleportacja od gracza &b" + request.getName());
+        TextUtil.message(request.source(), "&8(&3&l!&8) &7Gracz &b" + corePlayer.getName() + " &7zaakceptowal twoja &3prosbe &7o teleportacje!");
     }
 
 }

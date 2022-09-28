@@ -1,14 +1,16 @@
 package pl.kithard.core.util;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.*;
 
 public final class CollectionSerializer {
 
     private CollectionSerializer() {}
 
-    public static String serializeCollection(Collection<String> collection) {
+    public static String serializeCollection(Set<String> collection) {
         if (collection.isEmpty()) {
-            return "";
+            return null;
         }
         StringBuilder stringBuilder = new StringBuilder();
         for (String string : collection) {
@@ -17,7 +19,10 @@ public final class CollectionSerializer {
         return stringBuilder.toString();
     }
 
-    public static Collection<String> deserializeCollection(String serializedData) {
+    public static Set<String> deserializeCollection(String serializedData) {
+        if (serializedData == null || serializedData.isEmpty()) {
+            return new HashSet<>();
+        }
         Set<String> set = new HashSet<>();
         String[] split = serializedData.split("@");
         Collections.addAll(set, split);
@@ -25,6 +30,9 @@ public final class CollectionSerializer {
     }
 
     public static String serializeMap(Map<String, Integer> map) {
+        if (map.isEmpty()) {
+            return null;
+        }
         StringBuilder stringBuilder = new StringBuilder();
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
             stringBuilder.append(entry.getKey())
@@ -37,6 +45,10 @@ public final class CollectionSerializer {
     }
 
     public static Map<String, Integer> deserializeMap(String serializedData) {
+        if (serializedData == null || serializedData.isEmpty()) {
+            return new HashMap<>();
+        }
+
         Map<String, Integer> map = new HashMap<>();
         String[] split = serializedData.split("@");
         for (String string : split) {
@@ -50,6 +62,10 @@ public final class CollectionSerializer {
     }
 
     public static String serializeMapInteger(Map<Integer, String> map) {
+        if (map.isEmpty()) {
+            return null;
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         for (Map.Entry<Integer, String> entry : map.entrySet()) {
             stringBuilder.append(entry.getKey())
@@ -62,6 +78,10 @@ public final class CollectionSerializer {
     }
 
     public static Map<Integer, String> deserializeMapInteger(String serializedData) {
+        if (serializedData == null || serializedData.isEmpty()) {
+            return new HashMap<>();
+        }
+
         Map<Integer, String> map = new HashMap<>();
         String[] split = serializedData.split("@");
         for (String string : split) {
@@ -75,6 +95,10 @@ public final class CollectionSerializer {
     }
 
     public static String serializeMapLong(Map<String, Long> map) {
+        if (map.isEmpty()) {
+            return null;
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         for (Map.Entry<String, Long> entry : map.entrySet()) {
             stringBuilder.append(entry.getKey())
@@ -86,6 +110,10 @@ public final class CollectionSerializer {
     }
 
     public static Map<String, Long> deserializeMapLong(String serializedData) {
+        if (StringUtils.isEmpty(serializedData)) {
+            return new HashMap<>();
+        }
+
         Map<String, Long> map = new HashMap<>();
         String[] split = serializedData.split("@");
         for (String string : split) {

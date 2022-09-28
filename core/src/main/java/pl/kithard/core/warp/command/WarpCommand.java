@@ -54,7 +54,7 @@ public class WarpCommand {
         }
 
         this.plugin.getWarpFactory().create(args[0], player.getLocation(), Material.valueOf(args[1]));
-        TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &astworzono &7warp o nazwie: &b" + args[0]);
+        TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &astworzono &7warp o nazwie: &b" + args[0]);
     }
 
     @FunnyCommand(
@@ -71,12 +71,12 @@ public class WarpCommand {
 
         Warp warp = this.plugin.getWarpCache().findByName(args[0]);
         if (warp == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen warp nie istnieje!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen warp nie istnieje!");
             return;
         }
 
         this.plugin.getWarpFactory().delete(warp);
-        TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &cusunieto &7warp o nazwie: &b" + args[0]);
+        TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &cusunieto &7warp o nazwie: &b" + args[0]);
     }
 
 }

@@ -76,7 +76,7 @@ public class BlockCombatInteractionsListener implements Listener {
             for (String it : DISALLOWED_COMMANDS) {
                 if (message.contains("/" + it)) {
                     event.setCancelled(true);
-                    TextUtil.message(event.getPlayer(), "&8[&4&l!&8] &cTa komenda zostala zablokowana podczas walki!");
+                    TextUtil.message(event.getPlayer(), "&8(&4&l!&8) &cTa komenda zostala zablokowana podczas walki!");
                     break;
                 }
             }
@@ -98,7 +98,7 @@ public class BlockCombatInteractionsListener implements Listener {
         if (event.getClickedBlock().getType() == Material.WORKBENCH || event.getClickedBlock().getType() == Material.CHEST) {
             if (playerCombat.hasFight()) {
                 event.setCancelled(true);
-                TextUtil.message(event.getPlayer(), "&8[&4&l!&8] &cNie mozesz zrobic tego podczas walki!");
+                TextUtil.message(event.getPlayer(), "&8(&4&l!&8) &cNie mozesz zrobic tego podczas walki!");
             }
         }
     }

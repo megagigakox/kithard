@@ -22,7 +22,7 @@ public class SpeedCommand {
         double speedInteger = Double.parseDouble(speedString);
         double speedIntegerFloat = speedInteger / 10.0;
         if (speedIntegerFloat > 1.0) {
-            TextUtil.message(player,"&8[&4&l!&8] &cMaksymalna wartosc to &410&c!");
+            TextUtil.message(player,"&8(&4&l!&8) &cMaksymalna wartosc to &410&c!");
             return;
         }
 
@@ -30,12 +30,12 @@ public class SpeedCommand {
         if (player.isFlying()) {
 
             player.setFlySpeed(speed);
-            TextUtil.message(player,"&8[&3&l!&8] &7Ustawiles predkosc latania na: &b" + speedInteger);
+            TextUtil.message(player,"&8(&3&l!&8) &7Ustawiles predkosc latania na: &b" + speedInteger);
 
         } else {
 
             player.setWalkSpeed(speed);
-            TextUtil.message(player,"&8[&3&l!&8] &7Ustawiles predkosc chodzenia na: &b" + speedInteger);
+            TextUtil.message(player,"&8(&3&l!&8) &7Ustawiles predkosc chodzenia na: &b" + speedInteger);
         }
     }
 }

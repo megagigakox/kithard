@@ -32,7 +32,7 @@ public class PlayerBackupCommand {
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByName(args[0]);
         if (corePlayer == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz &4nie istnieje &cw bazie danych!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz &4nie istnieje &cw bazie danych!");
             return;
         }
 

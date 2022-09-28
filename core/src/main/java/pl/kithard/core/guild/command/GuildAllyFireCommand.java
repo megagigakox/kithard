@@ -31,7 +31,7 @@ public class GuildAllyFireCommand {
         guild.setAllyFire(!guild.isAllyFire());
         guild.setNeedSave(true);
 
-        TextUtil.message(player, "&8[&3&l!&8] &7Zmieniono tryb pvp w sojuszu na: " + (guild.isAllyFire() ? "&awlaczony" : "&cwylaczony"));
+        TextUtil.message(player, "&8(&3&l!&8) &7Zmieniono tryb pvp w sojuszu na: " + (guild.isAllyFire() ? "&awlaczony" : "&cwylaczony"));
 
     }
 }

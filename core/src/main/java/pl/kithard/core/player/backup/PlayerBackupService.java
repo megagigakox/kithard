@@ -27,10 +27,10 @@ public class PlayerBackupService {
 
         }
 
-        TextUtil.message(toRestore, "&8[&3&l!&8] &7Twoj ekwipunek zostal cofniety do &f" +
+        TextUtil.message(toRestore, "&8(&3&l!&8) &7Twoj ekwipunek zostal cofniety do &f" +
                 TimeUtil.formatTimeMillisToDate(playerBackup.getDate()) +
                 " &7przez &b" + player.getName());
-        TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie cofnales ekwipunek do &f" +
+        TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie cofnales ekwipunek do &f" +
                 TimeUtil.formatTimeMillisToDate(playerBackup.getDate()) +
                 " &7graczowi &b" + toRestore.getName());
 

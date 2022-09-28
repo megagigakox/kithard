@@ -20,7 +20,7 @@ public class SetSpawnCommand {
                 player.getLocation().getBlockY(),
                 player.getLocation().getBlockZ());
 
-        TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &fustawiono &7nowa lokalizacje spawna!");
+        TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &fustawiono &7nowa lokalizacje spawna!");
     }
 
 }

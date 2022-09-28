@@ -26,7 +26,7 @@ public class IncognitoCommand {
     )
     public void handle(CorePlayer corePlayer) {
         corePlayer.setIncognito(!corePlayer.isIncognito());
-        TextUtil.message(corePlayer.source(), "&8[&3&l!&8] &7Incognito zostalo " + (corePlayer.isIncognito() ? "&awlaczone" : "&cwylaczone") + "&7!");
+        TextUtil.message(corePlayer.source(), "&8(&3&l!&8) &7Incognito zostalo " + (corePlayer.isIncognito() ? "&awlaczone" : "&cwylaczone") + "&7!");
         this.plugin.getPlayerNameTagService().updateDummy(corePlayer);
 
     }

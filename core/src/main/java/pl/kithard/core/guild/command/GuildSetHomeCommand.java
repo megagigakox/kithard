@@ -34,19 +34,23 @@ public class GuildSetHomeCommand {
         }
 
         if (!guild.getRegion().isIn(player.getLocation())) {
-            TextUtil.message(player, "&8[&4&l!&8] &cNie możesz ustawic bazy gildyjnej za terenem gildii!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie możesz ustawic bazy gildyjnej za terenem gildii!");
             return;
         }
 
         Location location = LocationUtil.toCenter(player.getLocation());
         guild.setHome(location);
-        guild.addLog(new GuildLog(
+        guild.setNeedSave(true);
+        GuildLog guildLog = guild.addLog(new GuildLog(
+                guild.getTag(),
                 GuildLogType.OTHER,
                 "&f" + player.getName() + " &7ustawil baze gildyjna na kordach: &fx:" + location.getBlockX() + " z:" + location.getBlockZ())
         );
-        guild.setNeedSave(true);
+        this.plugin.getServer()
+                .getScheduler()
+                .runTaskAsynchronously(this.plugin, () -> this.plugin.getGuildRepository().insertLog(guildLog));
 
-        TextUtil.message(player, "&8[&3&l!&8] &7Pomyslnie &austawiles nowa lokalizacje &7bazy gildyjnej!");
+        TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &austawiles nowa lokalizacje &7bazy gildyjnej!");
     }
 
 }

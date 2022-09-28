@@ -71,8 +71,8 @@ public class PlayerDeathListener implements Listener {
                 && loserCorePlayer.getCooldown().getLastKillersCooldown().get(victimCorePlayer.getUuid())
                 + TimeUnit.MINUTES.toMillis(30) > System.currentTimeMillis()
         ) {
-            TextUtil.message(victim, "&8[&4&l!&8] &cZabiles ostatnio tego gracza, punkty nie zostaja przyznane!");
-            TextUtil.message(loser, "&8[&4&l!&8] &cZostales zabity ostatnio przez tego gracza, punkty nie zostaja odebrane!");
+            TextUtil.message(victim, "&8(&4&l!&8) &cZabiles ostatnio tego gracza, punkty nie zostaja przyznane!");
+            TextUtil.message(loser, "&8(&4&l!&8) &cZostales zabity ostatnio przez tego gracza, punkty nie zostaja odebrane!");
             this.plugin.getPlayerBackupFactory().create(
                     loser,
                     PlayerBackupType.DEATH,

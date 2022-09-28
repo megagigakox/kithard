@@ -40,7 +40,7 @@ public class ChatManageCommand {
             case "on": {
 
                 if (serverSettings.isEnabled(ServerSettingsType.CHAT)) {
-                    TextUtil.message(sender, "&8[&4&l!&8] &cChat jest już wlaczony!");
+                    TextUtil.message(sender, "&8(&4&l!&8) &cChat jest już wlaczony!");
                     return;
                 }
 
@@ -50,7 +50,7 @@ public class ChatManageCommand {
                 for (Player player : Bukkit.getOnlinePlayers()) {
 
                     TextUtil.sendEmptyMessage(player, 50);
-                    TextUtil.message(player, "&8[&3&l!&8] &7Chat serwerowy zostal &awlaczony &7przez: &b" + sender.getName());
+                    TextUtil.message(player, "&8(&3&l!&8) &7Chat serwerowy zostal &awlaczony &7przez: &b" + sender.getName());
                 }
 
                 return;
@@ -59,7 +59,7 @@ public class ChatManageCommand {
             case "off": {
 
                 if (!serverSettings.isEnabled(ServerSettingsType.CHAT)) {
-                    TextUtil.message(sender, "&8[&4&l!&8] &cChat jest już wylaczony!");
+                    TextUtil.message(sender, "&8(&4&l!&8) &cChat jest już wylaczony!");
                     return;
                 }
 
@@ -69,7 +69,7 @@ public class ChatManageCommand {
                 for (Player player : Bukkit.getOnlinePlayers()) {
 
                     TextUtil.sendEmptyMessage(player, 50);
-                    TextUtil.message(player, "&8[&3&l!&8] &7Chat serwerowy zostal &cwylaczony &7przez: &b" + sender.getName());
+                    TextUtil.message(player, "&8(&3&l!&8) &7Chat serwerowy zostal &cwylaczony &7przez: &b" + sender.getName());
                 }
 
                 return;
@@ -82,7 +82,7 @@ public class ChatManageCommand {
                 for (Player player : Bukkit.getOnlinePlayers()) {
 
                     TextUtil.sendEmptyMessage(player, 500);
-                    TextUtil.message(player, "&8[&3&l!&8] &7Chat serwerowy zostal &fwyczyszczony &7przez: &b" + sender.getName());
+                    TextUtil.message(player, "&8(&3&l!&8) &7Chat serwerowy zostal &fwyczyszczony &7przez: &b" + sender.getName());
                 }
 
                 return;

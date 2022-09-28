@@ -2,6 +2,7 @@ package pl.kithard.core.player.achievement;
 
 public class Achievement {
 
+    private final String uniqueId;
     private final int id;
 
     private final AchievementType type;
@@ -13,10 +14,16 @@ public class Achievement {
         this.type = type;
         this.reward = reward;
         this.required = required;
+
+        this.uniqueId = type.toString() + ":" + id;
     }
 
     public static AchievementBuilder builder() {
         return new AchievementBuilder();
+    }
+
+    public String getUniqueId() {
+        return uniqueId;
     }
 
     public int getId() {
@@ -40,6 +47,7 @@ public class Achievement {
         private AchievementType type;
         private AchievementReward reward;
         private long required;
+
 
         public AchievementBuilder id(int id) {
             this.id = id;

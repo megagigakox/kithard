@@ -56,7 +56,7 @@ public class ServerSettingsListeners implements Listener {
                 || result.getType() == Material.DIAMOND_SWORD || result.getType() == Material.DIAMOND_AXE) {
 
             if (!this.plugin.getServerSettings().isEnabled(ServerSettingsType.DIAMOND_ITEMS)) {
-                TextUtil.message(event.getWhoClicked(), "&8[&4&l!&8] &cCraftowanie diamentowych itemow zostalo tymczasowo wylaczone!");
+                TextUtil.message(event.getWhoClicked(), "&8(&4&l!&8) &cCraftowanie diamentowych itemow zostalo tymczasowo wylaczone!");
                 event.setCancelled(true);
 
             }
@@ -68,7 +68,7 @@ public class ServerSettingsListeners implements Listener {
 
         if (event.getItemInHand().getType() == Material.BEACON && !this.plugin.getServerSettings().isEnabled(ServerSettingsType.BEACON)) {
 
-            TextUtil.message(event.getPlayer(), "&8[&4&l!&8] &cStawianie beaconow zostalo tymczasowo wylaczone!");
+            TextUtil.message(event.getPlayer(), "&8(&4&l!&8) &cStawianie beaconow zostalo tymczasowo wylaczone!");
             event.setCancelled(true);
 
         }

@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.CorePlayer;
+import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.settings.ServerSettingsType;
 import pl.kithard.core.shop.ShopUtil;
 import pl.kithard.core.shop.item.ShopItem;
@@ -39,17 +40,17 @@ public class ShopGui {
                     .rows(5)
                     .create();
 
-            GuiHelper.fillColorGui5(gui);
+            GuiHelper.fillColorMain(gui);
             this.prepareTops(gui);
 
             CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
 
             gui.setItem(3, 3, ItemBuilder.from(new ItemStack(351, 1, (short) 10))
-                    .name(TextUtil.component("&a&lKupno Itemkow"))
+                    .name(TextUtil.component("   &a&lKupno Itemkow"))
                     .enchant(Enchantment.DURABILITY, 3)
                     .lore(TextUtil.component(Arrays.asList(
                             "",
-                            " &8» &7Kliknij &faby zobaczyc &7oferte!")))
+                            " &7Kliknij &faby zobaczyc &7oferte!")))
                     .glow(true)
                     .asGuiItem(event -> {
 
@@ -63,20 +64,20 @@ public class ShopGui {
                     }));
 
             gui.setItem(3, 5, ItemBuilder.from(new ItemStack(351, 1, (short) 1))
-                    .name(TextUtil.component("&c&lSprzedaz Itemkow"))
+                    .name(TextUtil.component("   &c&lSprzedaz Itemkow"))
                     .enchant(Enchantment.DURABILITY, 3)
                     .lore(TextUtil.component(Arrays.asList(
                             "",
-                            " &8» &7Kliknij &faby zobaczyc &7oferte!")))
+                            " &7Kliknij &faby zobaczyc &7oferte!")))
                     .glow(true)
                     .asGuiItem(inventoryClickEvent -> openSell(player)));
 
             gui.setItem(3, 7, ItemBuilder.from(new ItemStack(383, 1, (short) 120))
-                    .name(TextUtil.component("&2&lVillager"))
+                    .name(TextUtil.component("   &2&lVillager"))
                     .enchant(Enchantment.DURABILITY, 3)
                     .lore(TextUtil.component(Arrays.asList(
                             "",
-                            " &8» &7Kliknij &faby zobaczyc &7oferte!")))
+                            " &7Kliknij &faby zobaczyc &7oferte!")))
                     .glow(true)
                     .asGuiItem(inventoryClickEvent -> {
 
@@ -127,13 +128,13 @@ public class ShopGui {
             gui.addItem(ItemStackBuilder.of(buyItem.getItem().clone())
                     .appendLore(
                             "",
-                            "  &7Po zakupie otrzymasz...",
-                            "  &8» &f&l" + buyItem.getName() + "&8, &f&l" + buyItem.getItem().getAmount() + "x &8- &3&l" + buyItem.getPrice() + "zl",
+                            " &7Oferta kupna&8:",
+                            "  &8- &f&l" + buyItem.getName() + "&8, &f&l" + buyItem.getItem().getAmount() + "x &8- &b&l" + buyItem.getPrice() + "zl",
                             "",
-                            "  &fAby zakupic...",
-                            "  &8» &aNacisnij na ten przedmiot!",
+                            " &7Twoj aktualny stan konta wynosi&8: &3" + corePlayer.getMoney(),
                             "",
-                            "&7Twoj aktualny stan konta wynosi&8: &3" + corePlayer.getMoney())
+                            "&7Kliknij &flewym &7aby zakupic ten przedmiot!"
+                    )
                     .asGuiItem(inventoryClickEvent -> {
 
                         if (corePlayer.getMoney() >= buyItem.getPrice()) {
@@ -149,7 +150,7 @@ public class ShopGui {
                             openBuy(player);
 
                         } else {
-                            TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz &4wystarczajacej ilosci pieniedzy &caby zakupic ten przedmiot!");
+                            TextUtil.message(player, "&8(&4&l!&8) &cNie posiadasz &4wystarczajacej ilosci pieniedzy &caby zakupic ten przedmiot!");
                         }
 
                     }));
@@ -161,7 +162,7 @@ public class ShopGui {
 
     public void openSell(Player player) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Sklep (sprzedaz)"))
+                .title(TextUtil.component("&3&lSklep &8(sprzedaz)"))
                 .rows(6)
                 .create();
 
@@ -180,15 +181,15 @@ public class ShopGui {
             gui.addItem(ItemStackBuilder.of(sellItem.getItem().clone())
                     .appendLore(
                             "",
-                            "  &7Oferta sprzedazy...",
-                            "  &8» &f&l" + sellItem.getName() + "&8, &f&l" + sellItem.getItem().getAmount() + "x &8- &3&l" + sellItem.getPrice() + "zl",
-                            "",
-                            "  &fAby sprzedac...",
-                            "  &8» &cNacisnij na ten przedmiot!",
+                            " &7Oferta sprzedazy&8:",
+                            "  &8- &f&l" + sellItem.getName() + "&8, &f&l" + sellItem.getItem().getAmount() + "x &8- &b&l" + sellItem.getPrice() + "zl",
                             "",
                             (corePlayer.isDisabledSellItem(sellItem) ? " &7Ten item &a&nnie jest &7w liscie sprzedazy wiec.." : " &7Ten item &c&njest w liscie &7sprzedaży wiec.."),
                             (corePlayer.isDisabledSellItem(sellItem) ? " &a&lNie sprzedasz &7go uzywajac sprzedazy &c&nwszystkiego!" : " &c&lSprzedasz go &7uzywajac sprzedazy &c&nwszystkiego!"),
-                            "          &8(Kliknij prawym aby to zmienic!)")
+                            "          &8(Kliknij prawym aby to zmienic!)",
+                            "",
+                            "&7Kliknij &flewym &7aby sprzedać ten item!"
+                    )
                     .asGuiItem(event -> {
 
                         if (event.getClick() == ClickType.LEFT) {
@@ -199,7 +200,7 @@ public class ShopGui {
                                 corePlayer.setNeedSave(true);
                                 openSell(player);
                             } else {
-                                TextUtil.message(player, "&8[&4&l!&8] &cNie posiadasz tego itemku na sprzedaz!");
+                                TextUtil.message(player, "&8(&4&l!&8) &cNie posiadasz tego itemku na sprzedaz!");
                             }
                         } else if (event.getClick() == ClickType.RIGHT) {
                             if (corePlayer.isDisabledSellItem(sellItem)) {
@@ -213,10 +214,10 @@ public class ShopGui {
         }
 
         gui.setItem(5,5, ItemBuilder.from(Material.HOPPER)
-                .name(TextUtil.component("&c&lSprzedaż Wszystkiego"))
+                .name(TextUtil.component("&b&lSprzedaż Wszystkiego"))
                 .lore(TextUtil.component(Arrays.asList(
                         "",
-                        " &8» &7Kliknij tutaj aby &asprzedac wszystkie &7przedmioty z eq!",
+                        " &7Kliknij tutaj aby &bsprzedac wszystkie &7przedmioty z eq!",
                         "   &8(Ta funkcja sprzedaje tylko przedmioty...",
                         "        &8ktore nie sa zignorowane!",
                         "    &8Sprawdz to najeżdzajac na itemki u gory!)")))
@@ -268,10 +269,11 @@ public class ShopGui {
             gui.addItem(ItemStackBuilder.of(villagerItem.getItem().clone())
                     .appendLore(
                             "",
-                            "  &7Po zakupie otrzymasz...",
-                            "  &8» &f&l" + villagerItem.getName() + "&8, &f&l" + villagerItem.getItem().getAmount() + "x &8- &3&l" + villagerItem.getPrice() + " blokow eme", "",
-                            "  &fAby zakupic...",
-                            "  &8» &aNacisnij na ten przedmiot!")
+                            " &7Oferta kupna&8:",
+                            "  &8- &f&l" + villagerItem.getName() + "&8, &f&l" + villagerItem.getItem().getAmount() + "x &8- &b&l" + villagerItem.getPrice() + " blokow eme",
+                            "",
+                            "&7Kliknij &flewym &7aby zakupic ten przedmiot!"
+                    )
                     .asGuiItem(event -> {
 
                         if (player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD_BLOCK), (int) villagerItem.getPrice())) {
@@ -287,13 +289,13 @@ public class ShopGui {
 
     private void prepareTops(Gui gui) {
         ItemStack topMoney = ItemBuilder.from(new ItemStack(351, 1, (short) 14))
-                .name(TextUtil.component(" &6&lTopka posiadanego hajsu!")).build();
+                .name(TextUtil.component(" &8&l&m--[&b&l&m---&b&l TOPKA POSIADANEGO HAJSU &b&l&m---&8&l&m]--")).build();
 
         ItemStack topSpendMoney = ItemBuilder.from(new ItemStack(351, 1, (short) 6))
-                .name(TextUtil.component(" &3&lTopka wydanego hajsu!")).build();
+                .name(TextUtil.component(" &8&l&m--[&b&l&m---&b&l TOPKA WYDANEGO HAJSU &b&l&m---&8&l&m]--")).build();
 
         ItemStack topEarnedMoney = ItemBuilder.from(new ItemStack(351, 1, (short) 11))
-                .name(TextUtil.component(" &e&lTopka zarobionego hajsu!")).build();
+                .name(TextUtil.component(" &8&l&m--[&b&l&m---&b&l TOPKA ZAROBIONEGO HAJSU &b&l&m---&8&l&m]--")).build();
 
         List<CorePlayer> topMoneyPlayers = new ArrayList<>(this.plugin.getCorePlayerCache().getValues());
         topMoneyPlayers.sort((o1, o2) -> Double.compare(o2.getMoney(), o1.getMoney()));
@@ -305,11 +307,11 @@ public class ShopGui {
         for (CorePlayer corePlayer : topMoneyPlayers) {
             i++;
 
-            if (i > 10) {
+            if (i > 16) {
                 break;
             }
 
-            lore1.add(" &7" + i + ". &f" + corePlayer.getName() + " &8- &7posiada: &6" + corePlayer.getMoney() + " zl");
+            lore1.add("&8&l#&e&l" + i + "&8. &b" + corePlayer.getName() + " &8- &f" + corePlayer.getMoney() + "zl &7posiadanych pieniedzy w sklepie.");
         }
 
         meta1.setLore(TextUtil.color(lore1));
@@ -326,11 +328,11 @@ public class ShopGui {
         for (CorePlayer corePlayer : topSpendMoneyPlayers) {
             a++;
 
-            if (a > 10) {
+            if (a > 16) {
                 break;
             }
 
-            lore2.add(" &7" + a + ". &f" + corePlayer.getName() + " &8- &7wydal: &3" + corePlayer.getSpendMoney() + " zl");
+            lore2.add("&8&l#&e&l" + a + "&8. &b" + corePlayer.getName() + " &8- &f" + corePlayer.getSpendMoney() + "zl &7wydanych pieniedzy w sklepie.");
         }
 
         meta2.setLore(TextUtil.color(lore2));
@@ -347,11 +349,11 @@ public class ShopGui {
         for (CorePlayer corePlayer : topEarnedMoneyPlayers) {
             b++;
 
-            if (b > 10) {
+            if (b > 16) {
                 break;
             }
 
-            lore3.add(" &7" + b + ". &f" + corePlayer.getName() + " &8- &7zarobil: &e" + corePlayer.getEarnedMoney() + " zl");
+            lore3.add("&8&l#&e&l" + b + "&8. &b" + corePlayer.getName() + " &8- &f" + corePlayer.getEarnedMoney() + "zl &7zarobionych pieniedzy w sklepie.");
         }
 
         meta3.setLore(TextUtil.color(lore3));

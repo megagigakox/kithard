@@ -25,7 +25,7 @@ public class BorderCommand {
         World world = Bukkit.getWorld("world");
         world.getWorldBorder().setSize((size * 2 + 1));
 
-        TextUtil.message(player, "&8[&3&l!&8] &7Ustawiono &bborder swiata &7na &f" + size);
+        TextUtil.message(player, "&8(&3&l!&8) &7Ustawiono &bborder swiata &7na &f" + size);
     }
 
 }

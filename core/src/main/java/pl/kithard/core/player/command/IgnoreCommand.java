@@ -35,13 +35,13 @@ public class IgnoreCommand {
                 corePlayer.removeDisableSetting(PlayerSettings.PRIVATE_MESSAGES);
                 corePlayer.getIgnoredPlayers().clear();
                 corePlayer.setNeedSave(true);
-                TextUtil.message(player, "&8[&3&l!&8] &7Od tej pory &bnie ignorujesz &7nikogo!");
+                TextUtil.message(player, "&8(&3&l!&8) &7Od tej pory &bnie ignorujesz &7nikogo!");
                 return;
             }
 
             corePlayer.addDisabledSetting(PlayerSettings.PRIVATE_MESSAGES);
             corePlayer.setNeedSave(true);
-            TextUtil.message(player, "&8[&3&l!&8] &7Od tej pory &bignorujesz &7każdego!");
+            TextUtil.message(player, "&8(&3&l!&8) &7Od tej pory &bignorujesz &7każdego!");
             return;
         }
 
@@ -51,19 +51,19 @@ public class IgnoreCommand {
 
         CorePlayer targetCorePlayer = this.plugin.getCorePlayerCache().findByName(args[0]);
         if (targetCorePlayer == null) {
-            TextUtil.message(player, "&8[&4&l!&8] &cTen gracz &4nie istnieje &cw bazie danych!");
+            TextUtil.message(player, "&8(&4&l!&8) &cTen gracz &4nie istnieje &cw bazie danych!");
             return;
         }
 
         if (corePlayer.isIgnoredUuid(targetCorePlayer.getUuid())) {
             corePlayer.removeIgnoredUuid(targetCorePlayer.getUuid());
             corePlayer.setNeedSave(true);
-            TextUtil.message(player, "&8[&3&l!&8] &7Usunieto gracza &b" + targetCorePlayer.getName() + " &7z listy ignorowanych graczy!");
+            TextUtil.message(player, "&8(&3&l!&8) &7Usunieto gracza &b" + targetCorePlayer.getName() + " &7z listy ignorowanych graczy!");
             return;
         }
 
         corePlayer.addIgnoredUuid(targetCorePlayer.getUuid());
         corePlayer.setNeedSave(true);
-        TextUtil.message(player, "&8[&3&l!&8] &7Dodano gracza &b" + targetCorePlayer.getName() + " &7do listy ignorowanych graczy!");
+        TextUtil.message(player, "&8(&3&l!&8) &7Dodano gracza &b" + targetCorePlayer.getName() + " &7do listy ignorowanych graczy!");
     }
 }

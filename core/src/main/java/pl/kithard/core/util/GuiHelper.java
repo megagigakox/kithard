@@ -3,9 +3,13 @@ package pl.kithard.core.util;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.builder.item.SkullBuilder;
 import dev.triumphteam.gui.guis.BaseGui;
+import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
+import java.util.List;
 
 public final class GuiHelper {
 
@@ -50,7 +54,7 @@ public final class GuiHelper {
                     .build();
 
     public static void fillColorGui3(BaseGui gui) {
-        gui.getFiller().fillBorder(ItemBuilder.from(BLUE_STAINED_GLASS_PANE).asGuiItem());
+        gui.getFiller().fillBorder(ItemBuilder.from(CYAN_STAINED_GLASS_PANE).asGuiItem());
 
         gui.setItem(1,1, ItemBuilder.from(LIGHT_BLUE_STAINED_GLASS_PANE).asGuiItem());
         gui.setItem(1,5, ItemBuilder.from(LIGHT_BLUE_STAINED_GLASS_PANE).asGuiItem());
@@ -82,44 +86,7 @@ public final class GuiHelper {
 
     }
 
-    public static void fillEffectsGui(BaseGui gui) {
-
-        GuiItem cyan = ItemBuilder.from(CYAN_STAINED_GLASS_PANE)
-                .asGuiItem();
-
-        GuiItem lightBlue = ItemBuilder.from(LIGHT_BLUE_STAINED_GLASS_PANE)
-                .asGuiItem();
-
-        GuiItem white = ItemBuilder.from(WHITE_STAINED_GLASS_PANE)
-                .asGuiItem();
-
-        gui.getFiller().fill(ItemBuilder.from(BLACK_STAINED_GLASS_PANE).asGuiItem());
-
-        gui.setItem(1, 1, white);
-        gui.setItem(1, 2, lightBlue);
-        gui.setItem(1, 4, cyan);
-        gui.setItem(1, 5, lightBlue);
-        gui.setItem(1, 6, cyan);
-        gui.setItem(1, 8, lightBlue);
-        gui.setItem(1, 9, white);
-
-        gui.setItem(2,1, lightBlue);
-        gui.setItem(2, 9, lightBlue);
-        gui.setItem(5,1, lightBlue);
-        gui.setItem(5, 9, lightBlue);
-
-        gui.setItem(6, 1, white);
-        gui.setItem(6, 2, lightBlue);
-        gui.setItem(6, 4, cyan);
-        gui.setItem(6, 5, lightBlue);
-        gui.setItem(6, 6, cyan);
-        gui.setItem(6, 8, lightBlue);
-        gui.setItem(6, 9, white);
-
-    }
-
     public static void fillColorGui5(BaseGui gui) {
-
         GuiItem blue = ItemBuilder.from(BLUE_STAINED_GLASS_PANE)
                 .asGuiItem();
 
@@ -141,6 +108,23 @@ public final class GuiHelper {
         gui.setItem(5, 5, lightBlue);
         gui.setItem(5, 6, lightBlue);
 
+    }
+
+    public static void fillColorMain(BaseGui gui) {
+        gui.setItem(
+                Arrays.asList(0, 1, 7, 8, 9, 12, 13, 14, 17, 27, 30, 31, 32, 35, 36, 37, 43, 44),
+                ItemBuilder.from(GRAY_STAINED_GLASS_PANE).asGuiItem()
+        );
+
+        gui.setItem(
+                Arrays.asList(2, 4, 6, 19, 25, 38, 40, 42),
+                ItemBuilder.from(CYAN_STAINED_GLASS_PANE).asGuiItem()
+        );
+
+        gui.setItem(
+                Arrays.asList(3, 5, 10, 11, 15, 16, 18, 26, 28, 29, 33, 34, 39, 41),
+                ItemBuilder.from(LIGHT_BLUE_STAINED_GLASS_PANE).asGuiItem()
+        );
     }
 
 

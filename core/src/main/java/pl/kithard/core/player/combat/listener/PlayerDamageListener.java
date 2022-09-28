@@ -70,13 +70,13 @@ public class PlayerDamageListener implements Listener {
         }
 
         if (attackedPlayer.getProtection() > System.currentTimeMillis()) {
-            TextUtil.message(attacker, "&8[&4&l!&8] &cZaatakowany gracz posiada ochrone startowa jeszcze przez: &4" + TimeUtil.formatTimeMillis(attackedPlayer.getProtection() - System.currentTimeMillis()));
+            TextUtil.message(attacker, "&8(&4&l!&8) &cZaatakowany gracz posiada ochrone startowa jeszcze przez: &4" + TimeUtil.formatTimeMillis(attackedPlayer.getProtection() - System.currentTimeMillis()));
             event.setCancelled(true);
             return;
         }
 
         if (attackerPlayer.getProtection() > System.currentTimeMillis()) {
-            TextUtil.message(attacker, "&8[&4&l!&8] &cPosiadasz ochroe startowa jeszcze przez: &4" + TimeUtil.formatTimeMillis(attackerPlayer.getProtection() - System.currentTimeMillis()) + ". &cJezeli chcesz ja wylaczyc uzyj komendy: &4/wylaczochrone");
+            TextUtil.message(attacker, "&8(&4&l!&8) &cPosiadasz ochroe startowa jeszcze przez: &4" + TimeUtil.formatTimeMillis(attackerPlayer.getProtection() - System.currentTimeMillis()) + ". &cJezeli chcesz ja wylaczyc uzyj komendy: &4/wylaczochrone");
             event.setCancelled(true);
             return;
         }

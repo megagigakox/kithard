@@ -18,7 +18,7 @@ public class DepositItemConfiguration extends OkaeriConfig {
                 1,
                 true,
                 20,
-                "&8[&3&l!&8] &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7koxow do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}",
+                "&8(&3&l!&8) &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7koxow do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}",
                 new ItemStack(Material.GOLDEN_APPLE, 1, (short) 1)
         ));
         this.depositItems.add(new DepositItem(
@@ -26,7 +26,7 @@ public class DepositItemConfiguration extends OkaeriConfig {
                 1,
                 true,
                 21,
-                "&8[&3&l!&8] &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7refow do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}",
+                "&8(&3&l!&8) &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7refow do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}",
                 new ItemStack(Material.GOLDEN_APPLE)
         ));
         this.depositItems.add(new DepositItem(
@@ -34,7 +34,7 @@ public class DepositItemConfiguration extends OkaeriConfig {
                 1,
                 true,
                 22,
-                "&8[&3&l!&8] &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7perel do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}",
+                "&8(&3&l!&8) &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7perel do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}",
                 new ItemStack(Material.ENDER_PEARL)
         ));
         this.depositItems.add(new DepositItem(
@@ -42,7 +42,7 @@ public class DepositItemConfiguration extends OkaeriConfig {
                 16,
                 true,
                 23,
-                "&8[&3&l!&8] &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7strzal do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}",
+                "&8(&3&l!&8) &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7strzal do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}",
                 new ItemStack(Material.ARROW)
         ));
         this.depositItems.add(new DepositItem(
@@ -50,7 +50,7 @@ public class DepositItemConfiguration extends OkaeriConfig {
                 16,
                 true,
                 24,
-                "&8[&3&l!&8] &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7sniezek do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}",
+                "&8(&3&l!&8) &7Przeniesiono nadmiar &8(&f{AMOUNT}&8) &7sniezek do schowka! &7Aktualny stan w schowku: &f{OWNED-AMOUNT}",
                 new ItemStack(Material.SNOW_BALL)
         ));
     }

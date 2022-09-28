@@ -23,8 +23,9 @@ public class SaveAllCommand {
     public void handle(CommandSender commandSender) {
         this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
 
-            this.plugin.getGuildFactory().saveAll(false);
-            this.plugin.getCorePlayerFactory().saveAll(false);
+            this.plugin.getGuildRepository().updateAll(this.plugin.getGuildCache().getValues());
+            this.plugin.getCorePlayerRepository().updateAll(this.plugin.getCorePlayerCache().getValues());
+            TextUtil.message(commandSender, "&8(&2&l!&8) &aPomslnie zapisano userow oraz gildie!");
 
         });
 

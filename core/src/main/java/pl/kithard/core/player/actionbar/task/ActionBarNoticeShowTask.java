@@ -106,7 +106,7 @@ public class ActionBarNoticeShowTask extends BukkitRunnable {
                 player,
                 ActionBarNotice.builder()
                         .type(ActionBarNoticeType.PROTECTION)
-                        .text("&e&lOchrona &8(&f" + TimeUtil.formatTimeMillis(corePlayer.getProtection() - System.currentTimeMillis()) + "&8)")
+                        .text("&2&lOchrona &8(&a" + TimeUtil.formatTimeMillis(corePlayer.getProtection() - System.currentTimeMillis()) + "&8)")
                         .build()
         );
 

@@ -44,21 +44,20 @@ public class CorePlayer extends DatabaseEntry {
     private boolean vanish;
     private boolean incognito;
 
+    private final PlayerEnderChest enderChest;
     private final Set<UUID> ignoredPlayers;
     private final Set<String> disabledSellItems;
-    private final Set<PlayerSettings> disabledSettings;
+    private final Set<String> disabledSettings;
     private final Set<String> disabledDropItems;
     private final Set<String> guildHistory;
-    private final Set<Achievement> claimedAchievements;
-    private final List<PlayerHome> homes;
-    private final List<PlayerEnderChest> enderChests;
+    private final Set<String> claimedAchievements;
     private final Map<String, Integer> minedDrops;
     private final Map<String, Integer> depositItems;
-    private final Map<AchievementType, Long> achievementProgress;
-    private Map<UUID, Long> teleportRequests;
-
+    private final Map<String, Long> achievementProgress;
     private PlayerCombat combat;
     private PlayerCooldown cooldown;
+    private List<PlayerHome> homes;
+    private Map<UUID, Long> teleportRequests;
     private PlayerTeleport teleport;
     private UUID reply;
 
@@ -76,31 +75,16 @@ public class CorePlayer extends DatabaseEntry {
         this.disabledDropItems = new HashSet<>();
         this.guildHistory = new HashSet<>();
         this.claimedAchievements = new HashSet<>();
-        this.homes = new ArrayList<>();
-        this.enderChests = new ArrayList<>();
         this.minedDrops = new HashMap<>();
         this.depositItems = new HashMap<>();
         this.achievementProgress = new HashMap<>();
         this.teleportRequests = new HashMap<>();
+        this.enderChest = new PlayerEnderChest(null);
 
-
-        this.enderChests.add(new PlayerEnderChest(1, null, "Brak opisu"));
-        this.enderChests.add(new PlayerEnderChest(2, null, "Brak opisu"));
-        this.enderChests.add(new PlayerEnderChest(3, null, "Brak opisu"));
-        this.enderChests.add(new PlayerEnderChest(4, null, "Brak opisu"));
-        this.enderChests.add(new PlayerEnderChest(5, null, "Brak opisu"));
-
-        this.homes.add(new PlayerHome(1, null));
-        this.homes.add(new PlayerHome(2, null));
-        this.homes.add(new PlayerHome(3, null));
-        this.homes.add(new PlayerHome(4, null));
-        this.homes.add(new PlayerHome(5, null));
-
-        this.combat = new PlayerCombat();
-        this.cooldown = new PlayerCooldown();
+        init();
     }
 
-    public CorePlayer(UUID uuid, String name, String ip, double money, double earnedMoney, double spendMoney, int points, int kills, int deaths, int assists, int killStreak, long turboDrop, long spendTime, long protection, boolean vanish, boolean incognito, Set<UUID> ignoredPlayers, Set<String> disabledSellItems, Set<PlayerSettings> disabledSettings, Set<String> disabledDropItems, Set<String> guildHistory, Set<Achievement> claimedAchievements, List<PlayerHome> homes, List<PlayerEnderChest> enderChests, Map<String, Integer> minedDrops, Map<String, Integer> depositItems, Map<AchievementType, Long> achievementProgress) {
+    public CorePlayer(UUID uuid, String name, String ip, double money, double earnedMoney, double spendMoney, int points, int kills, int deaths, int assists, int killStreak, long turboDrop, long spendTime, long protection, boolean vanish, boolean incognito, Set<UUID> ignoredPlayers, Set<String> disabledSellItems, Set<String> disabledSettings, Set<String> disabledDropItems, Set<String> guildHistory, Set<String> claimedAchievements, Map<String, Integer> minedDrops, Map<String, Integer> depositItems, Map<String, Long> achievementProgress, PlayerEnderChest enderChest) {
         this.uuid = uuid;
         this.name = name;
         this.ip = ip;
@@ -123,11 +107,12 @@ public class CorePlayer extends DatabaseEntry {
         this.disabledDropItems = disabledDropItems;
         this.guildHistory = guildHistory;
         this.claimedAchievements = claimedAchievements;
-        this.homes = homes;
-        this.enderChests = enderChests;
         this.minedDrops = minedDrops;
         this.depositItems = depositItems;
         this.achievementProgress = achievementProgress;
+        this.enderChest = enderChest;
+
+        init();
     }
 
     public Player source() {
@@ -378,14 +363,10 @@ public class CorePlayer extends DatabaseEntry {
     }
 
     public void setHome(int id, Location location) {
-        findPlayerHome(id).setLocation(location);
+        findHome(id).setLocation(location);
     }
 
-    public List<PlayerEnderChest> getEnderChests() {
-        return enderChests;
-    }
-
-    public PlayerHome findPlayerHome(int id) {
+    public PlayerHome findHome(int id) {
         for (PlayerHome home : this.homes) {
             if (home.getId() == id) {
                 return home;
@@ -395,15 +376,15 @@ public class CorePlayer extends DatabaseEntry {
     }
 
     public boolean isDisabledSetting(PlayerSettings settings) {
-        return this.disabledSettings.contains(settings);
+        return this.disabledSettings.contains(settings.toString());
     }
 
     public void addDisabledSetting(PlayerSettings settings) {
-        this.disabledSettings.add(settings);
+        this.disabledSettings.add(settings.toString());
     }
 
     public void removeDisableSetting(PlayerSettings settings) {
-        this.disabledSettings.remove(settings);
+        this.disabledSettings.remove(settings.toString());
     }
 
     public boolean isDisabledDropItem(DropItem dropItem) {
@@ -464,7 +445,7 @@ public class CorePlayer extends DatabaseEntry {
             }
 
             if (this.teleport != null) {
-                TextUtil.message(player, "&8[&4&l!&8] &cTeleportujesz sie już gdzies!");
+                TextUtil.message(player, "&8(&4&l!&8) &cTeleportujesz sie już gdzies!");
                 return;
             }
 
@@ -480,23 +461,23 @@ public class CorePlayer extends DatabaseEntry {
     }
 
     public long getAchievementProgress(AchievementType type) {
-        return this.achievementProgress.getOrDefault(type, 0L);
+        return this.achievementProgress.getOrDefault(type.toString(), 0L);
     }
 
     public void addAchievementProgress(AchievementType type, long progress) {
-        this.achievementProgress.put(type, getAchievementProgress(type) + progress);
+        this.achievementProgress.put(type.toString(), getAchievementProgress(type) + progress);
     }
 
     public void setAchievementProgress(AchievementType type, long progress) {
-        this.achievementProgress.put(type, progress);
+        this.achievementProgress.put(type.toString(), progress);
     }
 
     public boolean isAchievementClaimed(Achievement achievement) {
-        return this.claimedAchievements.contains(achievement);
+        return this.claimedAchievements.contains(achievement.getUniqueId());
     }
 
     public void addClaimedAchievement(Achievement achievement) {
-        this.claimedAchievements.add(achievement);
+        this.claimedAchievements.add(achievement.getUniqueId());
     }
 
     public long getProtection() {
@@ -511,16 +492,8 @@ public class CorePlayer extends DatabaseEntry {
         return disabledSellItems;
     }
 
-    public Set<PlayerSettings> getDisabledSettings() {
-        return disabledSettings;
-    }
-
     public Set<String> getDisabledDropItems() {
         return disabledDropItems;
-    }
-
-    public Set<Achievement> getClaimedAchievements() {
-        return claimedAchievements;
     }
 
     public Map<String, Integer> getMinedDrops() {
@@ -531,41 +504,31 @@ public class CorePlayer extends DatabaseEntry {
         return depositItems;
     }
 
-    public Map<AchievementType, Long> getAchievementProgress() {
+    public Map<String, Long> getAchievementProgress() {
         return achievementProgress;
     }
 
-    @Override
-    public String toString() {
-        return "CorePlayer{" +
-                "uuid=" + uuid +
-                ", name='" + name + '\'' +
-                ", ip='" + ip + '\'' +
-                ", money=" + money +
-                ", earnedMoney=" + earnedMoney +
-                ", spendMoney=" + spendMoney +
-                ", points=" + points +
-                ", kills=" + kills +
-                ", deaths=" + deaths +
-                ", assists=" + assists +
-                ", killStreak=" + killStreak +
-                ", turboDrop=" + turboDrop +
-                ", spentTime=" + spendTime +
-                ", protection=" + protection +
-                ", ignoredPlayers=" + ignoredPlayers +
-                ", disabledSellItems=" + disabledSellItems +
-                ", disabledDropItems=" + disabledDropItems +
-                ", guildHistory=" + guildHistory +
-                ", claimedAchievements=" + claimedAchievements.toString() +
-                ", homes=" + homes.toString() +
-                ", minedDropItems=" + minedDrops.toString() +
-                ", depositItems=" + depositItems.toString() +
-                ", achievementProgress=" + achievementProgress.toString() +
-                ", lastTimeMeasurement=" + lastTimeMeasurement +
-                ", vanish=" + vanish +
-                ", incognito=" + incognito +
-                ", reply=" + reply +
-                ", teleportRequests=" + teleportRequests +
-                '}';
+    public Set<String> getClaimedAchievements() {
+        return claimedAchievements;
+    }
+
+    public Set<String> getDisabledSettings() {
+        return disabledSettings;
+    }
+
+    public PlayerEnderChest getEnderChest() {
+        return enderChest;
+    }
+
+    public void init() {
+        this.combat = new PlayerCombat();
+        this.cooldown = new PlayerCooldown();
+
+        this.homes = new ArrayList<>();
+        this.homes.add(new PlayerHome(1, null));
+        this.homes.add(new PlayerHome(2, null));
+        this.homes.add(new PlayerHome(3, null));
+        this.homes.add(new PlayerHome(4, null));
+        this.homes.add(new PlayerHome(5, null));
     }
 }
