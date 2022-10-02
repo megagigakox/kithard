@@ -7,6 +7,13 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.guild.regen.GuildRegenBlock;
+import pl.kithard.core.util.LocationSerializer;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuildRegenListener implements Listener {
 
@@ -29,12 +36,9 @@ public class GuildRegenListener implements Listener {
                 continue;
             }
 
-            guild.getRegenBlocks().add(
-                    new GuildRegenBlock(guild.getTag(), block.getLocation(), block.getType(), block.getData())
-            );
+            this.plugin.getRegenCache().getToSave()
+                    .add(new GuildRegenBlock(guild.getTag(), block.getLocation(), block.getType(), block.getData()));
         }
-
-        guild.setNeedSave(true);
     }
 
 }

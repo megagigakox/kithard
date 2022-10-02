@@ -4,6 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import pl.kithard.core.api.util.BCrypt;
 import pl.kithard.proxy.ProxyPlugin;
 import pl.kithard.proxy.auth.AuthPlayer;
 import pl.kithard.proxy.util.BungeeUtil;
@@ -51,7 +52,7 @@ public class RegisterCommand extends Command {
         }
 
         player.sendMessage(TextUtil.component("&aPomyslnie zarejestrowano!"));
-        authPlayer.setPassword(password);
+        authPlayer.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
         authPlayer.setRegistered(true);
         authPlayer.setLogged(true);
         authPlayer.setNeedSave(true);

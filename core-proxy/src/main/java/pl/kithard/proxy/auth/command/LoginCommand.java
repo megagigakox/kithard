@@ -4,6 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import pl.kithard.core.api.util.BCrypt;
 import pl.kithard.proxy.ProxyPlugin;
 import pl.kithard.proxy.auth.AuthPlayer;
 import pl.kithard.proxy.util.BungeeUtil;
@@ -43,7 +44,7 @@ public class LoginCommand extends Command {
         }
 
         String password = args[0];
-        if (!password.equals(authPlayer.getPassword())) {
+        if (!BCrypt.checkpw(password, authPlayer.getPassword())) {
             player.sendMessage(TextUtil.component("&cPodane haslo jest nieprawidlowe."));
             return;
         }

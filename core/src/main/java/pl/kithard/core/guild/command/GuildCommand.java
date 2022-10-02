@@ -22,6 +22,8 @@ public class GuildCommand {
                 "&8» &f/g usun &8- &7Usuwa gildie.",
                 "&8» &f/g itemy &8- &7Sprawdz itemy na gildie.",
                 "&8» &f/g info (tag) &8- &7Wyswietla informacje o gildii.",
+                "&8» &f/g baza &8- &7Teleportuje na baze gildyjna.",
+                "&8» &f/g serce (tag) &8- &7Teleportuje do serca gildyjnego.",
                 "&8» &f/g sojusz (tag) &8- &7Zaproszenie lub zerwanie sojuszu.",
                 "&8» &f/g zapros (gracz) &8- &7Zaprasza gracza do gildii.",
                 "&8» &f/g zaprosall &8- &7Zaprasza wszystkich graczy w obszarze 15 kratek.",

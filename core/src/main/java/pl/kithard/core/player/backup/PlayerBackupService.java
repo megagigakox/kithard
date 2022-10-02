@@ -24,19 +24,20 @@ public class PlayerBackupService {
             toRestore.getInventory().setArmorContents(playerBackup.getArmor());
             toRestore.getInventory().setContents(playerBackup.getInventory());
             corePlayer.addPoints(playerBackup.getLostPoints());
-
         }
 
         TextUtil.message(toRestore, "&8(&3&l!&8) &7Twoj ekwipunek zostal cofniety do &f" +
-                TimeUtil.formatTimeMillisToDate(playerBackup.getDate()) +
+                TimeUtil.formatTimeMillisToDate(playerBackup.getCreateTime()) +
                 " &7przez &b" + player.getName());
         TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie cofnales ekwipunek do &f" +
-                TimeUtil.formatTimeMillisToDate(playerBackup.getDate()) +
+                TimeUtil.formatTimeMillisToDate(playerBackup.getCreateTime()) +
                 " &7graczowi &b" + toRestore.getName());
 
-
         playerBackup.getAdminsRestored().put(System.currentTimeMillis(), player.getName());
-        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getMongoService().save(playerBackup));
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(
+                this.plugin,
+                () -> this.plugin.getPlayerBackupRepository().update(playerBackup)
+        );
     }
 
 }

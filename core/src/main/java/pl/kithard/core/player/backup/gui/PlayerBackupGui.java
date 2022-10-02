@@ -1,27 +1,30 @@
 package pl.kithard.core.player.backup.gui;
 
-import com.mongodb.client.model.Filters;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
-import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.api.util.TimeUtil;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.player.backup.PlayerBackup;
-import pl.kithard.core.util.GuiHelper;
-import pl.kithard.core.util.ItemStackBuilder;
-import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.api.util.TimeUtil;
+import pl.kithard.core.player.backup.PlayerBackupType;
+import pl.kithard.core.util.*;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class PlayerBackupGui {
 
@@ -50,16 +53,39 @@ public class PlayerBackupGui {
 
             long currentTimeMillis = System.currentTimeMillis();
             List<PlayerBackup> backups = new ArrayList<>();
-            for (Document document : this.plugin.getMongoService()
-                    .getMongoClient()
-                    .getDatabase("core")
-                    .getCollection("player-backups")
-                    .find(Filters.all("playerUuid", target.getUuid().toString()))) {
+            try (
+                    Connection connection = this.plugin.getDatabaseService().getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM kithard_backups WHERE player_name = ?")
+            ) {
 
-                backups.add(this.plugin.getGson().fromJson(document.toJson(), PlayerBackup.class));
+                preparedStatement.setString(1, target.getName());
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+
+                    PlayerBackup playerBackup = new PlayerBackup(
+                            UUID.fromString(resultSet.getString("id")),
+                            resultSet.getString("player_name"),
+                            PlayerBackupType.valueOf(resultSet.getString("type")),
+                            resultSet.getLong("create_time"),
+                            resultSet.getString("killer"),
+                            ItemStackSerializer.itemStackArrayFromBase64(resultSet.getString("inventory")),
+                            ItemStackSerializer.itemStackArrayFromBase64(resultSet.getString("armor")),
+                            resultSet.getInt("ping"),
+                            resultSet.getInt("lost_points"),
+                            resultSet.getFloat("tps"),
+                            CollectionSerializer.deserializeMapLongString(resultSet.getString("admin_restored"))
+                    );
+
+                    backups.add(playerBackup);
+                }
+
+                resultSet.close();
+            }
+            catch (SQLException | IOException e) {
+                throw new RuntimeException(e);
             }
 
-            backups.sort((o1, o2) -> Long.compare(o2.getDate(), o1.getDate()));
+            backups.sort((o1, o2) -> Long.compare(o2.getCreateTime(), o1.getCreateTime()));
             int index = backups.size();
             for (PlayerBackup playerBackup : backups) {
                 index--;
@@ -67,11 +93,11 @@ public class PlayerBackupGui {
                 ItemStackBuilder guiItem = ItemStackBuilder.of(playerBackup.getType().getIcon())
                         .name("&7Backup: &8&l#&e&l" + index)
                         .lore(
-                                " &7Unikalne ID: &f" + playerBackup.getUuid(),
-                                " &7Gracz: &f" + target.getName() + " &8(&f" + playerBackup.getPlayerUuid() + "&8)",
+                                " &7Unikalne ID: &f" + playerBackup.getId(),
+                                " &7Gracz: &f" + playerBackup.getPlayerName(),
                                 " &7Powod: &f" + playerBackup.getType().toString(),
                                 " &7Zabojca: &f" + playerBackup.getKiller(),
-                                " &7Data: &f" + TimeUtil.formatTimeMillisToDate(playerBackup.getDate()),
+                                " &7Data: &f" + TimeUtil.formatTimeMillisToDate(playerBackup.getCreateTime()),
                                 " &7Ping: &f" + (playerBackup.getPing() > 100 ? "&c" + playerBackup.getPing() : "&a" + playerBackup.getPing()),
                                 " &7TPS Serwera: &f" + playerBackup.getTps(),
                                 " &7Stracone punkty: &f" + playerBackup.getLostPoints(),
@@ -104,9 +130,9 @@ public class PlayerBackupGui {
 
                         TextUtil.message(viewer,
                                 "&8(&2&l!&8) &aPomyslnie usunieto kopie zapasowa gracza &2" + target.getName() + " &8(&a"  +
-                                        TimeUtil.formatTimeMillisToDate(playerBackup.getDate()) + "&8, &a" + playerBackup.getUuid() + "&8)");
+                                        TimeUtil.formatTimeMillisToDate(playerBackup.getCreateTime()) + "&8, &a" + playerBackup.getId() + "&8)");
 
-                        this.plugin.getMongoService().delete(playerBackup);
+//                        this.plugin.getMongoService().delete(playerBackup);
                         viewer.closeInventory();
                         open(viewer, target);
 
@@ -126,7 +152,7 @@ public class PlayerBackupGui {
 
     public void previewInventory(Player viewer, CorePlayer target, PlayerBackup playerBackup) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Backup: &3" + TimeUtil.formatTimeMillisToDate(playerBackup.getDate())))
+                .title(TextUtil.component("&7Backup: &3" + TimeUtil.formatTimeMillisToDate(playerBackup.getCreateTime())))
                 .rows(6)
                 .create();
 
@@ -202,7 +228,7 @@ public class PlayerBackupGui {
 
     public void previewArmor(Player viewer, CorePlayer target, PlayerBackup playerBackup) {
         Gui gui = Gui.gui()
-                .title(TextUtil.component("&7Backup: &3" + TimeUtil.formatTimeMillisToDate(playerBackup.getDate())))
+                .title(TextUtil.component("&7Backup: &3" + TimeUtil.formatTimeMillisToDate(playerBackup.getCreateTime())))
                 .rows(6)
                 .create();
 

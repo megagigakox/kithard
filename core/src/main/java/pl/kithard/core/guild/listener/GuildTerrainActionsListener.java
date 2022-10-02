@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.border.util.BorderUtil;
 import pl.kithard.core.guild.Guild;
@@ -62,8 +63,12 @@ public class GuildTerrainActionsListener implements Listener {
             player.getItemInHand().setType(Material.BUCKET);
             player.updateInventory();
 
-            Bukkit.getScheduler().runTaskLater(this.plugin, () ->
-                    clickedBlock.setType(Material.AIR), 20 * 5);
+            Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+                clickedBlock.setType(Material.AIR);
+                player.getInventory().remove(Material.BUCKET);
+                player.getInventory().addItem(new ItemStack(Material.WATER_BUCKET, 1));
+                player.updateInventory();
+            }, 20 * 5);
         }
 
     }

@@ -15,7 +15,7 @@ public class PlayerBackupFactory {
     public PlayerBackup create(Player player, PlayerBackupType type, String killer, int lostPoints) {
 
         PlayerBackup playerBackup = new PlayerBackup(
-                player.getUniqueId(),
+                player.getName(),
                 type,
                 killer,
                 player.getInventory().getContents(),
@@ -23,7 +23,11 @@ public class PlayerBackupFactory {
                 ((CraftPlayer)player).getHandle().ping,
                 lostPoints);
 
-        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getMongoService().save(playerBackup));
+        this.plugin.getServer()
+                .getScheduler()
+                .runTaskAsynchronously(
+                        plugin,
+                        () -> this.plugin.getPlayerBackupRepository().insert(playerBackup));
 
         return playerBackup;
     }

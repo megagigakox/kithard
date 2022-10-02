@@ -94,6 +94,39 @@ public final class CollectionSerializer {
         return map;
     }
 
+    public static String serializeMapLongString(Map<Long, String> map) {
+        if (map.isEmpty()) {
+            return null;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Map.Entry<Long, String> entry : map.entrySet()) {
+            stringBuilder.append(entry.getKey())
+                    .append("=")
+                    .append(entry.getValue())
+                    .append("@");
+        }
+
+        return stringBuilder.toString();
+    }
+
+    public static Map<Long, String> deserializeMapLongString(String serializedData) {
+        if (serializedData == null || serializedData.isEmpty()) {
+            return new HashMap<>();
+        }
+
+        Map<Long, String> map = new HashMap<>();
+        String[] split = serializedData.split("@");
+        for (String string : split) {
+            String[] mapSplit = string.split("=");
+            if (mapSplit.length >= 1) {
+                map.put(Long.valueOf(mapSplit[0]), mapSplit[1]);
+            }
+        }
+
+        return map;
+    }
+
     public static String serializeMapLong(Map<String, Long> map) {
         if (map.isEmpty()) {
             return null;

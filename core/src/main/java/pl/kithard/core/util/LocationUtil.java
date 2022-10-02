@@ -25,8 +25,8 @@ public final class LocationUtil {
         return distance(location, location.getWorld().getSpawnLocation()) < CoreConstants.SPAWN_AREA_DISTANCE;
     }
 
-    public static boolean isInSpawn(Location location, int size) {
-        return distance(location, location.getWorld().getSpawnLocation()) < size;
+    public static boolean isInProtectionArea(Location location) {
+        return distance(location, location.getWorld().getSpawnLocation()) < CoreConstants.PROTECTION_AREA_DISTANCE;
     }
 
     public static List<Player> getPlayersInRadius(Location location, int size, Material material) {

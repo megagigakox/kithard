@@ -40,7 +40,6 @@ public class Guild extends DatabaseEntry {
             lastExplodeTime;
     private boolean friendlyFire, allyFire;
 
-    private final LinkedList<GuildRegenBlock> regenBlocks = new LinkedList<>();
     private final Map<GuildLogType, List<GuildLog>> logs = new HashMap<>();
     private final Set<GuildMember> members = new HashSet<>();
     private final List<GuildPermissionScheme> permissionSchemes = new ArrayList<>();
@@ -94,7 +93,6 @@ public class Guild extends DatabaseEntry {
         this.deaths = 0;
         this.lives = 3;
 
-        this.warehouse = Bukkit.createInventory(null, 54, TextUtil.color("&7Magazyn gildyjny:"));
         this.initialize();
     }
 
@@ -344,14 +342,6 @@ public class Guild extends DatabaseEntry {
 
     }
 
-    public LinkedList<GuildRegenBlock> getRegenBlocks() {
-        return regenBlocks;
-    }
-
-    public Map<GuildLogType, List<GuildLog>> getLogs() {
-        return logs;
-    }
-
     public List<GuildLog> getLogsByType(GuildLogType type) {
         return this.logs.computeIfAbsent(type, x -> new ArrayList<>());
     }
@@ -363,6 +353,10 @@ public class Guild extends DatabaseEntry {
     }
 
     public void openWarehouse(Player player) {
+        if (this.warehouseContents != null) {
+            this.warehouse.setContents(warehouseContents);
+        }
+
         player.openInventory(this.warehouse);
         player.playSound(player.getLocation(), Sound.CHEST_OPEN, 1.0F, 1.0F);
     }
@@ -370,6 +364,8 @@ public class Guild extends DatabaseEntry {
     public void initialize() {
         this.allyInvites = new HashSet<>();
         this.memberInvites = new HashSet<>();
+
+        this.warehouse = Bukkit.createInventory(null, 54, TextUtil.color("&7Magazyn gildii&8: &3" + tag));
     }
 
     public long getGuildWarCooldown() {

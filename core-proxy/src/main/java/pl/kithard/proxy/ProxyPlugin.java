@@ -1,7 +1,5 @@
 package pl.kithard.proxy;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.LongSerializationPolicy;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.json.gson.JsonGsonConfigurer;
 import net.md_5.bungee.api.plugin.Plugin;

@@ -30,7 +30,7 @@ public class GuildMemberNeedHelpCommand {
         guild.getOnlineMembers().forEach(guildMember ->
                 this.plugin.getActionBarNoticeCache().add(guildMember.getUuid(), ActionBarNotice.builder()
                         .type(ActionBarNoticeType.NEED_HELP)
-                        .text("&f" + player.getName() + " &7potrzebuje pomocy, kordy&8: &fx" + player.getLocation().getBlockX() + " z:" + player.getLocation().getBlockZ())
+                        .text("&f" + player.getName() + " &7potrzebuje pomocy, kordy&8: &fx:" + player.getLocation().getBlockX() + " z:" + player.getLocation().getBlockZ())
                         .expireTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(15))
                         .build())
         );

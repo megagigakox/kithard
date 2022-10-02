@@ -128,7 +128,6 @@ public class GuildFactory {
         this.plugin.getGuildRepository().loadAll().forEach(guild -> this.plugin.getGuildCache().add(guild));
         this.plugin.getGuildRepository().loadMembers();
         this.plugin.getGuildRepository().loadSchemes();
-        this.plugin.getGuildRepository().loadRegenBlocks();
         this.plugin.getGuildRepository().loadLogs();
     }
 

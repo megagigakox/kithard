@@ -33,7 +33,7 @@ public class GuildRegenTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (regenBlocks.isEmpty()) {
+        if (this.regenBlocks.isEmpty()) {
             this.plugin.getRegenCache()
                     .getCurrentlyRegeneratingGuilds()
                     .remove(guild.getTag());
@@ -66,7 +66,6 @@ public class GuildRegenTask extends BukkitRunnable {
         location.getBlock().setType(regenBlock.getMaterial());
         location.getBlock().setData(regenBlock.getData());
         this.regenBlocks.remove(regenBlock);
-
     }
 
     public GuildRegenBlock get(int y) {

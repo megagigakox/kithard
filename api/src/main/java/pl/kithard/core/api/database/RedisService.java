@@ -5,7 +5,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.util.Map;
 
-public class RedisService {
+public class    RedisService {
 
     private final JedisPool pool;
 

@@ -4,6 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import pl.kithard.core.api.util.BCrypt;
 import pl.kithard.proxy.ProxyPlugin;
 import pl.kithard.proxy.auth.AuthPlayer;
 import pl.kithard.proxy.util.TextUtil;
@@ -39,7 +40,7 @@ public class ChangePasswordCommand extends Command {
         String oldPassword = args[0];
         String newPassword = args[1];
 
-        if (!oldPassword.equals(authPlayer.getPassword())) {
+        if (!BCrypt.checkpw(oldPassword, authPlayer.getPassword())) {
             player.sendMessage(TextUtil.component("&cStare haslo jest nieprawidlowe!"));
             return;
         }
@@ -49,7 +50,7 @@ public class ChangePasswordCommand extends Command {
             return;
         }
 
-        authPlayer.setPassword(newPassword);
+        authPlayer.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
         authPlayer.setNeedSave(true);
         player.sendMessage(TextUtil.component("&aPomyslnie ustawiono nowe haslo!"));
     }

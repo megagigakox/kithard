@@ -50,6 +50,7 @@ public class GeneratorListener implements Listener {
                 return;
             }
 
+            TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie usunieto generator kamienia!");
             this.plugin.getGeneratorFactory().delete(generator);
             InventoryUtil.addItem(player, CustomRecipe.STONE_GENERATOR.getItem());
             return;
@@ -88,15 +89,12 @@ public class GeneratorListener implements Listener {
 
             this.plugin.getGeneratorFactory().create(block.getLocation());
             event.getBlock().setType(Material.STONE);
-            TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &astworzono &7generator stone!");
+            TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &astworzono &7generator kamienia!");
             return;
         }
 
-        TextUtil.message(player, "&8(&4&l!&8) &cW tym miejscu &4jest juz stoniarka&c!");
+        TextUtil.message(player, "&8(&4&l!&8) &cW tym miejscu &4jest juz generator&c!");
         event.setCancelled(true);
         this.plugin.getGeneratorCache().regen(generator);
-
     }
-
-
 }

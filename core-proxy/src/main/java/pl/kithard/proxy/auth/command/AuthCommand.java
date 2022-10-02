@@ -4,6 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import pl.kithard.core.api.util.BCrypt;
 import pl.kithard.core.api.util.TimeUtil;
 import pl.kithard.proxy.ProxyPlugin;
 import pl.kithard.proxy.auth.AuthPlayer;
@@ -53,7 +54,7 @@ public class AuthCommand extends Command {
                     return;
                 }
 
-                authPlayer.setPassword("");
+                authPlayer.setPassword(null);
                 authPlayer.setRegistered(false);
                 authPlayer.setNeedSave(true);
 
@@ -91,7 +92,7 @@ public class AuthCommand extends Command {
                     return;
                 }
 
-                authPlayer.setPassword(args[2]);
+                authPlayer.setPassword(BCrypt.hashpw(args[2], BCrypt.gensalt()));
                 authPlayer.setNeedSave(true);
                 sender.sendMessage(TextUtil.component("&aPomyslnie ustawiono nowe haslo gracza: &b" + authPlayer.getName() + "&a!"));
                 return;

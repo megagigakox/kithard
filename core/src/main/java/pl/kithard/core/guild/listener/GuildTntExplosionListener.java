@@ -73,7 +73,6 @@ public class GuildTntExplosionListener implements Listener {
             }
         }
 
-
         List<Location> sphere = SquareUtil.sphere(event.getLocation(), 4, 4, false, true, 0);
         for (Location location : sphere) {
 
@@ -135,14 +134,6 @@ public class GuildTntExplosionListener implements Listener {
         if (event.getBlock().getType() == Material.TNT || event.getBlock().getType() == Material.DISPENSER) {
             if (block.getLocation().getY() > 50) {
                 TextUtil.message(player, "&8(&4&l!&8) &cTNT i Dispensery mozna stawiac od 50y w doł!");
-                event.setCancelled(true);
-                return;
-            }
-        }
-
-        if (event.getBlock().getType() == Material.TNT) {
-            if (TimeUtil.getHour(System.currentTimeMillis()) < 18 || TimeUtil.getHour(System.currentTimeMillis()) > 22) {
-                TextUtil.message(player, "&8(&4&l!&8) &cTNT Dziala tylko w godzinach: &418-22&c!");
                 event.setCancelled(true);
             }
         }

@@ -83,7 +83,7 @@ public class KitGui {
 
             if (player.hasPermission(kit.getPermission())) {
 
-                if (corePlayer.getCooldown().getKitCooldown(kit.getName()) < System.currentTimeMillis()) {
+                if (corePlayer.getCooldown().getKitCooldown(kit.getName()) < System.currentTimeMillis() || player.hasPermission("kithard.kit.cooldown.bypass")) {
                     kit.getItems().forEach(kitItem -> InventoryUtil.addItem(player, kitItem));
                     gui.close(player);
                     corePlayer.getCooldown().getKitCooldowns().put(kit.getName(), kit.getCooldown() + System.currentTimeMillis());
@@ -92,15 +92,12 @@ public class KitGui {
 
                     TextUtil.message(player, "&8(&4&l!&8) &cTen zestaw mozesz odebrac dopiero za &4" +
                             TimeUtil.formatTimeMillis(corePlayer.getCooldown().getKitCooldown(kit.getName()) - System.currentTimeMillis()));
-
                 }
 
-            } else {
-
-                TextUtil.insufficientPermission(player, kit.getPermission());
-
+                return;
             }
 
+            TextUtil.insufficientPermission(player, kit.getPermission());
         }));
 
 

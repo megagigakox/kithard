@@ -8,7 +8,7 @@ public class AuthPlayerCache {
     private final Map<String, AuthPlayer> authPlayerMap = new ConcurrentHashMap<>();
 
     public void add(AuthPlayer authPlayer) {
-        this.authPlayerMap.put(authPlayer.getName(), authPlayer);
+        this.authPlayerMap.put(authPlayer.getName().toLowerCase(), authPlayer);
     }
 
     public AuthPlayer create(String name) {

@@ -12,7 +12,8 @@ public final class CoreConstants {
 
     public final static int MIN_DISTANCE_FROM_SPAWN = 250;
     public final static int MIN_DISTANCE_FROM_OTHER_GUILD = 45 * 2 + 50;
-    public final static int SPAWN_AREA_DISTANCE = 75;
+    public final static int SPAWN_AREA_DISTANCE = 60;
+    public final static int PROTECTION_AREA_DISTANCE = 150;
 
     public final static List<ItemStack> PLAYER_GUILD_ITEMS = Arrays.asList(
             new ItemStack(Material.SLIME_BLOCK,24),

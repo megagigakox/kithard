@@ -11,6 +11,7 @@ import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.player.actionbar.ActionBarNotice;
 import pl.kithard.core.player.actionbar.ActionBarNoticeType;
 import pl.kithard.core.player.combat.PlayerCombat;
+import pl.kithard.core.util.LocationUtil;
 import pl.kithard.core.util.MathUtil;
 import pl.kithard.core.util.TextUtil;
 
@@ -29,12 +30,18 @@ public class PlayerDamageListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageByEntityEvent event) {
+
+
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
 
         Player attacker = this.getAttacker(event);
         if (attacker == null) {
+            return;
+        }
+
+        if (LocationUtil.isInSpawn(attacker.getLocation())) {
             return;
         }
 
@@ -60,7 +67,6 @@ public class PlayerDamageListener implements Listener {
             }
         }
 
-
         CorePlayer attackedPlayer = this.plugin.getCorePlayerCache().findByPlayer(attacked);
         CorePlayer attackerPlayer = this.plugin.getCorePlayerCache().findByPlayer(attacker);
 
@@ -69,14 +75,14 @@ public class PlayerDamageListener implements Listener {
             return;
         }
 
-        if (attackedPlayer.getProtection() > System.currentTimeMillis()) {
-            TextUtil.message(attacker, "&8(&4&l!&8) &cZaatakowany gracz posiada ochrone startowa jeszcze przez: &4" + TimeUtil.formatTimeMillis(attackedPlayer.getProtection() - System.currentTimeMillis()));
+        if (attackerPlayer.getProtection() > System.currentTimeMillis()) {
+            TextUtil.message(attacker, "&8(&4&l!&8) &cPosiadasz ochroe startowa jeszcze przez: &4" + TimeUtil.formatTimeMillis(attackerPlayer.getProtection() - System.currentTimeMillis()) + ". &cJezeli chcesz ja wylaczyc uzyj komendy: &4/wylaczochrone");
             event.setCancelled(true);
             return;
         }
 
-        if (attackerPlayer.getProtection() > System.currentTimeMillis()) {
-            TextUtil.message(attacker, "&8(&4&l!&8) &cPosiadasz ochroe startowa jeszcze przez: &4" + TimeUtil.formatTimeMillis(attackerPlayer.getProtection() - System.currentTimeMillis()) + ". &cJezeli chcesz ja wylaczyc uzyj komendy: &4/wylaczochrone");
+        if (attackedPlayer.getProtection() > System.currentTimeMillis()) {
+            TextUtil.message(attacker, "&8(&4&l!&8) &cZaatakowany gracz posiada ochrone startowa jeszcze przez: &4" + TimeUtil.formatTimeMillis(attackedPlayer.getProtection() - System.currentTimeMillis()));
             event.setCancelled(true);
             return;
         }

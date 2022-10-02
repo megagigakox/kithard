@@ -132,7 +132,6 @@ public class PlayerDataListener implements Listener {
         }
 
         this.plugin.getPlayerBackupFactory().create(player, PlayerBackupType.QUIT, "null", 0);
-
     }
 
 }

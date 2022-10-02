@@ -17,19 +17,19 @@ public class GeneratorFactory {
         this.plugin.getGeneratorCache().add(generator);
 
         this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
-                this.plugin.getMongoService().insert(generator));
+                this.plugin.getGeneratorRepository().insert(generator));
     }
 
     public void delete(Generator generator) {
         this.plugin.getGeneratorCache().remove(generator);
 
         this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
-                this.plugin.getMongoService().delete(generator));
+                this.plugin.getGeneratorRepository().delete(generator));
     }
 
     public void loadAll() {
-        this.plugin.getMongoService()
-                .loadAll(Generator.class)
+        this.plugin.getGeneratorRepository()
+                .loadAll()
                 .forEach(generator -> this.plugin.getGeneratorCache().add(generator));
     }
 

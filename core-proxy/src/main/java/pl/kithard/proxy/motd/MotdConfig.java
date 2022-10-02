@@ -14,10 +14,14 @@ public class MotdConfig extends OkaeriConfig {
     public List<String> sample = Arrays.asList(
             "  &r&8&l&m--[&r&b&l&m---&r&3&l Kit&r&b&lHard.pl &r&b&l&m---&r&8&l&m]--&r ",
             "&r",
-            " &8» &7Wersja&8: &f1.8.8&r",
-            " &8» &7Strona&8: &fwww.kithard.pl&r",
-            " &8» &7Facebook&8: &ffb.kithard.pl&r",
-            " &8» &7Discord&8: &fdc.kithard.pl&r",
+            "  &7Wersja&8: &f1.8.8&r",
+            "  &7Tryb&8: &fEASYHC&r",
+            "  &7Sredni ping&8: &f{AVERAGE_PING}ms",
+            "",
+            "  &7Nasze socialmedia&8:",
+            "   &8- &7Strona&8: &fwww.kithard.pl&r",
+            "   &8- &7Facebook&8: &ffb.kithard.pl&r",
+            "   &8- &7Discord&8: &fdsc.gg/kithard&r",
             "&r",
             "  &r&8&l&m--[&r&b&l&m---&r&3&l Kit&r&b&lHard.pl &r&b&l&m---&r&8&l&m]--&r "
     );

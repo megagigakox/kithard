@@ -17,10 +17,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -86,9 +83,6 @@ public class GuildRepository implements DatabaseRepository<Guild> {
 
     private final static String INSERT_SCHEME =
             "INSERT INTO kithard_guild_permission_schemes (guild, name, allowed_permissions) VALUES(?, ?, ?)";
-
-    private final static String INSERT_REGEN_BLOCK =
-            "INSERT IGNORE INTO kithard_guild_regen_blocks (guild, location, material, data) VALUES(?, ?, ?, ?)";
 
     private final static String INSERT_LOG =
             "INSERT INTO kithard_guild_logs (guild, type, action, date) VALUES(?, ?, ?, ?)";
@@ -339,16 +333,18 @@ public class GuildRepository implements DatabaseRepository<Guild> {
         }
     }
 
-    public void loadRegenBlocks() {
+    public LinkedList<GuildRegenBlock> loadRegenBlocks(String guild) {
+        LinkedList<GuildRegenBlock> guildRegenBlocks = new LinkedList<>();
         try (
                 Connection connection = this.databaseService.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM kithard_guild_regen_blocks");
-                ResultSet resultSet = preparedStatement.executeQuery();
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM kithard_guild_regen_blocks WHERE guild = ?")
         ) {
+
+            preparedStatement.setString(1, guild);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
 
-                Guild guild = this.guildCache.findByTag(resultSet.getString("guild"));
                 GuildRegenBlock guildRegenBlock = new GuildRegenBlock(
                         resultSet.getString("guild"),
                         LocationSerializer.deserialize(resultSet.getString("location")),
@@ -356,13 +352,17 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                         Byte.parseByte(resultSet.getString("data"))
                 );
 
-                guild.getRegenBlocks().add(guildRegenBlock);
+                guildRegenBlocks.add(guildRegenBlock);
             }
+
+            resultSet.close();
 
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return guildRegenBlocks;
     }
 
     public void loadLogs() {
@@ -448,7 +448,6 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                 PreparedStatement guildStatement = connection.prepareStatement(UPDATE_GUILD);
                 PreparedStatement memberStatement = connection.prepareStatement(UPDATE_MEMBER);
                 PreparedStatement schemeStatement = connection.prepareStatement(UPDATE_SCHEME);
-                PreparedStatement regenStatement = connection.prepareStatement(INSERT_REGEN_BLOCK)
         ) {
 
             for (Guild data : toUpdate) {
@@ -500,22 +499,11 @@ public class GuildRepository implements DatabaseRepository<Guild> {
 
                 }
 
-                for (GuildRegenBlock it : data.getRegenBlocks()) {
-
-                    regenStatement.setString(1, it.getGuild());
-                    regenStatement.setString(2, LocationSerializer.serialize(it.getLocation()));
-                    regenStatement.setString(3, it.getMaterial().toString());
-                    regenStatement.setInt(4, it.getData());
-                    regenStatement.addBatch();
-
-                }
             }
 
             guildStatement.executeBatch();
             memberStatement.executeBatch();
             schemeStatement.executeBatch();
-            regenStatement.executeBatch();
-
         }
         catch (SQLException e) {
             e.printStackTrace();

@@ -2,6 +2,7 @@ package pl.kithard.proxy.auth;
 
 import pl.kithard.core.api.database.mysql.DatabaseRepository;
 import pl.kithard.core.api.database.mysql.DatabaseService;
+import pl.kithard.core.api.util.BCrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -115,15 +116,16 @@ public class AuthPlayerRepository implements DatabaseRepository<AuthPlayer> {
     public void updateAll(Collection<AuthPlayer> toUpdate) {
         try (
                 Connection connection = this.databaseService.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement("UPDATE kithard_auth_players SET(" +
-                        "`password` = ?, `ip` = ?, `premium` = ? WHERE `name` = ?)")
+                PreparedStatement preparedStatement = connection.prepareStatement("UPDATE kithard_auth_players SET" +
+                        "`password` = ?, `ip` = ?, `premium` = ?, `registered` = ? WHERE `name` = ?")
         ) {
 
             for (AuthPlayer authPlayer : toUpdate) {
                 preparedStatement.setString(1, authPlayer.getPassword());
                 preparedStatement.setString(2, authPlayer.getIp());
                 preparedStatement.setBoolean(3, authPlayer.isPremium());
-                preparedStatement.setString(4, authPlayer.getName());
+                preparedStatement.setBoolean(4, authPlayer.isRegistered());
+                preparedStatement.setString(5, authPlayer.getName());
                 preparedStatement.addBatch();
 
                 authPlayer.setNeedSave(false);

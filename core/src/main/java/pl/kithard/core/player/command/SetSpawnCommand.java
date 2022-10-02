@@ -18,7 +18,8 @@ public class SetSpawnCommand {
         player.getWorld().setSpawnLocation(
                 player.getLocation().getBlockX(),
                 player.getLocation().getBlockY(),
-                player.getLocation().getBlockZ());
+                player.getLocation().getBlockZ()
+        );
 
         TextUtil.message(player, "&8(&3&l!&8) &7Pomyslnie &fustawiono &7nowa lokalizacje spawna!");
     }

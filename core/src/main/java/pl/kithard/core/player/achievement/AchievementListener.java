@@ -30,7 +30,7 @@ public class AchievementListener implements Listener {
         corePlayer.addAchievementProgress(AchievementType.MINED_STONE, 1);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTeleport(PlayerTeleportEvent event) {
         if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
             Player player = event.getPlayer();

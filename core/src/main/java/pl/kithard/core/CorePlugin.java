@@ -52,6 +52,7 @@ import pl.kithard.core.freeze.FreezeCommand;
 import pl.kithard.core.freeze.FreezeTask;
 import pl.kithard.core.generator.GeneratorCache;
 import pl.kithard.core.generator.GeneratorFactory;
+import pl.kithard.core.generator.GeneratorRepository;
 import pl.kithard.core.generator.listener.GeneratorListener;
 import pl.kithard.core.guild.GuildCache;
 import pl.kithard.core.guild.GuildFactory;
@@ -72,6 +73,7 @@ import pl.kithard.core.guild.panel.command.GuildPanelCommand;
 import pl.kithard.core.guild.periscope.listener.GuildPeriscopeListener;
 import pl.kithard.core.guild.permission.listener.GuildPermissionListener;
 import pl.kithard.core.guild.ranking.GuildRankingService;
+import pl.kithard.core.guild.regen.GuildRegenBlockSaveTask;
 import pl.kithard.core.guild.regen.GuildRegenCache;
 import pl.kithard.core.guild.regen.command.GuildRegenCommand;
 import pl.kithard.core.guild.regen.listener.GuildRegenListener;
@@ -97,6 +99,7 @@ import pl.kithard.core.player.achievement.AchievementListener;
 import pl.kithard.core.player.actionbar.ActionBarNoticeCache;
 import pl.kithard.core.player.actionbar.task.ActionBarNoticeShowTask;
 import pl.kithard.core.player.backup.PlayerBackupFactory;
+import pl.kithard.core.player.backup.PlayerBackupRepository;
 import pl.kithard.core.player.backup.PlayerBackupService;
 import pl.kithard.core.player.backup.command.PlayerBackupCommand;
 import pl.kithard.core.player.backup.task.PlayerBackupTask;
@@ -145,6 +148,7 @@ import pl.kithard.core.shop.command.ShopCommand;
 import pl.kithard.core.shop.item.ShopItemSerdes;
 import pl.kithard.core.shop.item.ShopVillagerItemSerdes;
 import pl.kithard.core.shop.item.ShopVillagerSerdes;
+import pl.kithard.core.spawn.SpawnProtectionListener;
 import pl.kithard.core.task.RankingsRefreshTask;
 import pl.kithard.core.util.TextUtil;
 import pl.kithard.core.util.adapters.ConfigurationSerializableAdapter;
@@ -170,6 +174,7 @@ public final class CorePlugin extends JavaPlugin {
     private PlayerNameTagService playerNameTagService;
     private PlayerBackupService playerBackupService;
     private PlayerBackupFactory playerBackupFactory;
+    private PlayerBackupRepository playerBackupRepository;
 
     private GuildCache guildCache;
     private GuildRepository guildRepository;
@@ -196,6 +201,7 @@ public final class CorePlugin extends JavaPlugin {
 
     private GeneratorCache generatorCache;
     private GeneratorFactory generatorFactory;
+    private GeneratorRepository generatorRepository;
 
     private WarpCache warpCache;
     private WarpFactory warpFactory;
@@ -321,7 +327,10 @@ public final class CorePlugin extends JavaPlugin {
             this.safeCache.add(safe);
         });
 
+
         this.playerNameTagService = new PlayerNameTagService(this);
+        this.playerBackupRepository = new PlayerBackupRepository(this.databaseService);
+        this.playerBackupRepository.prepareTable();
         this.playerBackupFactory = new PlayerBackupFactory(this);
         this.playerBackupService = new PlayerBackupService(this);
 
@@ -340,6 +349,8 @@ public final class CorePlugin extends JavaPlugin {
         this.customEffectCache.init();
 
         this.generatorCache = new GeneratorCache(this);
+        this.generatorRepository = new GeneratorRepository(this.databaseService);
+        this.generatorRepository.prepareTable();
         this.generatorFactory = new GeneratorFactory(this);
         this.generatorFactory.loadAll();
 
@@ -477,7 +488,8 @@ public final class CorePlugin extends JavaPlugin {
                         new RewardCommand(this),
                         new BlocksCommand(),
                         new GuildWarCommand(),
-                        new SaveAllCommand(this)
+                        new SaveAllCommand(this),
+                        new GuildHeartCommand()
                 ))
                 .completer("itemShopServices", (context, prefix, limit) -> CommandUtils.collectCompletions(
                         this.itemShopServiceConfiguration.getServices(),
@@ -512,6 +524,7 @@ public final class CorePlugin extends JavaPlugin {
         new AbbysTask(this);
         new RewardTask(this);
         new GuildShadowBlockProtectionTask(this);
+        new GuildRegenBlockSaveTask(this);
     }
 
     private void initListeners() {
@@ -546,6 +559,7 @@ public final class CorePlugin extends JavaPlugin {
         new AntiMacroListener(this);
         new CustomEnchantListener(this);
         new SafeListener(this);
+        new SpawnProtectionListener(this);
     }
 
     private void initRecipes() {
@@ -764,5 +778,13 @@ public final class CorePlugin extends JavaPlugin {
 
     public SafeRepository getSafeRepository() {
         return safeRepository;
+    }
+
+    public GeneratorRepository getGeneratorRepository() {
+        return generatorRepository;
+    }
+
+    public PlayerBackupRepository getPlayerBackupRepository() {
+        return playerBackupRepository;
     }
 }
