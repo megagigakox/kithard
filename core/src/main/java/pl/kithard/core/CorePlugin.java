@@ -23,7 +23,6 @@ import pl.kithard.core.abbys.AbbysTask;
 import pl.kithard.core.antimacro.AntiMacroCache;
 import pl.kithard.core.antimacro.AntiMacroListener;
 import pl.kithard.core.antimacro.AntiMacroTask;
-import pl.kithard.core.api.database.MongoService;
 import pl.kithard.core.api.database.RedisService;
 import pl.kithard.core.api.database.config.DatabaseConfig;
 import pl.kithard.core.api.database.mysql.DatabaseService;
@@ -81,6 +80,7 @@ import pl.kithard.core.guild.task.GuildExpireTask;
 import pl.kithard.core.guild.task.GuildHologramTask;
 import pl.kithard.core.guild.task.GuildShadowBlockProtectionTask;
 import pl.kithard.core.guild.variables.*;
+import pl.kithard.core.guild.warehouse.WarehouseListener;
 import pl.kithard.core.itemshop.ItemShopService;
 import pl.kithard.core.itemshop.ItemShopServiceConfiguration;
 import pl.kithard.core.itemshop.ItemShopServiceExecutor;
@@ -127,7 +127,6 @@ import pl.kithard.core.player.reward.RewardTask;
 import pl.kithard.core.player.settings.command.PlayerSettingsCommand;
 import pl.kithard.core.player.task.PlayerSpentTimeTask;
 import pl.kithard.core.player.teleport.countdown.PlayerTeleportCountdown;
-import pl.kithard.core.player.teleport.listener.PlayerMoveTeleportListener;
 import pl.kithard.core.player.variable.*;
 import pl.kithard.core.recipe.CustomRecipe;
 import pl.kithard.core.recipe.command.AdminItemsCommand;
@@ -164,7 +163,6 @@ import java.util.Arrays;
 public final class CorePlugin extends JavaPlugin {
 
     private Gson gson;
-    private MongoService mongoService;
     private DatabaseService databaseService;
     private RedisService redisService;
 
@@ -234,7 +232,6 @@ public final class CorePlugin extends JavaPlugin {
 
         this.redisService = new RedisService(DatabaseConfig.REDIS_URI);
         this.databaseService = new DatabaseService("mysql.titanaxe.com",3306, "srv235179", "srv235179", "CbccNpZ8");
-        this.mongoService = new MongoService(DatabaseConfig.MONGO_URI, this.gson);
 
         this.customEffectConfiguration = new CustomEffectConfiguration(this);
         this.customEffectConfiguration.createConfig();
@@ -502,8 +499,6 @@ public final class CorePlugin extends JavaPlugin {
                         TextUtil.insufficientPermission(message.getCommandSender(), permission))
                 .install();
 
-
-
     }
 
     private void initTasks() {
@@ -529,7 +524,6 @@ public final class CorePlugin extends JavaPlugin {
 
     private void initListeners() {
         new PlayerDataListener(this);
-        new PlayerMoveTeleportListener(this);
         new ItemDropListener(this);
         new EnderChestListener(this);
         new AsyncPlayerChatListener(this);
@@ -560,6 +554,7 @@ public final class CorePlugin extends JavaPlugin {
         new CustomEnchantListener(this);
         new SafeListener(this);
         new SpawnProtectionListener(this);
+        new WarehouseListener(this);
     }
 
     private void initRecipes() {
@@ -626,10 +621,6 @@ public final class CorePlugin extends JavaPlugin {
 
     public Gson getGson() {
         return gson;
-    }
-
-    public MongoService getMongoService() {
-        return mongoService;
     }
 
     public CorePlayerCache getCorePlayerCache() {

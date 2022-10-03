@@ -11,18 +11,18 @@ public class ServerSettingsService {
     }
 
     public void save(ServerSettings serverSettings) {
-        this.plugin.getMongoService().save(serverSettings);
+//        this.plugin.getMongoService().save(serverSettings);
     }
 
     public ServerSettings load() {
-        ServerSettings serverSettings = this.plugin.getMongoService()
-                .load("server_settings", ServerSettings.class);
+//        ServerSettings serverSettings = this.plugin.getMongoService()
+//                .load("server_settings", ServerSettings.class);
+//
+//        if (serverSettings == null) {
+//            serverSettings = new ServerSettings();
+//        }
 
-        if (serverSettings == null) {
-            serverSettings = new ServerSettings();
-        }
-
-        return serverSettings;
+        return new ServerSettings();
     }
 
 }

@@ -42,7 +42,7 @@ public class PlayerMoveListener implements Listener {
 
         PlayerCombat combat = corePlayer.getCombat();
         if (combat.hasFight() && !player.hasPermission("kithard.antilogout.bypass")) {
-            if ((from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY() || from.getBlockZ() != to.getBlockZ()) && LocationUtil.loc(75, -75, -75, 75, to)) {
+            if (LocationUtil.loc(60, -60, -60, 60, to)) {
                 event.setCancelled(true);
 
                 Location l = player.getWorld().getSpawnLocation().subtract(player.getLocation());

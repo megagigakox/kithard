@@ -1,10 +1,14 @@
 package pl.kithard.core.drop.special.listener;
 
+import dev.triumphteam.gui.builder.item.ItemBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.drop.special.SpecialDropItem;
@@ -133,8 +137,49 @@ public class SpecialDropsListener implements Listener {
             }
 
         }
+    }
 
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
 
+            Player player = event.getPlayer();
+            if (player.getItemInHand().getType() == Material.SKULL_ITEM) {
+                CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+                if (corePlayer.getCombat().hasFight()) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                int i = 0;
+                do {
+
+                    for (SpecialDropItem dropItem : this.plugin.getDropItemConfiguration().getSpecialDropItems()) {
+
+                        if (dropItem.getType() != SpecialDropItemType.PLAYER_HEAD) {
+                            continue;
+                        }
+
+                        if (i == 1) {
+                            continue;
+                        }
+
+                        double chance = dropItem.getChance();
+                        if (RandomUtil.getChance(chance)) {
+                            i++;
+                            ItemStack itemStack = dropItem.getItem().clone();
+                            itemStack.setAmount(RandomUtil.getRandInt(dropItem.getMin(), dropItem.getMax()));
+                            InventoryUtil.addItem(player, itemStack);
+                            TextUtil.message(player, "&8(&3&l!&8) &7Otworzyles &aglowe gracza &7i wylosowales: &3" + dropItem.getName() + " &7(&f" + itemStack.getAmount() + "x&7)");
+                        }
+                    }
+
+                } while (i == 0);
+
+                event.setCancelled(true);
+                player.setItemInHand(null);
+            }
+        }
     }
 
 }

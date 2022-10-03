@@ -65,12 +65,9 @@ public class ServerSettingsListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
-
         if (event.getItemInHand().getType() == Material.BEACON && !this.plugin.getServerSettings().isEnabled(ServerSettingsType.BEACON)) {
-
             TextUtil.message(event.getPlayer(), "&8(&4&l!&8) &cStawianie beaconow zostalo tymczasowo wylaczone!");
             event.setCancelled(true);
-
         }
     }
 

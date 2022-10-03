@@ -51,7 +51,6 @@ public class GuildChatListener implements Listener {
             guild.sendMessageToOnlineMembers("&8[&bDO GILDII&8] &7" + player.getName() + "&8: &f" + msg);
         }
 
-
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -64,11 +63,6 @@ public class GuildChatListener implements Listener {
         }
 
         String cmd = event.getMessage().toLowerCase();
-        if (this.plugin.getGuildCache().isNotAllowed(player, GuildPermission.TELEPORTATION_USE) && cmd.toLowerCase().contains("/tpaccept")) {
-            event.setCancelled(true);
-            return;
-        }
-
         if (!guild.isMember(player.getUniqueId()) && !player.hasPermission("kithard.guilds.admin")) {
             for (String s : BLOCKED) {
                 if (cmd.contains("/" + s)) {
@@ -79,5 +73,8 @@ public class GuildChatListener implements Listener {
             }
         }
 
+        if (this.plugin.getGuildCache().isNotAllowed(player, GuildPermission.TELEPORTATION_USE) && cmd.toLowerCase().contains("/tpaccept")) {
+            event.setCancelled(true);
+        }
     }
 }

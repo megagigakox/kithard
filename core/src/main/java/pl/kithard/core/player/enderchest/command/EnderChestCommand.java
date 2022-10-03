@@ -21,7 +21,21 @@ public class EnderChestCommand {
             playerOnly = true,
             permission = "kithard.commands.enderchest"
     )
-    public void handle(CorePlayer corePlayer) {
-        corePlayer.getEnderChest().openInventory(corePlayer.source());
+    public void handle(CorePlayer corePlayer, String[] args) {
+        if (args.length < 1) {
+            corePlayer.getEnderChest().openInventory(corePlayer.source(), corePlayer.source());
+        }
+        else if (corePlayer.source().hasPermission("kithard.commands.enderchest.other")) {
+            CorePlayer target = this.plugin.getCorePlayerCache().findByName(args[0]);
+            if (target == null) {
+                return;
+            }
+
+            if (target.source() == null) {
+                return;
+            }
+
+            target.getEnderChest().openInventory(target.source(), corePlayer.source());
+        }
     }
 }

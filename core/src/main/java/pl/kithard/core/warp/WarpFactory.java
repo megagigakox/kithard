@@ -17,22 +17,22 @@ public class WarpFactory {
         Warp warp = new Warp(name, location, icon);
         this.plugin.getWarpCache().add(warp);
 
-        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
-                this.plugin.getMongoService().insert(warp));
+//        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
+//                this.plugin.getMongoService().insert(warp));
     }
 
     public void delete(Warp warp) {
         this.plugin.getWarpCache().remove(warp);
 
-        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
-                this.plugin.getMongoService().delete(warp));
+//        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
+//                this.plugin.getMongoService().delete(warp));
     }
 
     public void loadAll() {
 
-        this.plugin.getMongoService()
-                .loadAll(Warp.class)
-                .forEach(warp -> this.plugin.getWarpCache().add(warp));
+//        this.plugin.getMongoService()
+//                .loadAll(Warp.class)
+//                .forEach(warp -> this.plugin.getWarpCache().add(warp));
 
     }
 

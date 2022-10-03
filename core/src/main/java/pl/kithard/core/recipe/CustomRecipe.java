@@ -123,6 +123,16 @@ public enum CustomRecipe {
             )))
             .glow()
             .build()),
+    REPAIR_VOUCHER(ItemBuilder.from(new ItemStack(Material.PAPER,1))
+            .name(TextUtil.component("&7Voucher na komende &8/&frepair"))
+            .lore(TextUtil.component(Arrays.asList(
+                    "",
+                    " &7Czas trwania przywileju&8: &bcała edycja",
+                    "",
+                    "&7Kliknij &fprawym &7aby aktywowac!"
+            )))
+            .glow()
+            .build()),
     TURBO_DROP_VOUCHER_30MIN(ItemBuilder.from(new ItemStack(Material.PAPER,1))
             .name(TextUtil.component("&7Voucher na &b&lT&3&lu&f&lr&b&lb&3&lo&f&lD&b&lr&3&lo&f&lp &f&l30min"))
             .lore(TextUtil.component(Arrays.asList(

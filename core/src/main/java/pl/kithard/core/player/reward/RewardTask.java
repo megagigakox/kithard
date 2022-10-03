@@ -12,7 +12,7 @@ public class RewardTask extends BukkitRunnable {
 
     public RewardTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimerAsynchronously(this.plugin, 20 * 15, 20 * 15);
+        this.runTaskTimerAsynchronously(this.plugin, 0L, 20 * 15L);
     }
 
     @Override

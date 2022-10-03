@@ -17,13 +17,12 @@ public class DepositTask extends BukkitRunnable {
 
     public DepositTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimer(plugin, 60L, 60L);
+        this.runTaskTimerAsynchronously(plugin, 0L, 60L);
     }
 
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-
             if (player == null) {
                 continue;
             }
@@ -33,7 +32,6 @@ public class DepositTask extends BukkitRunnable {
             }
 
             CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
-
             for (DepositItem depositItem : this.plugin.getDepositItemConfiguration().getDepositItems()) {
                 int itemToRemove = InventoryUtil.countItemsIgnoreItemMeta(player, depositItem.getItem());
 

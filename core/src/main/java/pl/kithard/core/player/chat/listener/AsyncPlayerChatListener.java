@@ -81,7 +81,7 @@ public class AsyncPlayerChatListener implements Listener {
                 .replace("{RANK}", this.plugin.getConfig().getString("prefix." + group))
                 .replace("{MESSAGE}", ChatColor.stripColor(event.getMessage().replace("%", "%%").replace("&", ""))));
 
-        corePlayer.getCooldown().setChatCooldown(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(2));
+        corePlayer.getCooldown().setChatCooldown(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(5));
         event.setFormat(format);
     }
 

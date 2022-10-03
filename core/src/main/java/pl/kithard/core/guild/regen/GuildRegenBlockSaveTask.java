@@ -17,7 +17,7 @@ public class GuildRegenBlockSaveTask extends BukkitRunnable {
 
     public GuildRegenBlockSaveTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimerAsynchronously(this.plugin, 0L, 20 * 20L);
+        this.runTaskTimerAsynchronously(this.plugin, 0L, 20 * 1800L);
     }
 
     @Override

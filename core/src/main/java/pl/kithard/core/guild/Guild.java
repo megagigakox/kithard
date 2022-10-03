@@ -379,4 +379,8 @@ public class Guild extends DatabaseEntry {
     public ItemStack[] getWarehouseContents() {
         return warehouseContents;
     }
+
+    public void setWarehouseContents(ItemStack[] warehouseContents) {
+        this.warehouseContents = warehouseContents;
+    }
 }

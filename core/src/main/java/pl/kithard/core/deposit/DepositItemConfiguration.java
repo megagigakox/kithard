@@ -55,37 +55,6 @@ public class DepositItemConfiguration extends OkaeriConfig {
         ));
     }
 
-//    public void init() {
-//        this.depositItems.clear();
-//        Configuration configuration = this.plugin.getDepositConfiguration().getCustomConfig();
-//
-//        for (String id : configuration.getConfigurationSection("deposit-items").getKeys(false)) {
-//
-//            String[] split = configuration.getString("deposit-items." + id + ".item.type").split(":");
-//
-//            int itemId = Integer.parseInt(split[0]);
-//            int amount = Integer.parseInt(split[1]);
-//            byte data = Byte.parseByte(split[2]);
-//
-//            ItemStack itemStack = ItemStackBuilder.of(new ItemStack(itemId, amount, data))
-//                    .name(configuration.getString("deposit-items." + id + ".item.name"))
-//                    .lore(configuration.getStringList("deposit-items." + id + ".item.lore"))
-//                    .glow(configuration.getBoolean("deposit-items." + id + ".item.glow"))
-//                    .asItemStack();
-//
-//            DepositItem depositItem = new DepositItem(
-//                    id,
-//                    configuration.getString("deposit-items." + id + ".name"),
-//                    configuration.getInt("deposit-items." + id + ".limit"),
-//                    configuration.getBoolean("deposit-items." + id + ".withdraw-all"),
-//                    configuration.getInt("deposit-items." + id + ".slot"),
-//                    configuration.getString("deposit-items." + id + ".message"),
-//                    itemStack);
-//
-//            this.depositItems.add(depositItem);
-//        }
-//    }
-
     public List<DepositItem> getDepositItems() {
         return depositItems;
     }

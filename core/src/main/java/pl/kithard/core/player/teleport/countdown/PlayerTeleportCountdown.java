@@ -26,7 +26,7 @@ public class PlayerTeleportCountdown extends BukkitRunnable {
         for (Player player : Bukkit.getOnlinePlayers()) {
 
             if (player == null) {
-                return;
+                continue;
             }
 
             CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
@@ -38,14 +38,12 @@ public class PlayerTeleportCountdown extends BukkitRunnable {
                 if (time > 0) {
                     TitleUtil.title(player, "", "&7Teleportacja nastapi za &3"
                             + TimeUtil.formatTimeMillis(playerTeleport.getTime() - currentTimeMillis), 0, 40, 0);
-                    return;
+                    continue;
                 }
 
                 Bukkit.getScheduler().runTask(plugin, () -> player.teleport(playerTeleport.getTeleportLocation()));
                 TitleUtil.title(player, "", "&aPomyslnie przeteleportowano!", 0, 20, 40);
                 corePlayer.setTeleport(null);
-                return;
-
             }
         }
     }

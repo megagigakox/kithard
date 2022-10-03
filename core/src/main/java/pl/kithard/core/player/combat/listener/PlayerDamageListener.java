@@ -30,8 +30,6 @@ public class PlayerDamageListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageByEntityEvent event) {
-
-
         if (!(event.getEntity() instanceof Player)) {
             return;
         }

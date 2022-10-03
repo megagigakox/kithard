@@ -104,7 +104,6 @@ public class GuildFactory {
     public void delete(Guild guild) {
 
         for (String allyTag : guild.getAllies()) {
-
             Guild ally = this.plugin.getGuildCache().findByTag(allyTag);
             if (ally != null) {
                 ally.getAllies().remove(guild.getTag());

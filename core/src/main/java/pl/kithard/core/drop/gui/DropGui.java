@@ -68,7 +68,7 @@ public class DropGui {
                         "",
                         " &7Kliknij aby &fzobaczyc podglad &7tego dropu!"
                 )))
-                .asGuiItem(inventoryClickEvent -> openCobbleX(player)));
+                .asGuiItem(inventoryClickEvent -> openBoss(player)));
 
         gui.setItem(3, 7, ItemBuilder.from(new ItemStack(397, 1, (short) 3))
                 .name(TextUtil.component("&7Drop z &a&lglowek graczy&7!"))
@@ -76,7 +76,7 @@ public class DropGui {
                         "",
                         " &7Kliknij aby &fzobaczyc podglad &7tego dropu!"
                 )))
-                .asGuiItem(inventoryClickEvent -> openCobbleX(player)));
+                .asGuiItem(inventoryClickEvent -> openPlayerHead(player)));
 
         gui.setDefaultClickAction(inventoryClickEvent -> inventoryClickEvent.setCancelled(true));
         gui.open(player);
@@ -259,13 +259,6 @@ public class DropGui {
         gui.setItem(6, 5, ItemBuilder.from(GuiHelper.BACK_ITEM)
                 .asGuiItem(inventoryClickEvent -> open(player)));
 
-        gui.setItem(6,7, ItemBuilder.from(GuiHelper.NEXT_ITEM)
-                .asGuiItem(inventoryClickEvent -> gui.next()));
-
-        gui.setItem(6,3, ItemBuilder.from(GuiHelper.PREVIOUS_ITEM)
-                .asGuiItem(inventoryClickEvent -> gui.previous()));
-
-
         for (SpecialDropItem dropItem : this.plugin.getDropItemConfiguration().getSpecialDropItems()) {
 
             if (dropItem.getType() != SpecialDropItemType.MAGIC_CHEST) {
@@ -279,7 +272,6 @@ public class DropGui {
                             " &7Przedmiot dropi w ilosciach&8: &f" + dropItem.getMin() + " &7- &f" + dropItem.getMax()
                     )
                     .asGuiItem());
-
         }
 
         gui.setDefaultClickAction(inventoryClickEvent -> inventoryClickEvent.setCancelled(true));
@@ -297,19 +289,78 @@ public class DropGui {
         gui.setItem(6, 5, ItemBuilder.from(GuiHelper.BACK_ITEM)
                 .asGuiItem(inventoryClickEvent -> open(player)));
 
-
         for (SpecialDropItem dropItem : this.plugin.getDropItemConfiguration().getSpecialDropItems()) {
 
             if (dropItem.getType() != SpecialDropItemType.COBBLEX) {
                 continue;
             }
 
-            gui.addItem(ItemBuilder.from(dropItem.getItem().clone())
+            gui.addItem(ItemStackBuilder.of(dropItem.getItem().clone())
                     .amount(dropItem.getMax())
-                    .lore(TextUtil.component(Arrays.asList(
+                    .appendLore(
                             "",
                             " &7Przedmiot dropi w ilosciach&8: &f" + dropItem.getMin() + " &7- &f" + dropItem.getMax()
-                    )))
+                    )
+                    .asGuiItem());
+        }
+
+        gui.setDefaultClickAction(inventoryClickEvent -> inventoryClickEvent.setCancelled(true));
+        gui.open(player);
+    }
+
+    public void openPlayerHead(Player player) {
+        Gui gui = Gui.gui()
+                .title(TextUtil.component("&3&lDrop z glowek graczy"))
+                .rows(3)
+                .create();
+
+        GuiHelper.fillColorGui3(gui);
+
+        gui.setItem(3, 5, ItemBuilder.from(GuiHelper.BACK_ITEM)
+                .asGuiItem(inventoryClickEvent -> open(player)));
+
+        for (SpecialDropItem dropItem : this.plugin.getDropItemConfiguration().getSpecialDropItems()) {
+
+            if (dropItem.getType() != SpecialDropItemType.PLAYER_HEAD) {
+                continue;
+            }
+
+            gui.addItem(ItemStackBuilder.of(dropItem.getItem().clone())
+                    .amount(dropItem.getMax())
+                    .appendLore(
+                            "",
+                            " &7Przedmiot dropi w ilosciach&8: &f" + dropItem.getMin() + " &7- &f" + dropItem.getMax()
+                    )
+                    .asGuiItem());
+        }
+
+        gui.setDefaultClickAction(inventoryClickEvent -> inventoryClickEvent.setCancelled(true));
+        gui.open(player);
+    }
+
+    public void openBoss(Player player) {
+        Gui gui = Gui.gui()
+                .title(TextUtil.component("&3&lDrop z bossa"))
+                .rows(6)
+                .create();
+
+        GuiHelper.fillColorGui6(gui);
+
+        gui.setItem(6, 5, ItemBuilder.from(GuiHelper.BACK_ITEM)
+                .asGuiItem(inventoryClickEvent -> open(player)));
+
+        for (SpecialDropItem dropItem : this.plugin.getDropItemConfiguration().getSpecialDropItems()) {
+
+            if (dropItem.getType() != SpecialDropItemType.BOSS) {
+                continue;
+            }
+
+            gui.addItem(ItemStackBuilder.of(dropItem.getItem().clone())
+                    .amount(dropItem.getMax())
+                    .appendLore(
+                            "",
+                            " &7Przedmiot dropi w ilosciach&8: &f" + dropItem.getMin() + " &7- &f" + dropItem.getMax()
+                    )
                     .asGuiItem());
 
         }

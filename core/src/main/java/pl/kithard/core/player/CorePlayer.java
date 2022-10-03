@@ -21,6 +21,7 @@ import pl.kithard.core.util.MathUtil;
 import pl.kithard.core.util.TextUtil;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @DatabaseEntity(database = "core", collection = "players")
@@ -76,9 +77,8 @@ public class CorePlayer extends DatabaseEntry {
         this.guildHistory = new HashSet<>();
         this.claimedAchievements = new HashSet<>();
         this.minedDrops = new HashMap<>();
-        this.depositItems = new HashMap<>();
+        this.depositItems = new ConcurrentHashMap<>();
         this.achievementProgress = new HashMap<>();
-        this.teleportRequests = new HashMap<>();
         this.enderChest = new PlayerEnderChest(null);
 
         init();
@@ -523,6 +523,7 @@ public class CorePlayer extends DatabaseEntry {
     public void init() {
         this.combat = new PlayerCombat();
         this.cooldown = new PlayerCooldown();
+        this.teleportRequests = new HashMap<>();
 
         this.homes = new ArrayList<>();
         this.homes.add(new PlayerHome(1, null));

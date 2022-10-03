@@ -125,6 +125,10 @@ public class PlayerDataListener implements Listener {
         }
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+        if (corePlayer.getTeleport() != null) {
+            corePlayer.setTeleport(null);
+        }
+
         if (corePlayer.getCombat().hasFight()) {
             player.setHealth(0);
             Bukkit.broadcastMessage(TextUtil.color("&8(&4&l!&8) &cGracz &4" + player.getName() + " &cwylogowal sie podczas walki!"));

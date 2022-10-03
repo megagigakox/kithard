@@ -29,7 +29,6 @@ public class AutoMessageTask extends BukkitRunnable {
         this.plugin.getServer().getOnlinePlayers().forEach(player -> {
 
             CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
-
             if (!corePlayer.isDisabledSetting(PlayerSettings.AUTO_MESSAGES)) {
                 TextUtil.message(player, messages.get(i));
             }

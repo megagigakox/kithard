@@ -5,10 +5,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import pl.kithard.core.api.database.entity.DatabaseEntity;
 
-@DatabaseEntity(database = "core", collection = "warps")
 public class Warp {
 
-    @SerializedName("_id")
     private final String name;
 
     private final Location location;

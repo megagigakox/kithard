@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import pl.kithard.core.guild.panel.gui.GuildPanelGui;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.guild.Guild;
+import pl.kithard.core.guild.permission.GuildPermission;
 import pl.kithard.core.util.TextUtil;
 import pl.kithard.core.api.util.TimeUtil;
 
@@ -140,13 +141,12 @@ public class GuildHeartListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        if (guild.isMember(player.getUniqueId()) && guild.isDeputyOrOwner(player.getUniqueId())) {
+        if (this.plugin.getGuildCache().isNotAllowed(player, GuildPermission.PANEL_ACCESS)) {
             new GuildPanelGui(plugin).openPanel(player, guild);
             return;
         }
 
         guild.openWarehouse(player);
-
     }
 
     @EventHandler(ignoreCancelled = true)

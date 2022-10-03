@@ -219,7 +219,6 @@ public class CustomRecipeListener implements Listener {
         }
 
         if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.VIP_VOUCHER.getItem().getItemMeta().getDisplayName())) {
-
             if (itemInHand.getAmount() > 1) {
                 itemInHand.setAmount(itemInHand.getAmount() - 1);
             } else {
@@ -232,7 +231,6 @@ public class CustomRecipeListener implements Listener {
         }
 
         else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.SVIP_VOUCHER.getItem().getItemMeta().getDisplayName())) {
-
             if (itemInHand.getAmount() > 1) {
                 itemInHand.setAmount(itemInHand.getAmount() - 1);
             } else {
@@ -244,7 +242,6 @@ public class CustomRecipeListener implements Listener {
 
         }
         else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.SPONSOR_VOUCHER.getItem().getItemMeta().getDisplayName())) {
-
             if (itemInHand.getAmount() > 1) {
                 itemInHand.setAmount(itemInHand.getAmount() - 1);
             } else {
@@ -255,8 +252,17 @@ public class CustomRecipeListener implements Listener {
             TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie aktywowano voucher!");
 
         }
-        else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.TURBO_DROP_VOUCHER_30MIN.getItem().getItemMeta().getDisplayName())) {
+        else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.REPAIR_VOUCHER.getItem().getItemMeta().getDisplayName())) {
+            if (itemInHand.getAmount() > 1) {
+                itemInHand.setAmount(itemInHand.getAmount() - 1);
+            } else {
+                player.setItemInHand(null);
+            }
 
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set kithard.commands.repair");
+            TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie aktywowano voucher!");
+        }
+        else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.TURBO_DROP_VOUCHER_30MIN.getItem().getItemMeta().getDisplayName())) {
             if (itemInHand.getAmount() > 1) {
                 itemInHand.setAmount(itemInHand.getAmount() - 1);
             } else {
@@ -267,7 +273,6 @@ public class CustomRecipeListener implements Listener {
             TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie aktywowano voucher!");
         }
         else if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.TURBO_DROP_VOUCHER_60MIN.getItem().getItemMeta().getDisplayName())) {
-
             if (itemInHand.getAmount() > 1) {
                 itemInHand.setAmount(itemInHand.getAmount() - 1);
             } else {

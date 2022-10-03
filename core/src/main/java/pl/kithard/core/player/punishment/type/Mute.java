@@ -3,7 +3,6 @@ package pl.kithard.core.player.punishment.type;
 import com.google.gson.annotations.SerializedName;
 import pl.kithard.core.api.database.entity.DatabaseEntity;
 
-@DatabaseEntity(database = "core", collection = "punishments-mute")
 public class Mute {
 
     @SerializedName("_id")

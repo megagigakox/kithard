@@ -7,11 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@DatabaseEntity(database = "core", collection = "settings")
 public class ServerSettings {
-
-    @SerializedName("_id")
-    private final String name = "server_settings";
 
     private long turboDrop, freeze;
     private final List<ServerSettingsType> enabledSettings = new ArrayList<>();

@@ -13,6 +13,8 @@ import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.player.CorePlayer;
 
+import java.util.concurrent.TimeUnit;
+
 public class PlayerItemConsumeListener implements Listener {
 
     private final CorePlugin plugin;
@@ -24,7 +26,6 @@ public class PlayerItemConsumeListener implements Listener {
 
     @EventHandler
     public void onItemConsume(PlayerItemConsumeEvent event) {
-
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
 
@@ -33,28 +34,27 @@ public class PlayerItemConsumeListener implements Listener {
 
             if (item.getDurability() == 0) {
                 corePlayer.addAchievementProgress(AchievementType.EATEN_GOLDEN_APPLES, 1);
-                player.addPotionEffect(
-                        new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1));
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                    player.removePotionEffect(PotionEffectType.REGENERATION);
+                    player.removePotionEffect(PotionEffectType.ABSORPTION);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 2));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1));
+                }, 1L);
 
-                Bukkit.getScheduler().runTaskLater(plugin, () -> player.addPotionEffect(
-                        new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 0)),
-                        1L);
-
-            } else {
+            } else if (item.getDurability() == 1) {
                 corePlayer.addAchievementProgress(AchievementType.EATEN_ENCHANTED_GOLDEN_APPLES, 1);
 
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-
-                    player.addPotionEffect(
-                            new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1));
-                    player.addPotionEffect(
-                            new PotionEffect(PotionEffectType.REGENERATION, 20 * 15, 0));
-                    player.addPotionEffect(
-                            new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 120, 0));
-                    player.addPotionEffect(
-                            new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 120, 0));
-
-                },1L);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
+                    player.removePotionEffect(PotionEffectType.REGENERATION);
+                    player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
+                    player.removePotionEffect(PotionEffectType.SPEED);
+                    player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+                    player.removePotionEffect(PotionEffectType.ABSORPTION);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 15, 4));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 120, 0));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 120, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 0));
+                }, 1L);
             }
         }
 
