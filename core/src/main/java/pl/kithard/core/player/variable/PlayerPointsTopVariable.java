@@ -29,7 +29,7 @@ public class PlayerPointsTopVariable extends Variable {
 
         if (playerRankingService.getPlayerPointsRanking().size() >= this.i) {
             CorePlayer corePlayer = playerRankingService.getPlayerPointsRanking().get(this.i - 1);
-            return s + corePlayer.getName() + " &8[&b" + corePlayer.getPoints() + "&8]";
+            return s + corePlayer.getName() + " &8[&3" + corePlayer.getPoints() + "&8]";
         }
 
         return s;

@@ -100,6 +100,10 @@ public class PlayerInteractListener implements Listener {
 
             int i = 0;
             Location randomLocation = LocationUtil.getRadnomLocation();
+            if (LocationUtil.isInSpawn(randomLocation)) {
+                return;
+            }
+
             for (Player radius : playersInRadius) {
                 if (i == 2) {
                     return;
@@ -154,8 +158,13 @@ public class PlayerInteractListener implements Listener {
                 return;
             }
 
+            Location randomLocation = LocationUtil.getRadnomLocation();
+            if (LocationUtil.isInSpawn(randomLocation)) {
+                return;
+            }
+
             player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
-            player.teleport(LocationUtil.getRadnomLocation());
+            player.teleport(randomLocation);
             CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
             corePlayer.getCooldown().setGroupTeleportCombatCooldown(TimeUnit.SECONDS.toMillis(3) + System.currentTimeMillis());
             corePlayer.getCombat().setLastAttackTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(31));
@@ -216,26 +225,16 @@ public class PlayerInteractListener implements Listener {
             }
 
             CorePlayer clickedCorePlayer = plugin.getCorePlayerCache().findByPlayer((Player) event.getRightClicked());
-            int toAddClicked = (int) (67.0 + (clickedCorePlayer.getPoints() - killerCorePlayer.getPoints()) * -0.25);
-            if (toAddClicked <= 20) {
-                toAddClicked = 20;
-            }
+            int toAddClicked = (int) (43.0 + (clickedCorePlayer.getPoints() - killerCorePlayer.getPoints()) * -0.10);
+            int toRemoveClicked = (int) (toAddClicked / 1.7);
 
-            int toRemoveClicked = toAddClicked / 2;
-            if (toAddClicked / 2 <= 10) {
-                toRemoveClicked = 10;
-            }
-
-            int add = (int) (67.0 + (killerCorePlayer.getPoints() - clickedCorePlayer.getPoints()) * -0.25);
-            if (add <= 20) {
-                add = 20;
-            }
+            int add = (int) (43.0 + (killerCorePlayer.getPoints() - clickedCorePlayer.getPoints()) * -0.10);
 
             killerCorePlayer.getCooldown().setPointsInfoCooldown(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(3));
             TextUtil.message(player, "&7Jezeli zabijesz tego gracza dostaniesz&8: &b&l+"
                     + (clickedCorePlayer.getCooldown().getLastKillersCooldown().containsKey(killerCorePlayer.getUuid()) ? "0" : add)
                     + " &7punktow!");
-            TextUtil.message(player, "&7Natomiast za zginiecie zostanie ci odebrane: &c&l-"
+            TextUtil.message(player, "&7Natomiast za zginiecie zostanie ci odebrane&8: &c&l-"
                     + (killerCorePlayer.getCooldown().getLastKillersCooldown().containsKey(clickedCorePlayer.getUuid()) ? "0" : toRemoveClicked)
                     + " &7punktow!");
         }

@@ -20,8 +20,8 @@ public class GuildRegion {
 
     public boolean isInHeart(Location location) {
         int top = 3;
-        int down = 2;
-        int wall = 4;
+        int down = 3;
+        int wall = 3;
         Location clone = this.getCenter().clone();
         return clone.getBlockY() - down <= location.getBlockY() && clone.getBlockY() + top >= location.getBlockY() &&
                 location.getBlockX() <= clone.getBlockX() + wall

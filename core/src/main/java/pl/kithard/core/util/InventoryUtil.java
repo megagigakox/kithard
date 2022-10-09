@@ -160,67 +160,6 @@ public final class InventoryUtil {
         }
     }
 
-    public static void remove(ItemStack is, Player player, int amount) {
-        int removed = 0;
-        boolean all = false;
-        final List<ItemStack> toRemove = new ArrayList<>();
-        final ItemStack[] contents = player.getInventory().getContents();
-        for (ItemStack item : contents) {
-            if (item != null && !item.getType().equals(Material.AIR) && item.getType().equals(is.getType()) && item.getDurability() == is.getDurability() && !all && removed != amount) {
-                if (item.getAmount() == amount) {
-                    if (removed == 0) {
-                        toRemove.add(item.clone());
-                        all = true;
-                        removed = item.getAmount();
-                    } else {
-                        int a = amount - removed;
-                        ItemStack s = item.clone();
-                        s.setAmount(a);
-                        toRemove.add(s);
-                        removed += a;
-                        all = true;
-                    }
-                } else if (item.getAmount() > amount) {
-                    if (removed == 0) {
-                        ItemStack s2 = item.clone();
-                        s2.setAmount(amount);
-                        toRemove.add(s2);
-                        all = true;
-                        removed = amount;
-                    } else {
-                        int a = amount - removed;
-                        ItemStack s = item.clone();
-                        s.setAmount(a);
-                        toRemove.add(s);
-                        removed += a;
-                        all = true;
-                    }
-                } else if (item.getAmount() < amount) {
-                    if (removed == 0) {
-                        toRemove.add(item.clone());
-                        removed = item.getAmount();
-                    } else {
-                        int a = amount - removed;
-                        if (a == item.getAmount()) {
-                            toRemove.add(item.clone());
-                            removed += item.getAmount();
-                            all = true;
-                        } else if (item.getAmount() > a) {
-                            ItemStack s = item.clone();
-                            s.setAmount(a);
-                            toRemove.add(s);
-                            removed += a;
-                            all = true;
-                        } else if (item.getAmount() < a) {
-                            toRemove.add(item.clone());
-                            removed += item.getAmount();
-                        }
-                    }
-                }
-            }
-        }
-        removeItem(player, toRemove);
-    }
     public static void removeItem(Player player, List<ItemStack> items) {
         if (player == null || items == null || items.isEmpty()) {
             return;

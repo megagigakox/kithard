@@ -17,7 +17,7 @@ public class PlayerBackupTask extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : this.plugin.getServer().getOnlinePlayers()) {
-            this.plugin.getPlayerBackupFactory().create(player, PlayerBackupType.AUTO, "null", 0);
+            this.plugin.getPlayerBackupFactory().create(player, PlayerBackupType.AUTO, "unknown killer", 0);
         }
     }
 }

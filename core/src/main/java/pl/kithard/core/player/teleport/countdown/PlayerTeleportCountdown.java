@@ -36,7 +36,7 @@ public class PlayerTeleportCountdown extends BukkitRunnable {
                 int time = (int) TimeUnit.MILLISECONDS.toSeconds(playerTeleport.getTime() - currentTimeMillis);
 
                 if (time > 0) {
-                    TitleUtil.title(player, "", "&7Teleportacja nastapi za &3"
+                    TitleUtil.title(player, "", "&7Teleportacja nastapi za&8: &f"
                             + TimeUtil.formatTimeMillis(playerTeleport.getTime() - currentTimeMillis), 0, 40, 0);
                     continue;
                 }

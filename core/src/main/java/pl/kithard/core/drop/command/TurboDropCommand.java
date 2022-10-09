@@ -36,7 +36,8 @@ public class TurboDropCommand {
             ServerSettings serverSettings = this.plugin.getServerSettings();
 
             serverSettings.setTurboDrop(time);
-            this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getServerSettingsService().save(serverSettings));
+            this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
+                    this.plugin.getServerSettingsConfiguration().save());
 
             Bukkit.getOnlinePlayers().forEach(it -> TitleUtil.title(it, "", "&b&lT&3&lu&f&lr&b&lb&3&lo&f&lD&b&lr&3&lo&f&lp &7zostal aktywowany na: &3" +
                     TimeUtil.formatTimeMillis(time - System.currentTimeMillis()), 20, 40, 20));

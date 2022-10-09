@@ -57,12 +57,13 @@ public class AuthListener implements Listener {
 
             AuthPlayer authPlayer = this.plugin.getAuthPlayerCache().findByName(name);
             if (authPlayer == null) {
-                if (this.plugin.getAuthPlayerCache().hasMaxAccountsPerIP(connection.getAddress().getAddress().getHostAddress())) {
+                if (this.plugin.getAuthPlayerCache().hasMaxAccountsPerIP(connection.getAddress().getAddress().getHostName())) {
                     event.setCancelReason(TextUtil.component("&cOsiagnales limit kont na tym ip!"));
                     event.setCancelled(true);
                     event.completeIntent(plugin);
                     return;
                 }
+
                 authPlayer = this.plugin.getAuthPlayerCache().create(name);
                 authPlayer.setPremium(MojangUtil.fetchStatus(name));
                 authPlayer.setFirstJoinTime(System.currentTimeMillis());

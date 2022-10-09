@@ -37,8 +37,6 @@ public class GuildFactory {
         ));
 
         Guild guild = new Guild(tag, name, owner, home);
-        updateHologram(guild);
-
         GuildMember guildMember = new GuildMember(guild.getTag(), owner.getUuid(), owner.getName());
         guild.getMembers().add(guildMember);
 
@@ -66,6 +64,7 @@ public class GuildFactory {
                     this.plugin.getGuildRepository().insertScheme(scheme4);
                 });
 
+        updateHologram(guild);
         return guild;
     }
 
@@ -90,13 +89,14 @@ public class GuildFactory {
         int size = guild.getRegion().getSize() * 2;
         hologram.appendItemLine(head);
         hologram.appendTextLine(TextUtil.color("   &8&l&m--[&b&l&m---&b&l " + guild.getTag() + " &b&l&m---&8&l&m]--"));
-        hologram.appendTextLine(TextUtil.color("&7Lider: &f" + owner.getName()));
-        hologram.appendTextLine(TextUtil.color("&7Rozmiar cuboida: &f" + size + "x" + size));
-        hologram.appendTextLine(TextUtil.color("&7Wygasa za: &f" + TimeUtil.formatTimeMillis(guild.getExpireTime() - System.currentTimeMillis())));
-        hologram.appendTextLine(TextUtil.color("&7Atak możliwy za: &f" + (guild.getLastAttackTime() > System.currentTimeMillis()
+        hologram.appendTextLine(TextUtil.color("&7Lider&8: &f" + owner.getName()));
+        hologram.appendTextLine(TextUtil.color("&7Rozmiar cuboida&8: &f" + size + "x" + size));
+        hologram.appendTextLine(TextUtil.color("&7Wygasa za&8: &f" + TimeUtil.formatTimeMillis(guild.getExpireTime() - System.currentTimeMillis())));
+        hologram.appendTextLine(TextUtil.color("&7Podbicie możliwe za&8: &f" + (guild.getLastAttackTime() > System.currentTimeMillis()
                 ? TimeUtil.formatTimeMillis(guild.getLastAttackTime() - System.currentTimeMillis())
                 : "&b&lteraz!")));
-        hologram.appendTextLine(TextUtil.color("&7Serca: &c" + guild.getHearts()));
+        hologram.appendTextLine(TextUtil.color("&7Serca&8: &c" + guild.getHearts()));
+        hologram.appendTextLine(TextUtil.color("&7HP&8: &f" + guild.getHp()));
 
         guild.setHologram(hologram);
     }
@@ -124,7 +124,10 @@ public class GuildFactory {
     }
 
     public void loadAll() {
-        this.plugin.getGuildRepository().loadAll().forEach(guild -> this.plugin.getGuildCache().add(guild));
+        this.plugin.getGuildRepository().loadAll().forEach(guild -> {
+            this.plugin.getGuildCache().add(guild);
+            this.plugin.getGuildFactory().updateHologram(guild);
+        });
         this.plugin.getGuildRepository().loadMembers();
         this.plugin.getGuildRepository().loadSchemes();
         this.plugin.getGuildRepository().loadLogs();

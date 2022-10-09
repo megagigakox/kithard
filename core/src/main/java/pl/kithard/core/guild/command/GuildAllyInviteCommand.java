@@ -83,12 +83,12 @@ public class GuildAllyInviteCommand {
             return;
         }
 
-        if (guild.getAllies().size() == 3) {
+        if (guild.getAllies().size() == 1) {
             TextUtil.message(player, "&8(&4&l!&8) &cTwoja gildia posiada maksymalna liczbe sojuszy!");
             return;
         }
 
-        if (otherGuild.getAllies().size() == 3) {
+        if (otherGuild.getAllies().size() == 1) {
             TextUtil.message(player, "&8(&4&l!&8) &cGildia z ktora chcesz zawrzec sojusz posiada maksymalna liczbe sojuszy!");
             return;
         }
@@ -132,7 +132,6 @@ public class GuildAllyInviteCommand {
             );
 
         });
-
 
         Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gildia &8[&b" + guild.getTag() + "&8] &7zawarla sojusz z gildia &8[&b" + otherGuild.getTag() + "&8]"));
     }

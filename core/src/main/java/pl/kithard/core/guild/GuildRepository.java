@@ -31,6 +31,7 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                     "guild_region_center TEXT NOT NULL, " +
                     "guild_region_size INT, " +
                     "home TEXT NOT NULL," +
+                    "hp INT, " +
                     "lives INT, " +
                     "points INT, " +
                     "kills INT, " +
@@ -74,9 +75,9 @@ public class GuildRepository implements DatabaseRepository<Guild> {
 
     private final static String INSERT_GUILD =
             "INSERT INTO kithard_guilds (" +
-                    "tag, name, owner, guild_region_center, guild_region_size, home, lives, points, kills, deaths, expire_time, " +
+                    "tag, name, owner, guild_region_center, guild_region_size, home, hp, lives, points, kills, deaths, expire_time, " +
                     "create_time, last_attack_time, last_explode_time, friendly_fire, ally_fire, deputies, allies, warehouse) " +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private final static String INSERT_MEMBER =
             "INSERT INTO kithard_guild_members (guild, uuid, name, allowed_permissions) VALUES(?, ?, ?, ?)";
@@ -89,7 +90,7 @@ public class GuildRepository implements DatabaseRepository<Guild> {
 
     private final static String UPDATE_GUILD =
             "UPDATE kithard_guilds SET" +
-                    "`owner` = ?, `guild_region_center` = ?, `guild_region_size` = ?, `home` = ?, `lives` = ?, `points` = ?, " +
+                    "`owner` = ?, `guild_region_center` = ?, `guild_region_size` = ?, `home` = ?, `hp` = ?, `lives` = ?, `points` = ?, " +
                     "`kills` = ?, `deaths` = ?, `expire_time` = ?, `create_time` = ?, " +
                     "`last_attack_time` = ?, `last_explode_time` = ?, `friendly_fire` = ?, `ally_fire` = ?, " +
                     "`deputies` = ?, `allies` = ?, `warehouse` = ? WHERE `tag` = ?";
@@ -222,19 +223,20 @@ public class GuildRepository implements DatabaseRepository<Guild> {
             preparedStatement.setString(4, LocationSerializer.serialize(data.getRegion().getCenter().clone()));
             preparedStatement.setInt(5, data.getRegion().getSize());
             preparedStatement.setString(6, LocationSerializer.serialize(data.getHome()));
-            preparedStatement.setInt(7, data.getLives());
-            preparedStatement.setInt(8, data.getPoints());
-            preparedStatement.setInt(9, data.getKills());
-            preparedStatement.setInt(10, data.getDeaths());
-            preparedStatement.setLong(11, data.getExpireTime());
-            preparedStatement.setLong(12, data.getCreateTime());
-            preparedStatement.setLong(13, data.getLastAttackTime());
-            preparedStatement.setLong(14, data.getLastExplodeTime());
-            preparedStatement.setBoolean(15, data.isFriendlyFire());
-            preparedStatement.setBoolean(16, data.isAllyFire());
-            preparedStatement.setString(17, null);
+            preparedStatement.setInt(7, data.getHp());
+            preparedStatement.setInt(8, data.getLives());
+            preparedStatement.setInt(9, data.getPoints());
+            preparedStatement.setInt(10, data.getKills());
+            preparedStatement.setInt(11, data.getDeaths());
+            preparedStatement.setLong(12, data.getExpireTime());
+            preparedStatement.setLong(13, data.getCreateTime());
+            preparedStatement.setLong(14, data.getLastAttackTime());
+            preparedStatement.setLong(15, data.getLastExplodeTime());
+            preparedStatement.setBoolean(16, data.isFriendlyFire());
+            preparedStatement.setBoolean(17, data.isAllyFire());
             preparedStatement.setString(18, null);
-            preparedStatement.setString(19, ItemStackSerializer.itemStackArrayToBase64(data.getWarehouseContents()));
+            preparedStatement.setString(19, null);
+            preparedStatement.setString(20, ItemStackSerializer.itemStackArrayToBase64(data.getWarehouseContents()));
 
             preparedStatement.execute();
 
@@ -415,6 +417,7 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                                 resultSet.getInt("guild_region_size")
                         ),
                         LocationSerializer.deserialize(resultSet.getString("home")),
+                        resultSet.getInt("hp"),
                         resultSet.getInt("lives"),
                         resultSet.getInt("points"),
                         resultSet.getInt("kills"),
@@ -456,23 +459,24 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                 guildStatement.setString(2, LocationSerializer.serialize(data.getRegion().getCenter().clone()));
                 guildStatement.setInt(3, data.getRegion().getSize());
                 guildStatement.setString(4, LocationSerializer.serialize(data.getHome()));
-                guildStatement.setInt(5, data.getLives());
-                guildStatement.setInt(6, data.getPoints());
-                guildStatement.setInt(7, data.getKills());
-                guildStatement.setInt(8, data.getDeaths());
-                guildStatement.setLong(9, data.getExpireTime());
-                guildStatement.setLong(10, data.getCreateTime());
-                guildStatement.setLong(11, data.getLastAttackTime());
-                guildStatement.setLong(12, data.getLastExplodeTime());
-                guildStatement.setBoolean(13, data.isFriendlyFire());
-                guildStatement.setBoolean(14, data.isAllyFire());
-                guildStatement.setString(15, CollectionSerializer.serializeCollection(data.getDeputies()
+                guildStatement.setInt(5, data.getHp());
+                guildStatement.setInt(6, data.getLives());
+                guildStatement.setInt(7, data.getPoints());
+                guildStatement.setInt(8, data.getKills());
+                guildStatement.setInt(9, data.getDeaths());
+                guildStatement.setLong(10, data.getExpireTime());
+                guildStatement.setLong(11, data.getCreateTime());
+                guildStatement.setLong(12, data.getLastAttackTime());
+                guildStatement.setLong(13, data.getLastExplodeTime());
+                guildStatement.setBoolean(14, data.isFriendlyFire());
+                guildStatement.setBoolean(15, data.isAllyFire());
+                guildStatement.setString(16, CollectionSerializer.serializeCollection(data.getDeputies()
                         .stream()
                         .map(UUID::toString)
                         .collect(Collectors.toSet())));
-                guildStatement.setString(16, CollectionSerializer.serializeCollection(data.getAllies()));
-                guildStatement.setString(17, ItemStackSerializer.itemStackArrayToBase64(data.getWarehouseContents()));
-                guildStatement.setString(18, data.getTag());
+                guildStatement.setString(17, CollectionSerializer.serializeCollection(data.getAllies()));
+                guildStatement.setString(18, ItemStackSerializer.itemStackArrayToBase64(data.getWarehouseContents()));
+                guildStatement.setString(19, data.getTag());
                 guildStatement.addBatch();
 
                 for (GuildMember guildMember : data.getMembers()) {

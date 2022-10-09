@@ -14,12 +14,14 @@ import net.dzikoysk.funnycommands.resources.types.PlayerType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.kithard.core.abbys.AbbysTask;
+import pl.kithard.core.abyss.AbbysTask;
 import pl.kithard.core.antimacro.AntiMacroCache;
 import pl.kithard.core.antimacro.AntiMacroListener;
 import pl.kithard.core.antimacro.AntiMacroTask;
@@ -30,6 +32,10 @@ import pl.kithard.core.automessage.config.AutoMessageConfiguration;
 import pl.kithard.core.automessage.task.AutoMessageTask;
 import pl.kithard.core.border.command.BorderCommand;
 import pl.kithard.core.border.listener.BorderListener;
+import pl.kithard.core.boss.BossCommand;
+import pl.kithard.core.boss.BossListener;
+import pl.kithard.core.boss.BossService;
+import pl.kithard.core.boss.BossTask;
 import pl.kithard.core.configuration.command.ReloadConfigurationCommand;
 import pl.kithard.core.database.task.DataSaveTask;
 import pl.kithard.core.deposit.DepositItemConfiguration;
@@ -48,6 +54,7 @@ import pl.kithard.core.effect.command.CustomEffectCommand;
 import pl.kithard.core.effect.configuration.CustomEffectConfiguration;
 import pl.kithard.core.enchant.*;
 import pl.kithard.core.freeze.FreezeCommand;
+import pl.kithard.core.freeze.FreezeListener;
 import pl.kithard.core.freeze.FreezeTask;
 import pl.kithard.core.generator.GeneratorCache;
 import pl.kithard.core.generator.GeneratorFactory;
@@ -138,7 +145,8 @@ import pl.kithard.core.safe.SafeCache;
 import pl.kithard.core.safe.SafeListener;
 import pl.kithard.core.safe.SafeRepository;
 import pl.kithard.core.settings.ServerSettings;
-import pl.kithard.core.settings.ServerSettingsService;
+import pl.kithard.core.settings.ServerSettingsConfiguration;
+import pl.kithard.core.settings.ServerSettingsSerdes;
 import pl.kithard.core.settings.command.ServerSettingsCommand;
 import pl.kithard.core.settings.listener.ServerSettingsListeners;
 import pl.kithard.core.shop.ShopConfiguration;
@@ -193,7 +201,7 @@ public final class CorePlugin extends JavaPlugin {
     private ShopConfiguration shopConfiguration;
 
     private ServerSettings serverSettings;
-    private ServerSettingsService serverSettingsService;
+    private ServerSettingsConfiguration serverSettingsConfiguration;
 
     private DepositItemConfiguration depositItemConfiguration;
 
@@ -217,6 +225,8 @@ public final class CorePlugin extends JavaPlugin {
 
     private SafeCache safeCache;
     private SafeRepository safeRepository;
+
+    private BossService bossService;
 
     @Override
     public void onEnable() {
@@ -304,11 +314,17 @@ public final class CorePlugin extends JavaPlugin {
         this.autoMessageConfiguration = new AutoMessageConfiguration(this);
         this.autoMessageConfiguration.createConfig();
 
-        this.serverSettingsService = new ServerSettingsService(this);
-        this.serverSettings = this.serverSettingsService.load();
+        this.serverSettingsConfiguration = ConfigManager.create(ServerSettingsConfiguration.class, (it) -> {
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit());
+            it.withSerdesPack(registry -> registry.register(new ServerSettingsSerdes()));
+            it.withBindFile(getDataFolder() + "/serverSettings.yml");
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load(true);
+        });
+        this.serverSettings = serverSettingsConfiguration.getServerSettings();
 
         this.playerRankingService = new PlayerRankingService();
-
         this.corePlayerRepository = new CorePlayerRepository(this.databaseService);
         this.corePlayerRepository.prepareTable();
         this.corePlayerCache = new CorePlayerCache();
@@ -323,7 +339,6 @@ public final class CorePlugin extends JavaPlugin {
         this.safeRepository.loadAll().forEach(safe -> {
             this.safeCache.add(safe);
         });
-
 
         this.playerNameTagService = new PlayerNameTagService(this);
         this.playerBackupRepository = new PlayerBackupRepository(this.databaseService);
@@ -365,7 +380,7 @@ public final class CorePlugin extends JavaPlugin {
         this.achievementCache.init();
 
         this.antiMacroCache = new AntiMacroCache();
-
+        this.bossService = new BossService();
 
         this.initTabList();
         this.initCommands();
@@ -376,6 +391,12 @@ public final class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+
+        for (Entity entity : this.getServer().getWorld("world").getEntities()) {
+            if (entity instanceof IronGolem) {
+                entity.remove();
+            }
+        }
 
         for (Player player : getServer().getOnlinePlayers()) {
             CorePlayer corePlayer = this.corePlayerCache.findByPlayer(player);
@@ -486,7 +507,9 @@ public final class CorePlugin extends JavaPlugin {
                         new BlocksCommand(),
                         new GuildWarCommand(),
                         new SaveAllCommand(this),
-                        new GuildHeartCommand()
+                        new GuildHeartCommand(),
+                        new BossCommand(this),
+                        new FreeTurboCommand(this)
                 ))
                 .completer("itemShopServices", (context, prefix, limit) -> CommandUtils.collectCompletions(
                         this.itemShopServiceConfiguration.getServices(),
@@ -517,9 +540,10 @@ public final class CorePlugin extends JavaPlugin {
         new FreezeTask(this);
         new AntiMacroTask(this);
         new AbbysTask(this);
-        new RewardTask(this);
+//        new RewardTask(this);
         new GuildShadowBlockProtectionTask(this);
         new GuildRegenBlockSaveTask(this);
+        new BossTask(this);
     }
 
     private void initListeners() {
@@ -555,6 +579,8 @@ public final class CorePlugin extends JavaPlugin {
         new SafeListener(this);
         new SpawnProtectionListener(this);
         new WarehouseListener(this);
+        new FreezeListener(this);
+        new BossListener(this);
     }
 
     private void initRecipes() {
@@ -655,8 +681,8 @@ public final class CorePlugin extends JavaPlugin {
         return serverSettings;
     }
 
-    public ServerSettingsService getServerSettingsService() {
-        return serverSettingsService;
+    public ServerSettingsConfiguration getServerSettingsConfiguration() {
+        return serverSettingsConfiguration;
     }
 
     public DepositItemConfiguration getDepositItemConfiguration() {
@@ -777,5 +803,9 @@ public final class CorePlugin extends JavaPlugin {
 
     public PlayerBackupRepository getPlayerBackupRepository() {
         return playerBackupRepository;
+    }
+
+    public BossService getBossService() {
+        return bossService;
     }
 }

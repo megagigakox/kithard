@@ -15,7 +15,7 @@ public class Achievement {
         this.reward = reward;
         this.required = required;
 
-        this.uniqueId = type.toString() + ":" + id;
+        this.uniqueId = type.toString() + "-" + id;
     }
 
     public static AchievementBuilder builder() {

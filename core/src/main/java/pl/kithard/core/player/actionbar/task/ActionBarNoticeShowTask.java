@@ -29,7 +29,6 @@ public class ActionBarNoticeShowTask extends BukkitRunnable {
 
     @Override
     public void run() {
-
         for (Player onlinePlayer : this.plugin.getServer().getOnlinePlayers()) {
             if (onlinePlayer == null) {
                 continue;
@@ -157,6 +156,6 @@ public class ActionBarNoticeShowTask extends BukkitRunnable {
             return;
         }
 
-        builder.append(TextUtil.color(" &8&l| &r" + text));
+        builder.append(TextUtil.color(" &8〣 &r" + text));
     }
 }

@@ -45,7 +45,7 @@ public class ShopGui {
 
             CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
 
-            gui.setItem(3, 3, ItemBuilder.from(new ItemStack(351, 1, (short) 10))
+            gui.setItem(3, 3, ItemBuilder.from(new ItemStack(425, 1, (short) 2))
                     .name(TextUtil.component("   &a&lKupno Itemkow"))
                     .enchant(Enchantment.DURABILITY, 3)
                     .lore(TextUtil.component(Arrays.asList(
@@ -63,7 +63,7 @@ public class ShopGui {
                         openBuy(player);
                     }));
 
-            gui.setItem(3, 5, ItemBuilder.from(new ItemStack(351, 1, (short) 1))
+            gui.setItem(3, 5, ItemBuilder.from(new ItemStack(425, 1, (short) 1))
                     .name(TextUtil.component("   &c&lSprzedaz Itemkow"))
                     .enchant(Enchantment.DURABILITY, 3)
                     .lore(TextUtil.component(Arrays.asList(

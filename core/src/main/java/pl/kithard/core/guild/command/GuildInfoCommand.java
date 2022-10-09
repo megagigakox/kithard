@@ -75,7 +75,7 @@ public class GuildInfoCommand {
         info.add("&8» &7Utworzona: &f" + TimeUtil.formatTimeMillisToDate(guild.getCreateTime()));
         info.add("&8» &7Wazna do: &f" + TimeUtil.formatTimeMillisToDate(guild.getExpireTime()));
         info.add("&8» &7Wygasa za: &f" + TimeUtil.formatTimeMillis(guild.getExpireTime() - System.currentTimeMillis()));
-        info.add("&8» &7Atak mozliwy za: &f" +
+        info.add("&8» &7Podbicie serca mozliwe za: &f" +
                 (guild.getLastAttackTime() > System.currentTimeMillis()
                         ? TimeUtil.formatTimeMillis(guild.getLastAttackTime() - System.currentTimeMillis())
                         : "&aw tym momencie!"));
@@ -85,7 +85,7 @@ public class GuildInfoCommand {
                 ? "&fBrak."
                 : String.join("&8,&f ", guild.getAllies());
 
-        info.add("&8» &7Sojusze: &f" + allies + " &8(&b" + guild.getAllies().size() + "&8/&b3&8)");
+        info.add("&8» &7Sojusze: &f" + allies + " &8(&b" + guild.getAllies().size() + "&8/&b1&8)");
 
         Set<GuildMember> onlineMembers =
                 guild.getMembers().stream()

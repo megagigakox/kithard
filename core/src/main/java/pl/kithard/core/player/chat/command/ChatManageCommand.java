@@ -45,7 +45,8 @@ public class ChatManageCommand {
                 }
 
                 serverSettings.addEnabledSetting(ServerSettingsType.CHAT);
-                this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getServerSettingsService().save(serverSettings));
+                this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
+                        this.plugin.getServerSettingsConfiguration().save());
 
                 for (Player player : Bukkit.getOnlinePlayers()) {
 
@@ -64,7 +65,8 @@ public class ChatManageCommand {
                 }
 
                 serverSettings.removeEnabledSetting(ServerSettingsType.CHAT);
-                this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getServerSettingsService().save(serverSettings));
+                this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
+                        this.plugin.getServerSettingsConfiguration().save());
 
                 for (Player player : Bukkit.getOnlinePlayers()) {
 

@@ -2,6 +2,7 @@ package pl.kithard.core.guild.listener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,7 +29,7 @@ public class GuildHeartListener implements Listener {
         this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void inHeartBreak(BlockBreakEvent event) {
         Guild guild = this.plugin.getGuildCache().findByLocation(event.getBlock().getLocation());
 
@@ -42,7 +43,7 @@ public class GuildHeartListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void inHeartPlace(BlockPlaceEvent event) {
         Guild guild = this.plugin.getGuildCache().findByLocation(event.getBlock().getLocation());
 
@@ -60,7 +61,7 @@ public class GuildHeartListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void conquer(BlockBreakEvent event) {
         Block block = event.getBlock();
-        if (block.getType() != Material.SEA_LANTERN) {
+        if (block.getType() != Material.SPONGE) {
             return;
         }
 
@@ -76,7 +77,6 @@ public class GuildHeartListener implements Listener {
         event.setCancelled(true);
         Player player = event.getPlayer();
         Guild playerGuild = this.plugin.getGuildCache().findByPlayer(player);
-
         if (playerGuild == null) {
             TextUtil.message(player, "&8(&4&l!&8) &cNie posiadasz swojej gildii aby moc podbic wroga gildie!");
             return;
@@ -92,32 +92,38 @@ public class GuildHeartListener implements Listener {
             return;
         }
 
+        if (guild.getHp() <= 0) {
 
-        if (guild.getLives() == 1) {
-
-            Bukkit.getScheduler().runTask(this.plugin, () -> this.plugin.getGuildFactory().delete(guild));
-
-            if (playerGuild.getLives() < 3) {
-                playerGuild.setLives(playerGuild.getLives() + 1);
-                playerGuild.setNeedSave(true);
-            }
-
-            Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gildia &8[&b" + guild.getTag() + "&8] &7zostala zniszczona przez &8[&b" + playerGuild.getTag() + "&8] &f" + player.getName()));
-
-        } else {
-
-            guild.setLastAttackTime(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24));
-            guild.setLives(guild.getLives() - 1);
-            guild.setNeedSave(true);
-
-            if (playerGuild.getLives() < 3) {
+            if (playerGuild.getLives() < 5) {
                 playerGuild.setLives(playerGuild.getLives() + 1);
             }
+            playerGuild.setHp(500);
             playerGuild.setNeedSave(true);
 
-            Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gildia &8[&b" + guild.getTag() + "&8] &7zostala oslabiona o jedno życie przez &8[&b" + playerGuild.getTag() + "&8] &f" + player.getName()));
-        }
+            if (guild.getLives() == 1) {
 
+                Bukkit.getScheduler().runTask(this.plugin, () -> this.plugin.getGuildFactory().delete(guild));
+                Bukkit.broadcastMessage("");
+                Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gildia &8[&b" + guild.getTag() + "&8] &7zostala zniszczona przez &8[&b" + playerGuild.getTag() + "&8] &f" + player.getName()));
+                Bukkit.broadcastMessage("");
+
+            } else {
+
+                guild.setLastAttackTime(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24));
+                guild.setHp(500);
+                guild.setLives(guild.getLives() - 1);
+                guild.setNeedSave(true);
+                Bukkit.broadcastMessage("");
+                Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gildia &8[&b" + guild.getTag() + "&8] &7zostala oslabiona o jedno życie przez &8[&b" + playerGuild.getTag() + "&8] &f" + player.getName()));
+                Bukkit.broadcastMessage("");
+            }
+        }
+        else {
+
+            guild.setHp(guild.getHp() - 1);
+            this.plugin.getGuildFactory().updateHologram(guild);
+
+        }
     }
 
     @EventHandler
@@ -127,7 +133,7 @@ public class GuildHeartListener implements Listener {
         }
 
         Block block = event.getClickedBlock();
-        if (block.getType() != Material.SEA_LANTERN) {
+        if (block.getType() != Material.SPONGE) {
             return;
         }
 
@@ -141,12 +147,9 @@ public class GuildHeartListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        if (this.plugin.getGuildCache().isNotAllowed(player, GuildPermission.PANEL_ACCESS)) {
-            new GuildPanelGui(plugin).openPanel(player, guild);
-            return;
+        if (!guild.isMember(player.getUniqueId()) || !this.plugin.getGuildCache().isNotAllowed(player, GuildPermission.WAREHOUSE_ACCESS)) {
+            guild.openWarehouse(player);
         }
-
-        guild.openWarehouse(player);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -156,11 +159,9 @@ public class GuildHeartListener implements Listener {
             return;
         }
 
-        if (!guild.getRegion().isInHeart(event.getToBlock().getLocation())) {
-            return;
+        if (guild.getRegion().isInHeart(event.getToBlock().getLocation())) {
+            event.setCancelled(true);
         }
-
-        event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)

@@ -35,8 +35,9 @@ public class DepositGui {
                             " &7W schowku posiadasz&8: &f" + corePlayer.getAmountOfDepositItem(depositItem.getName()),
                             " &7Aktualny limit w eq&8: &f" + depositItem.getLimit(),
                             "",
-                            "&7Kliknij &flewym &7aby wyplacic limit!",
-                            "&7Kliknij &fprawym &7aby wplacic limit!"
+                            " &7Jak korzystać ze schowka?",
+                            "  &8- &7Kliknij &flewym &7aby wyplacic limit!",
+                            "  &8- &7Kliknij &fprawym &7aby wplacic limit!"
                     )
                     .asGuiItem(event -> {
 
@@ -96,23 +97,26 @@ public class DepositGui {
                         if (!depositItem.isWithdrawAll()) continue;
 
                         int amountInInventory = InventoryUtil.countAmountForDeposit(player, depositItem.getItem().clone());
-                        if (amountInInventory >= depositItem.getLimit() && !LocationUtil.isInSpawn(player.getLocation())) continue;
+                        if (amountInInventory >= depositItem.getLimit() && !LocationUtil.isInSpawn(player.getLocation())) {
+                            continue;
+                        }
 
-                        if (corePlayer.getAmountOfDepositItem(depositItem.getName()) <= 0) continue;
+                        if (corePlayer.getAmountOfDepositItem(depositItem.getName()) <= 0) {
+                            continue;
+                        }
 
                         int i = depositItem.getLimit() - amountInInventory;
-
-                        if (LocationUtil.isInSpawn(player.getLocation()))
+                        if (LocationUtil.isInSpawn(player.getLocation())) {
                             i = depositItem.getItem().getMaxStackSize();
+                        }
 
-                        if (i > corePlayer.getAmountOfDepositItem(depositItem.getName()))
+                        if (i > corePlayer.getAmountOfDepositItem(depositItem.getName())) {
                             i = corePlayer.getAmountOfDepositItem(depositItem.getName());
+                        }
 
                         corePlayer.removeFromDeposit(depositItem, i);
-
                         ItemStack toAdd = depositItem.getItem().clone();
                         toAdd.setAmount(i);
-
                         InventoryUtil.addItem(player, toAdd);
                     }
 

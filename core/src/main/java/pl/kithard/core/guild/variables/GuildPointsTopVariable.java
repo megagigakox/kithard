@@ -27,7 +27,7 @@ public class GuildPointsTopVariable extends Variable {
 
         if (guildRankingService.getGuildPointsRanking().size() >= this.i) {
             Guild guild = guildRankingService.getGuildPointsRanking().get(this.i - 1);
-            return s + guild.getTag() + " &8[&b" + guild.getPoints() + "&8]";
+            return s + guild.getTag() + " &8[&3" + guild.getPoints() + "&8]";
         }
         return s;
     }

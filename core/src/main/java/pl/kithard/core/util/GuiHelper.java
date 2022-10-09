@@ -69,8 +69,7 @@ public final class GuiHelper {
     }
 
     public static void fillColorGui6(BaseGui gui) {
-
-        gui.getFiller().fillBorder(ItemBuilder.from(BLUE_STAINED_GLASS_PANE).asGuiItem());
+        gui.getFiller().fillBorder(ItemBuilder.from(CYAN_STAINED_GLASS_PANE).asGuiItem());
 
         gui.setItem(1, 2, ItemBuilder.from(LIGHT_BLUE_STAINED_GLASS_PANE).asGuiItem());
         gui.setItem(1, 5, ItemBuilder.from(LIGHT_BLUE_STAINED_GLASS_PANE).asGuiItem());
@@ -87,7 +86,7 @@ public final class GuiHelper {
     }
 
     public static void fillColorGui5(BaseGui gui) {
-        GuiItem blue = ItemBuilder.from(BLUE_STAINED_GLASS_PANE)
+        GuiItem blue = ItemBuilder.from(CYAN_STAINED_GLASS_PANE)
                 .asGuiItem();
 
         GuiItem lightBlue = ItemBuilder.from(LIGHT_BLUE_STAINED_GLASS_PANE)

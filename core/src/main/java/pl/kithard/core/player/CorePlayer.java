@@ -1,21 +1,19 @@
 package pl.kithard.core.player;
 
-import com.google.gson.annotations.SerializedName;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import pl.kithard.core.api.database.entry.DatabaseEntry;
+import pl.kithard.core.deposit.DepositItem;
+import pl.kithard.core.drop.DropItem;
 import pl.kithard.core.player.achievement.Achievement;
 import pl.kithard.core.player.achievement.AchievementType;
-import pl.kithard.core.deposit.DepositItem;
 import pl.kithard.core.player.combat.PlayerCombat;
 import pl.kithard.core.player.cooldown.PlayerCooldown;
 import pl.kithard.core.player.enderchest.PlayerEnderChest;
 import pl.kithard.core.player.home.PlayerHome;
 import pl.kithard.core.player.settings.PlayerSettings;
 import pl.kithard.core.player.teleport.PlayerTeleport;
-import pl.kithard.core.api.database.entity.DatabaseEntity;
-import pl.kithard.core.api.database.entry.DatabaseEntry;
-import pl.kithard.core.drop.DropItem;
 import pl.kithard.core.shop.item.ShopItem;
 import pl.kithard.core.util.MathUtil;
 import pl.kithard.core.util.TextUtil;
@@ -24,10 +22,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-@DatabaseEntity(database = "core", collection = "players")
 public class CorePlayer extends DatabaseEntry {
 
-    @SerializedName("_id")
     private final UUID uuid;
     private String name;
     private final String ip;
@@ -61,6 +57,7 @@ public class CorePlayer extends DatabaseEntry {
     private Map<UUID, Long> teleportRequests;
     private PlayerTeleport teleport;
     private UUID reply;
+//    private FastBoard board;
 
     public CorePlayer(UUID uuid, String name, String ip) {
         this.uuid = uuid;
@@ -449,6 +446,7 @@ public class CorePlayer extends DatabaseEntry {
                 return;
             }
 
+            TextUtil.message(player, "&8(&3&l!&8) &7Rozgrzewam teleport... &7Zostaniesz przeteleportowany za&8: &f" + delay + " sekund!");
             PlayerTeleport playerTeleport = new PlayerTeleport();
             playerTeleport.setTeleportLocation(location);
             playerTeleport.setTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(delay));
@@ -532,4 +530,12 @@ public class CorePlayer extends DatabaseEntry {
         this.homes.add(new PlayerHome(4, null));
         this.homes.add(new PlayerHome(5, null));
     }
+
+//    public FastBoard getBoard() {
+//        return board;
+//    }
+//
+//    public void setBoard(FastBoard board) {
+//        this.board = board;
+//    }
 }

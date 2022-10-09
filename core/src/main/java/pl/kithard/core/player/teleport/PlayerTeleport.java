@@ -7,10 +7,6 @@ public class PlayerTeleport {
     private Location teleportLocation;
     private long time;
 
-    public boolean isTeleport() {
-        return this.time > System.currentTimeMillis();
-    }
-
     public Location getTeleportLocation() {
         return teleportLocation;
     }

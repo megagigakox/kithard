@@ -44,7 +44,6 @@ public class CustomRecipeListener implements Listener {
         if (result.equals(CustomRecipe.COBBLEX.getItem())) {
 
             ItemStack cobbleStone = new ItemStack(Material.COBBLESTONE, 64);
-
             for (int i = 1; i <= 9; i++) {
                 if (inventory.getItem(i) != null) {
                     ItemStack inventoryItem = inventory.getItem(i);
@@ -57,6 +56,7 @@ public class CustomRecipeListener implements Listener {
                     }
                 }
             }
+
         }
     }
 
@@ -84,7 +84,7 @@ public class CustomRecipeListener implements Listener {
             inventory.setResult(new ItemStack(Material.AIR));
             if (!event.isCancelled()){
                 for (int i = 1; i <= 9; i++) {
-                    InventoryUtil.removeItem(inventory,i, 64);
+                    InventoryUtil.removeItem(inventory, i, 64);
                     inventory.setResult(CustomRecipe.COBBLEX.getItem());
                 }
             }
@@ -101,7 +101,6 @@ public class CustomRecipeListener implements Listener {
         }
 
         Guild guild = this.plugin.getGuildCache().findByLocation(event.getBlock().getLocation());
-
         if (itemInHand.getItemMeta().getDisplayName().equalsIgnoreCase(CustomRecipe.BOY_FARMER.getItem().getItemMeta().getDisplayName())) {
 
             if (guild == null) {
@@ -110,7 +109,7 @@ public class CustomRecipeListener implements Listener {
                 return;
             }
 
-            else if (this.plugin.getGuildCache().isNotAllowed(player, event.getBlock().getLocation(), GuildPermission.BOY_FARMER_PLACEMENT)) {
+            if (this.plugin.getGuildCache().isNotAllowed(player, event.getBlock().getLocation(), GuildPermission.BOY_FARMER_PLACEMENT)) {
                 event.setCancelled(true);
                 return;
             }
@@ -122,12 +121,8 @@ public class CustomRecipeListener implements Listener {
                     continue;
                 }
 
-                if (block.getType() == Material.BEDROCK) {
+                if (block.getType() != Material.AIR) {
                     return;
-                }
-
-                if (block.getType() == Material.SEA_LANTERN) {
-                    continue;
                 }
 
                 block.setType(Material.OBSIDIAN);
@@ -142,7 +137,7 @@ public class CustomRecipeListener implements Listener {
                 return;
             }
 
-            else if (this.plugin.getGuildCache().isNotAllowed(player, event.getBlock().getLocation(), GuildPermission.SAND_FARMER_PLACEMENT)) {
+            if (this.plugin.getGuildCache().isNotAllowed(player, event.getBlock().getLocation(), GuildPermission.SAND_FARMER_PLACEMENT)) {
                 event.setCancelled(true);
                 return;
             }
@@ -154,12 +149,8 @@ public class CustomRecipeListener implements Listener {
                     continue;
                 }
 
-                if (block.getType() == Material.BEDROCK) {
+                if (block.getType() != Material.AIR) {
                     return;
-                }
-
-                if (block.getType() == Material.SEA_LANTERN) {
-                    continue;
                 }
 
                 block.setType(Material.SAND);
@@ -174,7 +165,7 @@ public class CustomRecipeListener implements Listener {
                 return;
             }
 
-            else if (this.plugin.getGuildCache().isNotAllowed(player, event.getBlock().getLocation(), GuildPermission.AIR_FARMER_PLACEMENT)) {
+            if (this.plugin.getGuildCache().isNotAllowed(player, event.getBlock().getLocation(), GuildPermission.AIR_FARMER_PLACEMENT)) {
                 event.setCancelled(true);
                 return;
             }
@@ -190,7 +181,7 @@ public class CustomRecipeListener implements Listener {
                     return;
                 }
 
-                if (block.getType() == Material.SEA_LANTERN) {
+                if (block.getType() == Material.SEA_LANTERN || block.getType() == Material.CHEST) {
                     continue;
                 }
 
@@ -202,7 +193,6 @@ public class CustomRecipeListener implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-
         if (event.getAction() != Action.RIGHT_CLICK_AIR) {
             return;
         }
@@ -301,7 +291,4 @@ public class CustomRecipeListener implements Listener {
             }
         }
     }
-
-
-
 }

@@ -27,7 +27,7 @@ public class AuthPlayerRepository implements DatabaseRepository<AuthPlayer> {
                 PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS kithard_auth_players (" +
                         "name VARCHAR(16) NOT NULL, " +
                         "password TEXT, " +
-                        "ip TEXT NOT NULL, " +
+                        "ip TEXT, " +
                         "first_join_time BIGINT NOT NULL, " +
                         "premium BOOLEAN NOT NULL, " +
                         "registered BOOLEAN NOT NULL)")

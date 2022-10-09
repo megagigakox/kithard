@@ -1,8 +1,5 @@
 package pl.kithard.core.settings;
 
-import com.google.gson.annotations.SerializedName;
-import pl.kithard.core.api.database.entity.DatabaseEntity;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +7,13 @@ import java.util.List;
 public class ServerSettings {
 
     private long turboDrop, freeze;
-    private final List<ServerSettingsType> enabledSettings = new ArrayList<>();
+    private List<ServerSettingsType> enabledSettings = new ArrayList<>();
+
+    public ServerSettings(long turboDrop, long freeze, List<ServerSettingsType> enabledSettings) {
+        this.turboDrop = turboDrop;
+        this.freeze = freeze;
+        this.enabledSettings = enabledSettings;
+    }
 
     public ServerSettings() {
         this.enabledSettings.addAll(Arrays.asList(ServerSettingsType.values()));
@@ -42,5 +45,9 @@ public class ServerSettings {
 
     public void setFreeze(long freeze) {
         this.freeze = freeze;
+    }
+
+    public List<ServerSettingsType> getEnabledSettings() {
+        return enabledSettings;
     }
 }

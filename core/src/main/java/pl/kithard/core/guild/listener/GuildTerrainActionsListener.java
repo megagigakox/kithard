@@ -11,11 +11,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.border.util.BorderUtil;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.guild.permission.GuildPermission;
+import pl.kithard.core.util.LocationUtil;
 import pl.kithard.core.util.TextUtil;
 
 public class GuildTerrainActionsListener implements Listener {
@@ -38,14 +40,26 @@ public class GuildTerrainActionsListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
+    public void water2(PlayerBucketFillEvent event) {
+        Guild guild = this.plugin.getGuildCache().findByLocation(event.getBlockClicked().getLocation());
+        if (guild != null && !guild.isMember(event.getPlayer().getUniqueId())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
     public void water(PlayerBucketEmptyEvent event) {
+        if (LocationUtil.isInSpawn(event.getBlockClicked().getLocation())) {
+            event.setCancelled(true);
+            return;
+        }
+
         if (event.getBucket() != Material.WATER_BUCKET) {
             return;
         }
 
         Player player = event.getPlayer();
         Guild guild = this.plugin.getGuildCache().findByLocation(event.getBlockClicked().getLocation());
-
         Block clickedBlock = event.getBlockClicked().getRelative(event.getBlockFace());
 
         if (guild == null) {

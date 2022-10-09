@@ -30,11 +30,14 @@ public class Guild extends DatabaseEntry {
     private UUID owner;
     private final GuildRegion region;
     private Location home;
-    private int lives,
+    private int
+            hp,
+            lives,
             points,
             kills,
             deaths;
-    private long expireTime,
+    private long
+            expireTime,
             createTime,
             lastAttackTime,
             lastExplodeTime;
@@ -53,12 +56,13 @@ public class Guild extends DatabaseEntry {
     private Set<String> allyInvites;
     private Hologram hologram;
 
-    public Guild(String tag, String name, UUID owner, GuildRegion region, Location home, int lives, int points, int kills, int deaths, long expireTime, long createTime, long lastAttackTime, long lastExplodeTime, boolean friendlyFire, boolean allyFire, Set<UUID> deputies, Set<String> allies, ItemStack[] warehouseContents) {
+    public Guild(String tag, String name, UUID owner, GuildRegion region, Location home, int hp, int lives, int points, int kills, int deaths, long expireTime, long createTime, long lastAttackTime, long lastExplodeTime, boolean friendlyFire, boolean allyFire, Set<UUID> deputies, Set<String> allies, ItemStack[] warehouseContents) {
         this.tag = tag;
         this.name = name;
         this.owner = owner;
         this.region = region;
         this.home = home;
+        this.hp = hp;
         this.lives = lives;
         this.points = points;
         this.kills = kills;
@@ -92,6 +96,7 @@ public class Guild extends DatabaseEntry {
         this.kills = 0;
         this.deaths = 0;
         this.lives = 3;
+        this.hp = 500;
 
         this.initialize();
     }
@@ -129,6 +134,12 @@ public class Guild extends DatabaseEntry {
     }
 
     public String getHearts() {
+        if (lives == 5) {
+            return "❤❤❤❤❤";
+        }
+        if (lives == 4) {
+            return "❤❤❤❤";
+        }
         if (lives == 3) {
             return "❤❤❤";
         }
@@ -382,5 +393,13 @@ public class Guild extends DatabaseEntry {
 
     public void setWarehouseContents(ItemStack[] warehouseContents) {
         this.warehouseContents = warehouseContents;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 }

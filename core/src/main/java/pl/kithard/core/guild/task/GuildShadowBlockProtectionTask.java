@@ -29,7 +29,11 @@ public class GuildShadowBlockProtectionTask extends BukkitRunnable {
                 continue;
             }
 
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 5, 0));
+            if (guild.getRegion().isInHeart(player.getLocation())) {
+                continue;
+            }
+
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 5, 2));
             player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 20 * 5, 0));
         }
     }

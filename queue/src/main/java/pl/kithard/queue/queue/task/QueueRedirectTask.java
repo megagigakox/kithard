@@ -19,7 +19,7 @@ public class QueueRedirectTask implements Runnable {
         this.plugin = plugin;
         this.queue = queue;
 
-        this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this,  80L, 80L);
+        this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this,  0L, 40L);
     }
 
     @Override
@@ -36,11 +36,9 @@ public class QueueRedirectTask implements Runnable {
         }
 
         if (queuePlayer.getAttempts() == 3) {
-            Bukkit.getScheduler().runTask(plugin, () ->
-                    player.kickPlayer(TextUtil.color(
-                            "&cWejscie na serwer skonczylo się niepowodzeniem!\n" +
-                            "&cSprobuj ponownie &bpozniej&c!"
-                    )));
+            TextUtil.message(player, "&cPrzekroczono maksymalna ilosc prob polaczenia z serwerem - przenosze na koniec kolejki.");
+            this.plugin.getQueuePlayerCache().remove(queuePlayer);
+            this.plugin.getQueuePlayerCache().add(new QueuePlayer(queuePlayer.getUUID(), queue));
             return;
         }
 

@@ -50,7 +50,7 @@ public class ServerSettingGui {
                         }
 
                         this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
-                                this.plugin.getServerSettingsService().save(plugin.getServerSettings()));
+                                this.plugin.getServerSettingsConfiguration().save());
                         open(player);
 
                     }));

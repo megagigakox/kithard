@@ -1,14 +1,20 @@
 package pl.kithard.core.spawn;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.util.LocationUtil;
 import pl.kithard.core.util.TextUtil;
 
@@ -19,6 +25,14 @@ public class SpawnProtectionListener implements Listener {
     public SpawnProtectionListener(CorePlugin plugin) {
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onFill(BlockBurnEvent event) {
+        if (LocationUtil.isInProtectionArea(event.getBlock().getLocation())) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -41,9 +55,17 @@ public class SpawnProtectionListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPvp(EntityDamageEvent event) {
-        Player player = (Player) event.getEntity();
-        if (LocationUtil.isInSpawn(player.getLocation())) {
-            event.setCancelled(true);
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+            if (LocationUtil.isInSpawn(player.getLocation())) {
+                event.setCancelled(true);
+                return;
+            }
+
+            if (corePlayer.getTeleport() != null) {
+                corePlayer.setTeleport(null);
+            }
         }
     }
 

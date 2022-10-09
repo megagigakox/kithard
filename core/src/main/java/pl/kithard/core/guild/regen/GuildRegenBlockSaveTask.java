@@ -1,6 +1,5 @@
 package pl.kithard.core.guild.regen;
 
-import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.util.LocationSerializer;

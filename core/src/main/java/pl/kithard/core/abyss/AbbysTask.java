@@ -1,4 +1,4 @@
-package pl.kithard.core.abbys;
+package pl.kithard.core.abyss;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;

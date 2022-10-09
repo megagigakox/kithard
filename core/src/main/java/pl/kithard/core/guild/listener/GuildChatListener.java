@@ -53,7 +53,7 @@ public class GuildChatListener implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onGuildCommand(PlayerCommandPreprocessEvent event) {
 
         Player player = event.getPlayer();
@@ -73,7 +73,7 @@ public class GuildChatListener implements Listener {
             }
         }
 
-        if (this.plugin.getGuildCache().isNotAllowed(player, GuildPermission.TELEPORTATION_USE) && cmd.toLowerCase().contains("/tpaccept")) {
+        if (cmd.equals("/tpaccept") && this.plugin.getGuildCache().isNotAllowed(player, GuildPermission.TELEPORTATION_USE)) {
             event.setCancelled(true);
         }
     }

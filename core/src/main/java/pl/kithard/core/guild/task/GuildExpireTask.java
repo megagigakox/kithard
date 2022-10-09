@@ -17,10 +17,8 @@ public class GuildExpireTask extends BukkitRunnable {
 
     @Override
     public void run() {
-
         long currentTimeMillis = System.currentTimeMillis();
         for (Guild guild : this.plugin.getGuildCache().getValues()) {
-
             if (guild.getExpireTime() < currentTimeMillis) {
                 this.plugin.getGuildFactory().delete(guild);
                 Bukkit.broadcastMessage(TextUtil.color(" &7Gildia &8[&b" + guild.getTag() + "&8] &7wygasla!"));

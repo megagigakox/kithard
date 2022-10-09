@@ -22,16 +22,23 @@ public class AuthPlayerCache {
     }
 
     public boolean hasMaxAccountsPerIP(String ip) {
+        if (ip == null || ip.isEmpty()) {
+            return false;
+        }
         List<AuthPlayer> authPlayers = findAccountsByIP(ip);
         if (authPlayers == null || authPlayers.isEmpty()) {
             return false;
         }
-        return authPlayers.size() > 2;
+        return authPlayers.size() > 3;
     }
 
     public List<AuthPlayer> findAccountsByIP(String ip) {
         List<AuthPlayer> authPlayers = new ArrayList<>();
         for (AuthPlayer authPlayer : this.authPlayerMap.values()) {
+            if (authPlayer.getIp() == null) {
+                continue;
+            }
+
             if (authPlayer.getIp().equals(ip)) {
                 authPlayers.add(authPlayer);
             }

@@ -26,16 +26,4 @@ public class ShopCommand {
     public void handle(Player player) {
         new ShopGui(plugin).open(player);
     }
-
-    @FunnyCommand(
-            name = "resethajs",
-            permission = "kithard.core.wazne"
-    )
-    public void handlex(Player player) {
-        for (CorePlayer corePlayer : this.plugin.getCorePlayerCache().getValues()) {
-            if (corePlayer.getMoney() >= 1200){
-                corePlayer.setMoney(corePlayer.getMoney() - 1200);
-            }
-        }
-    }
 }

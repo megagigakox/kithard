@@ -42,7 +42,8 @@ public class PlayerCommandPreprocessListener implements Listener {
             "/calc",
             "/eval",
             "/evaluate",
-            "/calculate"
+            "/calculate",
+            "/to"
     };
 
     private final CorePlugin plugin;
@@ -53,16 +54,22 @@ public class PlayerCommandPreprocessListener implements Listener {
         disableTabulation();
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
-
         String message = event.getMessage().toLowerCase(Locale.ROOT);
         String[] splitMessage = message.split(" ");
+        Player player = event.getPlayer();
+
+        if (this.plugin.getServerSettings().getFreeze() > System.currentTimeMillis() && !player.hasPermission("kithard.freeze.bypass")) {
+            TextUtil.message(player, "&8(&4&l!&8) &cNie mozesz uzywac komend podczas zamrozenia!");
+            event.setCancelled(true);
+            return;
+        }
 
         for (String it : DISALLOWED_COMMANDS) {
             if (splitMessage[0].equalsIgnoreCase("/" + it)) {
                 event.setCancelled(true);
-                TextUtil.message(event.getPlayer(), "&8(&3&l!&8) &7Ta komenda niestety &3nie istnieje&7! Aby sprawdzic &bnajpotrzebniejsze &7komendy na serwerze uzyj&8: /&fpomoc");
+                TextUtil.message(player, "&8(&3&l!&8) &7Ta komenda niestety &3nie istnieje&7! Aby sprawdzic &bnajpotrzebniejsze &7komendy na serwerze uzyj&8: /&fpomoc");
                 break;
             }
         }
@@ -91,10 +98,10 @@ public class PlayerCommandPreprocessListener implements Listener {
                  if (event.getPacketType() == PacketType.Play.Client.TAB_COMPLETE) {
                      try {
                          PacketContainer packet = event.getPacket();
-                         String message = (packet.getSpecificModifier(String.class).read(0)).toLowerCase();
+                         String message = packet.getSpecificModifier(String.class).read(0).toLowerCase();
 
                             for (String it : DISALLOWED_COMMANDS) {
-                                if (message.startsWith("/" + it)) {
+                                if (message.startsWith("/" + it) || message.equals("/")) {
                                     event.setCancelled(true);
                                     break;
                                 }

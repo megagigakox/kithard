@@ -7,14 +7,6 @@ public class PlayerCombat {
     private Player lastAttackPlayer, lastAssistPlayer;
     private long lastAttackTime, lastAssistTime;
 
-    public PlayerCombat() {
-        this.lastAttackPlayer = null;
-        this.lastAssistPlayer = null;
-
-        this.lastAttackTime = 0L;
-        this.lastAssistTime = 0L;
-    }
-
     public boolean hasFight() {
         return this.lastAttackTime > System.currentTimeMillis();
     }
@@ -49,5 +41,12 @@ public class PlayerCombat {
 
     public void setLastAssistTime(long lastAssistTime) {
         this.lastAssistTime = lastAssistTime;
+    }
+
+    public void reset() {
+        this.lastAttackTime = 0L;
+        this.lastAssistTime = 0L;
+        this.lastAssistPlayer = null;
+        this.lastAttackPlayer = null;
     }
 }

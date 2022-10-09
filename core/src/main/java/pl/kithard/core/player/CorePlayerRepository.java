@@ -180,7 +180,7 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
                         CollectionSerializer.deserializeCollection(resultSet.getString("disabled_settings")),
                         CollectionSerializer.deserializeCollection(resultSet.getString("disabled_drop_items")),
                         CollectionSerializer.deserializeCollection(resultSet.getString("guild_history")),
-                        CollectionSerializer.deserializeCollection("claimed_achievements"),
+                        CollectionSerializer.deserializeCollection(resultSet.getString("claimed_achievements")),
                         CollectionSerializer.deserializeMap(resultSet.getString("mined_drops")),
                         CollectionSerializer.deserializeMap(resultSet.getString("deposit_items")),
                         CollectionSerializer.deserializeMapLong(resultSet.getString("achievement_progress")),

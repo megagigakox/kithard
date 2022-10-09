@@ -12,6 +12,7 @@ public class PlayerCooldown {
     private long pointsInfoCooldown;
     private long rankResetCooldown;
     private long groupTeleportCombatCooldown;
+    private long freeTurboCooldown;
     private final Map<String, Long> kitCooldowns = new HashMap<>();
     private final Map<UUID, Long> lastKillersCooldown = new HashMap<>();
 
@@ -73,5 +74,13 @@ public class PlayerCooldown {
 
     public Map<UUID, Long> getLastKillersCooldown() {
         return lastKillersCooldown;
+    }
+
+    public long getFreeTurboCooldown() {
+        return freeTurboCooldown;
+    }
+
+    public void setFreeTurboCooldown(long freeTurboCooldown) {
+        this.freeTurboCooldown = freeTurboCooldown;
     }
 }

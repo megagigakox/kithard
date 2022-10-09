@@ -125,6 +125,10 @@ public class PlayerDataListener implements Listener {
         }
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+//        if (corePlayer.getBoard() != null) {
+//            corePlayer.getBoard().delete();
+//            corePlayer.setBoard(null);
+//        }
         if (corePlayer.getTeleport() != null) {
             corePlayer.setTeleport(null);
         }

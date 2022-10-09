@@ -26,10 +26,33 @@ public class AuthCommand extends Command {
             sender.sendMessage(TextUtil.component("&8» &f/auth unregister (gracz) &8- &7Odrejestrowywuje gracza"));
             sender.sendMessage(TextUtil.component("&8» &f/auth changepassword (gracz) (haslo) &8- &7Zmiana hasla gracza"));
             sender.sendMessage(TextUtil.component("&8» &f/auth info (gracz) &8- &7Informacje o graczu"));
+            sender.sendMessage(TextUtil.component("&8» &f/auth accounts (gracz) &8- &7Informacje o kontach gracza"));
             return;
         }
 
         switch (args[0]) {
+
+            case "accounts": {
+
+                if (args.length < 2) {
+                    sender.sendMessage(TextUtil.component("&cPoprawne uzycie: &b/auth accounts (gracz)"));
+                    return;
+                }
+
+
+                AuthPlayer authPlayer = this.plugin.getAuthPlayerCache().findByName(args[1]);
+                if (authPlayer == null) {
+                    sender.sendMessage(TextUtil.component("&cTen gracz nie istnieje w bazie danych!"));
+                    return;
+                }
+
+                sender.sendMessage(TextUtil.component("&7Lista graczy zarejestrowanych na ip gracza: &f" + authPlayer.getName()));
+                for (AuthPlayer it : this.plugin.getAuthPlayerCache().findAccountsByIP(authPlayer.getIp())) {
+                    sender.sendMessage(TextUtil.component(" &8- &7" + it.getName()));
+                }
+
+                return;
+            }
 
             case "unregister": {
 

@@ -34,7 +34,7 @@ public class GuildWarCommand {
         Bukkit.broadcastMessage(TextUtil.color("       &8&l&m--[&b&l&m---&b&l WALKA &b&l&m---&8&l&m]--"));
         Bukkit.broadcastMessage(TextUtil.color("         &7Gildia&8: [&3&l" + guild.getTag() + "&8] &b" + guild.getName()));
         Bukkit.broadcastMessage(TextUtil.color(" &7Zaprasza na cuboid ktory zanjduje sie na kordach&8:"));
-        Bukkit.broadcastMessage(TextUtil.color("              &7(&bX&8: " + guild.getRegion().getX() + "&8, &bZ&8: &b" + guild.getRegion().getZ() + "&7)"));
+        Bukkit.broadcastMessage(TextUtil.color("              &7(&bX&8: &b" + guild.getRegion().getX() + "&8, &bZ&8: &b" + guild.getRegion().getZ() + "&7)"));
         guild.setGuildWarCooldown(TimeUnit.MINUTES.toMillis(5) + System.currentTimeMillis());
     }
 

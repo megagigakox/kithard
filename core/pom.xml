@@ -73,6 +73,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>fr.minuskube</groupId>
+            <artifactId>netherboard-bukkit</artifactId>
+            <version>1.2.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>eu.okaeri</groupId>
             <artifactId>okaeri-configs-yaml-bukkit</artifactId>
             <version>4.0.6</version>
