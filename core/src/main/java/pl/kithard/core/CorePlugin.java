@@ -15,13 +15,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.kithard.core.abyss.AbbysTask;
+import pl.kithard.core.antigrief.AntiGriefCache;
+import pl.kithard.core.antigrief.AntiGriefListener;
+import pl.kithard.core.antigrief.AntiGriefTask;
 import pl.kithard.core.antimacro.AntiMacroCache;
 import pl.kithard.core.antimacro.AntiMacroListener;
 import pl.kithard.core.antimacro.AntiMacroTask;
@@ -112,6 +115,7 @@ import pl.kithard.core.player.backup.command.PlayerBackupCommand;
 import pl.kithard.core.player.backup.task.PlayerBackupTask;
 import pl.kithard.core.player.chat.command.ChatManageCommand;
 import pl.kithard.core.player.chat.listener.AsyncPlayerChatListener;
+import pl.kithard.core.player.combat.listener.BlockCombatPlaceListener;
 import pl.kithard.core.player.combat.listener.BlockCombatInteractionsListener;
 import pl.kithard.core.player.combat.listener.PlayerDamageListener;
 import pl.kithard.core.player.combat.listener.PlayerDeathListener;
@@ -120,6 +124,8 @@ import pl.kithard.core.player.command.bind.CorePlayerBind;
 import pl.kithard.core.player.enderchest.command.EnderChestCommand;
 import pl.kithard.core.player.enderchest.listener.EnderChestListener;
 import pl.kithard.core.player.home.command.PlayerHomeCommand;
+import pl.kithard.core.player.incognito.command.IncognitoCommand;
+import pl.kithard.core.player.incognito.PlayerIncognitoSerivce;
 import pl.kithard.core.player.listener.*;
 import pl.kithard.core.player.nametag.PlayerNameTagService;
 import pl.kithard.core.player.nametag.task.PlayerNameTagRefreshTask;
@@ -130,7 +136,6 @@ import pl.kithard.core.player.punishment.listener.PlayerLoginListener;
 import pl.kithard.core.player.ranking.PlayerRankingCommand;
 import pl.kithard.core.player.ranking.PlayerRankingService;
 import pl.kithard.core.player.reward.RewardCommand;
-import pl.kithard.core.player.reward.RewardTask;
 import pl.kithard.core.player.settings.command.PlayerSettingsCommand;
 import pl.kithard.core.player.task.PlayerSpentTimeTask;
 import pl.kithard.core.player.teleport.countdown.PlayerTeleportCountdown;
@@ -142,6 +147,7 @@ import pl.kithard.core.recipe.command.CustomRecipeCommand;
 import pl.kithard.core.recipe.command.MagicChestGiveCommand;
 import pl.kithard.core.recipe.listener.CustomRecipeListener;
 import pl.kithard.core.safe.SafeCache;
+import pl.kithard.core.safe.SafeCommand;
 import pl.kithard.core.safe.SafeListener;
 import pl.kithard.core.safe.SafeRepository;
 import pl.kithard.core.settings.ServerSettings;
@@ -157,12 +163,15 @@ import pl.kithard.core.shop.item.ShopVillagerItemSerdes;
 import pl.kithard.core.shop.item.ShopVillagerSerdes;
 import pl.kithard.core.spawn.SpawnProtectionListener;
 import pl.kithard.core.task.RankingsRefreshTask;
+import pl.kithard.core.trade.TradeCache;
+import pl.kithard.core.trade.TradeListener;
 import pl.kithard.core.util.TextUtil;
 import pl.kithard.core.util.adapters.ConfigurationSerializableAdapter;
 import pl.kithard.core.util.adapters.InventoryAdapter;
 import pl.kithard.core.util.adapters.ItemStackArrayAdapter;
 import pl.kithard.core.warp.WarpCache;
 import pl.kithard.core.warp.WarpFactory;
+import pl.kithard.core.warp.WarpSerdes;
 import pl.kithard.core.warp.command.WarpCommand;
 
 import java.util.ArrayList;
@@ -181,6 +190,7 @@ public final class CorePlugin extends JavaPlugin {
     private PlayerBackupService playerBackupService;
     private PlayerBackupFactory playerBackupFactory;
     private PlayerBackupRepository playerBackupRepository;
+    private PlayerIncognitoSerivce playerIncognitoSerivce;
 
     private GuildCache guildCache;
     private GuildRepository guildRepository;
@@ -227,6 +237,8 @@ public final class CorePlugin extends JavaPlugin {
     private SafeRepository safeRepository;
 
     private BossService bossService;
+    private TradeCache tradeCache;
+    private AntiGriefCache antiGriefCache;
 
     @Override
     public void onEnable() {
@@ -332,6 +344,7 @@ public final class CorePlugin extends JavaPlugin {
             this.corePlayerCache.add(corePlayer);
             this.playerRankingService.add(corePlayer);
         });
+        this.playerIncognitoSerivce = new PlayerIncognitoSerivce(this);
 
         this.safeCache = new SafeCache();
         this.safeRepository = new SafeRepository(databaseService);
@@ -366,9 +379,17 @@ public final class CorePlugin extends JavaPlugin {
         this.generatorFactory = new GeneratorFactory(this);
         this.generatorFactory.loadAll();
 
-        this.warpCache = new WarpCache();
+        this.warpCache = ConfigManager.create(WarpCache.class, (it) -> {
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit());
+            it.withSerdesPack(registry -> {
+                registry.register(new WarpSerdes());
+            });
+            it.withBindFile(getDataFolder() + "/warps.yml");
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load(true);
+        });
         this.warpFactory = new WarpFactory(this);
-        this.warpFactory.loadAll();
 
         this.punishmentCache = new PunishmentCache();
         this.punishmentFactory = new PunishmentFactory(this);
@@ -381,6 +402,8 @@ public final class CorePlugin extends JavaPlugin {
 
         this.antiMacroCache = new AntiMacroCache();
         this.bossService = new BossService();
+        this.tradeCache = new TradeCache(this);
+        this.antiGriefCache = new AntiGriefCache();
 
         this.initTabList();
         this.initCommands();
@@ -393,7 +416,7 @@ public final class CorePlugin extends JavaPlugin {
     public void onDisable() {
 
         for (Entity entity : this.getServer().getWorld("world").getEntities()) {
-            if (entity instanceof IronGolem) {
+            if (entity instanceof Zombie) {
                 entity.remove();
             }
         }
@@ -474,7 +497,7 @@ public final class CorePlugin extends JavaPlugin {
                         new PlayerInfoCommand(this),
                         new GuildAllyInviteCommand(this),
                         new GuildDeputyCommand(this),
-                        new GuildLeaveCommand(this),
+                        new GuildMemberLeaveCommand(this),
                         new MagicChestGiveCommand(this),
                         new AdminItemsCommand(),
                         new KitCommand(this),
@@ -509,7 +532,10 @@ public final class CorePlugin extends JavaPlugin {
                         new SaveAllCommand(this),
                         new GuildHeartCommand(),
                         new BossCommand(this),
-                        new FreeTurboCommand(this)
+                        new FreeTurboCommand(this),
+                        new GuildInviteAllCommand(this),
+                        new SafeCommand(),
+                        new RepairPickaxeCommand(this)
                 ))
                 .completer("itemShopServices", (context, prefix, limit) -> CommandUtils.collectCompletions(
                         this.itemShopServiceConfiguration.getServices(),
@@ -544,10 +570,11 @@ public final class CorePlugin extends JavaPlugin {
         new GuildShadowBlockProtectionTask(this);
         new GuildRegenBlockSaveTask(this);
         new BossTask(this);
+        new AntiGriefTask(this);
     }
 
     private void initListeners() {
-        new PlayerDataListener(this);
+        new PlayerQuitJoinListener(this);
         new ItemDropListener(this);
         new EnderChestListener(this);
         new AsyncPlayerChatListener(this);
@@ -570,7 +597,7 @@ public final class CorePlugin extends JavaPlugin {
         new GuildHeartListener(this);
         new ServerSettingsListeners(this);
         new GuildChatListener(this);
-        new BlockPlaceListener(this);
+        new BlockCombatPlaceListener(this);
         new GuildRegenListener(this);
         new GuildPeriscopeListener(this);
         new AchievementListener(this);
@@ -581,6 +608,8 @@ public final class CorePlugin extends JavaPlugin {
         new WarehouseListener(this);
         new FreezeListener(this);
         new BossListener(this);
+        new TradeListener(this);
+        new AntiGriefListener(this);
     }
 
     private void initRecipes() {
@@ -807,5 +836,17 @@ public final class CorePlugin extends JavaPlugin {
 
     public BossService getBossService() {
         return bossService;
+    }
+
+    public TradeCache getTradeCache() {
+        return tradeCache;
+    }
+
+    public PlayerIncognitoSerivce getPlayerIncognitoSerivce() {
+        return playerIncognitoSerivce;
+    }
+
+    public AntiGriefCache getAntiGriefCache() {
+        return antiGriefCache;
     }
 }

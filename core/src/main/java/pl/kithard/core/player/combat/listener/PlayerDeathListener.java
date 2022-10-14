@@ -12,6 +12,7 @@ import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.CorePlayer;
+import pl.kithard.core.player.backup.PlayerBackup;
 import pl.kithard.core.player.backup.PlayerBackupType;
 import pl.kithard.core.player.combat.PlayerCombat;
 import pl.kithard.core.player.settings.PlayerSettings;
@@ -51,7 +52,8 @@ public class PlayerDeathListener implements Listener {
 
         Guild loserGuild = this.plugin.getGuildCache().findByPlayer(loser);
         if (killer == null) {
-            this.plugin.getPlayerBackupFactory().create(loser, PlayerBackupType.DEATH, "unknown killer", 3);
+            PlayerBackup playerBackup = this.plugin.getPlayerBackupFactory().create(loser, PlayerBackupType.DEATH, "unknown killer", 3);
+            this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getPlayerBackupRepository().insert(playerBackup));
             loserPlayer.removePoints(3);
             loserPlayer.setNeedSave(true);
             loserCombat.reset();
@@ -70,13 +72,20 @@ public class PlayerDeathListener implements Listener {
             TextUtil.message(killer, "&8(&4&l!&8) &cZabiles ostatnio tego gracza, punkty nie zostaja przyznane!");
             TextUtil.message(loser, "&8(&4&l!&8) &cZostales zabity ostatnio przez tego gracza, punkty nie zostaja odebrane!");
             broadcastKill(loserGuild, killerGuild, killer, loser, 0, 0);
-            this.plugin.getPlayerBackupFactory().create(loser, PlayerBackupType.DEATH, killer.getName(), 0);
+            PlayerBackup playerBackup = this.plugin.getPlayerBackupFactory().create(loser, PlayerBackupType.DEATH, killer.getName(), 0);
+            this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getPlayerBackupRepository().insert(playerBackup));
             loserCombat.reset();
             return;
         }
 
         int toAdd = (int) (43.0 + (killerPlayer.getPoints() - loserPlayer.getPoints()) * -0.10);
+        if (toAdd < 10) {
+            toAdd = 8;
+        }
         int toRemove = (int) (toAdd / 1.7);
+        if (toRemove < 5) {
+            toRemove = 5;
+        }
 
         broadcastKill(loserGuild, killerGuild, killer, loser, toAdd, toRemove);
 
@@ -89,7 +98,7 @@ public class PlayerDeathListener implements Listener {
 
             int assistPoints = (int) ((31.0 + (assistantCorePlayer.getPoints() - loserPlayer.getPoints()) * -0.10) / 3.0);
             if (assistPoints <= 0) {
-                assistPoints = 5;
+                assistPoints = 3;
             }
 
             Guild assistantGuild = this.plugin.getGuildCache().findByPlayer(assistant);
@@ -132,7 +141,8 @@ public class PlayerDeathListener implements Listener {
         loserCombat.reset();
 
         this.plugin.getPlayerNameTagService().updateDummy(loserPlayer);
-        this.plugin.getPlayerBackupFactory().create(loser, PlayerBackupType.DEATH, killer.getName(), toRemove);
+        PlayerBackup playerBackup = this.plugin.getPlayerBackupFactory().create(loser, PlayerBackupType.DEATH, killer.getName(), toRemove);
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getPlayerBackupRepository().insert(playerBackup));
 
         if (loserGuild != null) {
             loserGuild.addDeaths(1);

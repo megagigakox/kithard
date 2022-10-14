@@ -29,14 +29,14 @@ public class RankingResetCommand {
         }
 
         if (!InventoryUtil.hasItem(player, Material.EMERALD_BLOCK, 256)) {
-            TextUtil.message(player, "&8(&4&l!&8) &cAby zresetowac swoj ranking potrzebujesz &4256 blokow emeraldow&c! Aktualnie posiadasz: &4" +
-                    InventoryUtil.countItemsIgnoreItemMeta(player, new ItemStack(Material.EMERALD_BLOCK, 256)) + "&8/&4256&c!");
+            TextUtil.message(player, "&8(&4&l!&8) &cAby zresetowac swoj ranking potrzebujesz &4128 blokow emeraldow&c! Aktualnie posiadasz: &4" +
+                    InventoryUtil.countItemsIgnoreItemMeta(player, new ItemStack(Material.EMERALD_BLOCK, 128)) + "&8/&4128&c!");
             return;
         }
 
-        InventoryUtil.removeItem(player, Material.EMERALD_BLOCK, 256);
+        InventoryUtil.removeItem(player, Material.EMERALD_BLOCK, 128);
 
-        corePlayer.setPoints(500);
+        corePlayer.setPoints(1000);
         corePlayer.setAssists(0);
         corePlayer.setKills(0);
         corePlayer.setDeaths(0);

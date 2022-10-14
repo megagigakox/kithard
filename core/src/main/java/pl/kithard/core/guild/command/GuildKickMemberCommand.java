@@ -72,7 +72,10 @@ public class GuildKickMemberCommand {
 
         this.plugin.getServer()
                 .getScheduler()
-                .runTaskAsynchronously(this.plugin, () -> this.plugin.getGuildRepository().insertLog(guildLog));
+                .runTaskAsynchronously(this.plugin, () -> {
+                    this.plugin.getGuildRepository().insertLog(guildLog);
+                    this.plugin.getGuildRepository().deleteMember(guildMember);
+                });
 
         guild.getMembers().remove(guildMember);
         guild.setNeedSave(true);

@@ -39,6 +39,7 @@ public class PlayerGuideCommand {
                 "&8» &f/bloki &8- &7Wymiana sztabek na bloki.",
                 "&8» &f/kosz &8- &7Pozbadz sie niepotrzebnych itemkow.",
                 "&8» &f/gracz &8- &7Statystyki danego gracza.",
+                "&8» &f/naprawkilof &8- &7Naprawa kilofa za expa.",
                 "",
                 "   &8(Rangi premium do kupna w itemshopie)",
                 "    &8/&evip&8, /&6svip&8, /&bsponsor&8, /&3hard ",

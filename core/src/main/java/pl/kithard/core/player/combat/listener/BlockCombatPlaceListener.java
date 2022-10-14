@@ -1,4 +1,4 @@
-package pl.kithard.core.player.listener;
+package pl.kithard.core.player.combat.listener;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,11 +10,11 @@ import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.util.TextUtil;
 
-public class BlockPlaceListener implements Listener {
+public class BlockCombatPlaceListener implements Listener {
 
     private final CorePlugin plugin;
 
-    public BlockPlaceListener(CorePlugin plugin) {
+    public BlockCombatPlaceListener(CorePlugin plugin) {
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }

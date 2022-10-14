@@ -69,6 +69,9 @@ public class ActionBarNoticeShowTask extends BukkitRunnable {
     void constant(Player player) {
         long currentTimeMillis = System.currentTimeMillis();
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+        if (corePlayer == null) {
+            return;
+        }
 
         add(
                 corePlayer.isVanish(),

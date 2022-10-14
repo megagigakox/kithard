@@ -11,7 +11,8 @@ public enum ActionBarNoticeType {
     GUILD_TERRAIN(7),
     GUILD_TERRAIN_REGEN(8),
     STONE_DROP(9),
-    PERISCOPE(10);
+    PERISCOPE(10),
+    TNT(11);
 
     private final int priority;
 

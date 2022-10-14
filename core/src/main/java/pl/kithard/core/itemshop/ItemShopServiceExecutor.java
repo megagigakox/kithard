@@ -16,9 +16,11 @@ public class ItemShopServiceExecutor {
         this.plugin = plugin;
     }
 
-    public void execute(String playerName, ItemShopService service) {
+    public void execute(String playerName, ItemShopService service, int amount) {
         for (String s : service.getCommands()) {
-            this.plugin.getServer().dispatchCommand(Bukkit.getConsoleSender(), s.replace("{PLAYER}", playerName));
+            this.plugin.getServer().dispatchCommand(Bukkit.getConsoleSender(), s
+                    .replace("{PLAYER}", playerName)
+                    .replace("{AMOUNT}", String.valueOf(amount)));
         }
 
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -26,7 +28,9 @@ public class ItemShopServiceExecutor {
 
             if (!corePlayer.isDisabledSetting(PlayerSettings.ITEM_SHOP_SERVICES_MESSAGES)) {
                 for (String s : service.getMessages()) {
-                    TextUtil.message(player, s.replace("{PLAYER}", playerName));
+                    TextUtil.message(player, s
+                            .replace("{PLAYER}", playerName)
+                            .replace("{AMOUNT}", String.valueOf(amount)));
                 }
             }
         }
@@ -42,4 +46,5 @@ public class ItemShopServiceExecutor {
             }
         }
     }
+
 }

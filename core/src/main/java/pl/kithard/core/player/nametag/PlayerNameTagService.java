@@ -6,6 +6,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedMetaData;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -14,6 +15,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.CorePlayer;
+import pl.kithard.core.player.incognito.PlayerIncognito;
 import pl.kithard.core.util.TextUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerNameTagService {
 
@@ -108,47 +111,58 @@ public class PlayerNameTagService {
         Guild guild2 = this.plugin.getGuildCache().findByPlayer(player2);
 
         CorePlayer corePlayer1 = this.plugin.getCorePlayerCache().findByPlayer(player1);
+        PlayerIncognito playerIncognito = corePlayer1.getPlayerIncognito();
+        boolean isNameIncognito = playerIncognito.isNameIncognito();
 
-        if (!player2.hasPermission("kithard.incognito.bypass") && corePlayer1.isIncognito()) {
+        if (!player2.hasPermission("kithard.incognito.bypass")) {
             if (guild1 == null) {
-                return "&f&k";
+                return isNameIncognito ? "&f&k" : "";
             }
+
+            String tag;
+            if (playerIncognito.isTagIncognito()) {
+                tag = "?";
+            }
+            else {
+                tag = guild1.getTag();
+            }
+
             if (guild2 == null) {
-                return "&8[&c?&8] &c&k";
+                return "&c["+ tag + "] " + (isNameIncognito ? "&k" : "");
             }
             if (guild1.getTag().equalsIgnoreCase(guild2.getTag())) {
-                return "&8[&a?&8] &a&k";
+                return "&a["+ tag + "] " + (isNameIncognito ? "&k" : "");
             }
             if (guild2.getAllies().contains(guild1.getTag())) {
-                return "&8[&9?&8] &9&k";
+                return "&9["+ tag + "] " + (isNameIncognito ? "&k" : "");
             }
 
-            return "&8[&c?&8] &f&k";
+            return "&c["+ tag + "] " + (isNameIncognito ? "&k" : "");
         }
 
         if (guild1 == null) {
             return "";
         }
         if (guild2 == null) {
-            return "&8[&c" + guild1.getTag() + "&8] &c";
+            return "&c[" + guild1.getTag() + "] ";
         }
         if (guild1.getTag().equalsIgnoreCase(guild2.getTag())) {
-            return "&8[&a" + guild1.getTag() + "&8] &a";
+            return "&a[" + guild1.getTag() + "] ";
         }
         if (guild2.getAllies().contains(guild1.getTag())) {
-            return "&8[&9" + guild1.getTag() + "&8] &9";
+            return "&9[" + guild1.getTag() + "] &9";
         }
 
-        return "&8[&c" + guild1.getTag() + "&8] &c";
+        return "&c[" + guild1.getTag() + "] ";
     }
 
     public String suffix(Player player1, Player player2) {
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player1);
-        if (corePlayer.isIncognito() && player2.hasPermission("kithard.incognito.bypass")) {
+        if (corePlayer.getPlayerIncognito().isNameIncognito() && player2.hasPermission("kithard.incognito.bypass")) {
             return " &bINCOGNITO";
         }
 
-        if (!corePlayer.isIncognito()) {
+        if (!corePlayer.getPlayerIncognito().isNameIncognito()) {
 
             CachedMetaData metaData = this.luckPerms.getPlayerAdapter(Player.class).getMetaData(player1);
             String group = metaData.getPrimaryGroup();
@@ -186,8 +200,8 @@ public class PlayerNameTagService {
         for (Player online : Bukkit.getOnlinePlayers()) {
             CorePlayer onlineCorePlayer = this.plugin.getCorePlayerCache().findByPlayer(online);
 
-            if (corePlayer.isIncognito()) {
-                objective.getScore(online.getName()).setScore(onlineCorePlayer.getPoints() + 23);
+            if (corePlayer.getPlayerIncognito().isPointsIncognito()) {
+                objective.getScore(online.getName()).setScore(onlineCorePlayer.getPoints() + ThreadLocalRandom.current().nextInt(5, 40));
             } else {
                 objective.getScore(online.getName()).setScore(onlineCorePlayer.getPoints());
             }
@@ -195,4 +209,5 @@ public class PlayerNameTagService {
             online.setScoreboard(board);
         }
     }
+
 }

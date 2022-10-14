@@ -53,7 +53,7 @@ public class PlayerInfoCommand {
         TextUtil.message(player, "&8» &7Smierci: &f" + corePlayer.getDeaths());
         TextUtil.message(player, "&8» &7KD-Ratio: &f" + corePlayer.getKd());
         TextUtil.message(player, "&8» &7Kill-streak: &f" + corePlayer.getKillStreak());
-        TextUtil.message(player, "&8» &7Przegrany czas: &f" + TimeUtil.formatTimeMillis(corePlayer.getSpendTime()));
+        TextUtil.message(player, "&8» &7Spedzony czas: &f" + TimeUtil.formatTimeMillis(corePlayer.getSpendTime()));
         TextUtil.message(player, "&8» &7Historia gildii: &f" + (corePlayer.getGuildHistory().isEmpty() ? "Brak" : String.join("&8,&f ", corePlayer.getGuildHistory())));
 
     }

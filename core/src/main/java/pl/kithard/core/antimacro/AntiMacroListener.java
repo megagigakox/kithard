@@ -23,10 +23,14 @@ public class AntiMacroListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         if (event.getAction() == Action.LEFT_CLICK_AIR) {
 
+            if (event.getItem() != null && event.getItem().getType().toString().contains("PICKAXE")) {
+                return;
+            }
+
             Player player = event.getPlayer();
             int cps = this.plugin.getAntiMacroCache().getUuidClicksPerSecondMap().get(player.getUniqueId());
 
-            if (cps >= 15) {
+            if (cps >= 16) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 5, 0));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 5, 0));
                 TitleUtil.title(player, "&3&lANTI-MACRO", "&cPrzekroczyles limit cps! &cAktualny limit wynosi: &b16", 0, 60, 20);

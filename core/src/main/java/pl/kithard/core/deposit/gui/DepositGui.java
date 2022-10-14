@@ -2,9 +2,11 @@ package pl.kithard.core.deposit.gui;
 
 import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.deposit.DepositItem;
 import pl.kithard.core.player.CorePlayer;
@@ -36,14 +38,48 @@ public class DepositGui {
                             " &7Aktualny limit w eq&8: &f" + depositItem.getLimit(),
                             "",
                             " &7Jak korzystać ze schowka?",
-                            "  &8- &7Kliknij &flewym &7aby wyplacic limit!",
-                            "  &8- &7Kliknij &fprawym &7aby wplacic limit!"
+                            "  &8- &7Kliknij &bLPM &7aby wyplacic limit.",
+                            "  &8- &7Kliknij &bPPM &7aby wplacic limit.",
+                            "  &8- &7Kliknij &bQ &7aby wyrzucic pojedynczy item.",
+                            "  &8- &7Kliknij &bCTRL+Q &7aby wyrzucic caly limit."
                     )
                     .asGuiItem(event -> {
 
-                        if (event.getClick() == ClickType.LEFT) {
-                            int amountInInventory = InventoryUtil.countAmountForDeposit(player, depositItem.getItem());
+                        if (event.getClick() == ClickType.DROP) {
 
+                            if (corePlayer.getAmountOfDepositItem(depositItem.getName()) <= 0) {
+                                return;
+                            }
+
+                            corePlayer.removeFromDeposit(depositItem, 1);
+                            open(player, corePlayer);
+
+                            ItemStack toAdd = depositItem.getItem().clone();
+                            toAdd.setAmount(1);
+
+                            Item thrownItem = player.getWorld().dropItemNaturally(player.getLocation().clone().add(0.0, 1.5, 0.0), toAdd);
+                            thrownItem.setVelocity(player.getLocation().getDirection().clone().multiply(0.3));
+                        }
+
+                        else if (event.getClick() == ClickType.CONTROL_DROP) {
+
+                            if (corePlayer.getAmountOfDepositItem(depositItem.getName()) <= 0) {
+                                return;
+                            }
+
+                            int i = depositItem.getLimit();
+                            corePlayer.removeFromDeposit(depositItem, i);
+                            open(player, corePlayer);
+
+                            ItemStack toAdd = depositItem.getItem().clone();
+                            toAdd.setAmount(i);
+
+                            Item thrownItem = player.getWorld().dropItemNaturally(player.getLocation().clone().add(0.0, 1.5, 0.0), toAdd);
+                            thrownItem.setVelocity(player.getLocation().getDirection().clone().multiply(0.3));
+                        }
+
+                        else if (event.getClick() == ClickType.LEFT) {
+                            int amountInInventory = InventoryUtil.countAmountForDeposit(player, depositItem.getItem());
                             if (amountInInventory >= depositItem.getLimit()) {
                                 return;
                             }
@@ -53,10 +89,6 @@ public class DepositGui {
                             }
 
                             int i = depositItem.getLimit() - amountInInventory;
-                            if (LocationUtil.isInSpawn(player.getLocation())) {
-                                i = depositItem.getItem().getMaxStackSize();
-                            }
-
                             if (i > corePlayer.getAmountOfDepositItem(depositItem.getName())) {
                                 i = corePlayer.getAmountOfDepositItem(depositItem.getName());
                             }
@@ -69,7 +101,8 @@ public class DepositGui {
 
                             InventoryUtil.addItem(player, toAdd);
 
-                        } else if (event.getClick() == ClickType.RIGHT) {
+                        }
+                        else if (event.getClick() == ClickType.RIGHT) {
                             int amountInInventory = InventoryUtil.countAmountForDeposit(player, depositItem.getItem());
                             if (amountInInventory != 0) {
                                 corePlayer.addToDeposit(depositItem, amountInInventory);
@@ -97,7 +130,7 @@ public class DepositGui {
                         if (!depositItem.isWithdrawAll()) continue;
 
                         int amountInInventory = InventoryUtil.countAmountForDeposit(player, depositItem.getItem().clone());
-                        if (amountInInventory >= depositItem.getLimit() && !LocationUtil.isInSpawn(player.getLocation())) {
+                        if (amountInInventory >= depositItem.getLimit()) {
                             continue;
                         }
 
@@ -106,10 +139,6 @@ public class DepositGui {
                         }
 
                         int i = depositItem.getLimit() - amountInInventory;
-                        if (LocationUtil.isInSpawn(player.getLocation())) {
-                            i = depositItem.getItem().getMaxStackSize();
-                        }
-
                         if (i > corePlayer.getAmountOfDepositItem(depositItem.getName())) {
                             i = corePlayer.getAmountOfDepositItem(depositItem.getName());
                         }

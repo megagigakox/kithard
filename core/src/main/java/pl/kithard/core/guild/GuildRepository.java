@@ -106,6 +106,9 @@ public class GuildRepository implements DatabaseRepository<Guild> {
     private final static String DELETE_SCHEME =
             "DELETE FROM kithard_guild_permission_schemes WHERE name = ? AND guild = ?";
 
+    private final static String DELETE_MEMBER =
+            "DELETE FROM kithard_guild_members WHERE uuid = ?";
+
     private final Logger logger;
     private final DatabaseService databaseService;
     private final GuildCache guildCache;
@@ -306,6 +309,22 @@ public class GuildRepository implements DatabaseRepository<Guild> {
         catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void deleteMember(GuildMember guildMember) {
+        try (
+                Connection connection = this.databaseService.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(DELETE_MEMBER)
+        ) {
+
+            preparedStatement.setString(1, guildMember.getUuid().toString());
+            preparedStatement.execute();
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void loadSchemes() {

@@ -5,6 +5,7 @@ import net.dzikoysk.funnycommands.stereotypes.FunnyComponent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.util.TextUtil;
 
@@ -45,8 +46,8 @@ public class BossCommand {
     public void handleDespawn(Player player) {
         this.plugin.getBossService().setBoss(null);
         for (Entity entity : this.plugin.getServer().getWorld("world").getEntities()) {
-            if (entity instanceof IronGolem) {
-                ((IronGolem) entity).setHealth(0);
+            if (entity instanceof Zombie) {
+                ((Zombie) entity).setHealth(0);
                 entity.remove();
             }
         }

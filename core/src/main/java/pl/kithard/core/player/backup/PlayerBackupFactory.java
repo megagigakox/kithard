@@ -14,7 +14,7 @@ public class PlayerBackupFactory {
 
     public PlayerBackup create(Player player, PlayerBackupType type, String killer, int lostPoints) {
 
-        PlayerBackup playerBackup = new PlayerBackup(
+        return new PlayerBackup(
                 player.getName(),
                 type,
                 killer,
@@ -22,14 +22,6 @@ public class PlayerBackupFactory {
                 player.getInventory().getArmorContents(),
                 ((CraftPlayer)player).getHandle().ping,
                 lostPoints);
-
-        this.plugin.getServer()
-                .getScheduler()
-                .runTaskAsynchronously(
-                        plugin,
-                        () -> this.plugin.getPlayerBackupRepository().insert(playerBackup));
-
-        return playerBackup;
     }
 
 }

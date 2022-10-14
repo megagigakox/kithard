@@ -226,9 +226,18 @@ public class PlayerInteractListener implements Listener {
 
             CorePlayer clickedCorePlayer = plugin.getCorePlayerCache().findByPlayer((Player) event.getRightClicked());
             int toAddClicked = (int) (43.0 + (clickedCorePlayer.getPoints() - killerCorePlayer.getPoints()) * -0.10);
+            if (toAddClicked < 10) {
+                toAddClicked = 8;
+            }
             int toRemoveClicked = (int) (toAddClicked / 1.7);
+            if (toRemoveClicked < 5) {
+                toRemoveClicked = 5;
+            }
 
             int add = (int) (43.0 + (killerCorePlayer.getPoints() - clickedCorePlayer.getPoints()) * -0.10);
+            if (add < 10) {
+                add = 8;
+            }
 
             killerCorePlayer.getCooldown().setPointsInfoCooldown(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(3));
             TextUtil.message(player, "&7Jezeli zabijesz tego gracza dostaniesz&8: &b&l+"

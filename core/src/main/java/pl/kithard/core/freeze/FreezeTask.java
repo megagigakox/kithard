@@ -22,6 +22,9 @@ public class FreezeTask extends BukkitRunnable {
             long currentTimeMilis = System.currentTimeMillis();
             for (Player player : this.plugin.getServer().getOnlinePlayers()) {
                 CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+                if (corePlayer == null) {
+                    continue;
+                }
                 corePlayer.setProtection(TimeUtil.timeFromString("5m") + currentTimeMilis);
                 TitleUtil.title(player, "&b&lZAMROZENIE", "&7Start edycji zacznie sie za&8: &f" + TimeUtil.formatTimeMillis(this.plugin.getServerSettings().getFreeze() - System.currentTimeMillis()), 0, 60, 0);
             }

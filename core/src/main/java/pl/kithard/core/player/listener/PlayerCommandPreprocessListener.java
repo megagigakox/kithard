@@ -43,7 +43,8 @@ public class PlayerCommandPreprocessListener implements Listener {
             "/eval",
             "/evaluate",
             "/calculate",
-            "/to"
+            "/to",
+            "to"
     };
 
     private final CorePlugin plugin;

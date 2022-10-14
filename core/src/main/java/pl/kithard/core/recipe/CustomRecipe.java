@@ -81,9 +81,8 @@ public enum CustomRecipe {
             .glow()
             .build()),
     MAGIC_CHEST(ItemBuilder.from(new ItemStack(Material.CHEST,1))
-            .name(TextUtil.component(" "))
+            .name(TextUtil.component("     &b&l&nMagiczna Skrzynka"))
             .lore(TextUtil.component(Arrays.asList(
-                    "     &b&l&nMagiczna Skrzynka",
                     "  &3Wyjatkowo cenny przedmiot.",
                     "",
                     "  &7Jest to skrzynia z ktorej",

@@ -10,7 +10,4 @@ public class ServerSettingsConfiguration extends OkaeriConfig {
         return serverSettings;
     }
 
-    public void setServerSettings(ServerSettings serverSettings) {
-        this.serverSettings = serverSettings;
-    }
 }

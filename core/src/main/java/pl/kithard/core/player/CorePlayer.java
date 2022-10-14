@@ -12,6 +12,7 @@ import pl.kithard.core.player.combat.PlayerCombat;
 import pl.kithard.core.player.cooldown.PlayerCooldown;
 import pl.kithard.core.player.enderchest.PlayerEnderChest;
 import pl.kithard.core.player.home.PlayerHome;
+import pl.kithard.core.player.incognito.PlayerIncognito;
 import pl.kithard.core.player.settings.PlayerSettings;
 import pl.kithard.core.player.teleport.PlayerTeleport;
 import pl.kithard.core.shop.item.ShopItem;
@@ -39,7 +40,7 @@ public class CorePlayer extends DatabaseEntry {
     private long protection;
     private long lastTimeMeasurement;
     private boolean vanish;
-    private boolean incognito;
+    private PlayerIncognito playerIncognito;
 
     private final PlayerEnderChest enderChest;
     private final Set<UUID> ignoredPlayers;
@@ -57,15 +58,13 @@ public class CorePlayer extends DatabaseEntry {
     private Map<UUID, Long> teleportRequests;
     private PlayerTeleport teleport;
     private UUID reply;
-//    private FastBoard board;
 
     public CorePlayer(UUID uuid, String name, String ip) {
         this.uuid = uuid;
         this.name = name;
         this.ip = ip;
 
-        this.money = 0;
-        this.points = 500;
+        this.points = 1000;
 
         this.disabledSellItems = new HashSet<>();
         this.ignoredPlayers = new HashSet<>();
@@ -81,7 +80,7 @@ public class CorePlayer extends DatabaseEntry {
         init();
     }
 
-    public CorePlayer(UUID uuid, String name, String ip, double money, double earnedMoney, double spendMoney, int points, int kills, int deaths, int assists, int killStreak, long turboDrop, long spendTime, long protection, boolean vanish, boolean incognito, Set<UUID> ignoredPlayers, Set<String> disabledSellItems, Set<String> disabledSettings, Set<String> disabledDropItems, Set<String> guildHistory, Set<String> claimedAchievements, Map<String, Integer> minedDrops, Map<String, Integer> depositItems, Map<String, Long> achievementProgress, PlayerEnderChest enderChest) {
+    public CorePlayer(UUID uuid, String name, String ip, double money, double earnedMoney, double spendMoney, int points, int kills, int deaths, int assists, int killStreak, long turboDrop, long spendTime, long protection, boolean vanish, Set<UUID> ignoredPlayers, Set<String> disabledSellItems, Set<String> disabledSettings, Set<String> disabledDropItems, Set<String> guildHistory, Set<String> claimedAchievements, Map<String, Integer> minedDrops, Map<String, Integer> depositItems, Map<String, Long> achievementProgress, PlayerEnderChest enderChest) {
         this.uuid = uuid;
         this.name = name;
         this.ip = ip;
@@ -97,7 +96,6 @@ public class CorePlayer extends DatabaseEntry {
         this.spendTime = spendTime;
         this.protection = protection;
         this.vanish = vanish;
-        this.incognito = incognito;
         this.ignoredPlayers = ignoredPlayers;
         this.disabledSellItems = disabledSellItems;
         this.disabledSettings = disabledSettings;
@@ -256,14 +254,6 @@ public class CorePlayer extends DatabaseEntry {
 
     public void setVanish(boolean vanish) {
         this.vanish = vanish;
-    }
-
-    public boolean isIncognito() {
-        return incognito;
-    }
-
-    public void setIncognito(boolean incognito) {
-        this.incognito = incognito;
     }
 
     public void setTurboDrop(long turboDrop) {
@@ -522,6 +512,7 @@ public class CorePlayer extends DatabaseEntry {
         this.combat = new PlayerCombat();
         this.cooldown = new PlayerCooldown();
         this.teleportRequests = new HashMap<>();
+        this.playerIncognito = new PlayerIncognito();
 
         this.homes = new ArrayList<>();
         this.homes.add(new PlayerHome(1, null));
@@ -531,11 +522,8 @@ public class CorePlayer extends DatabaseEntry {
         this.homes.add(new PlayerHome(5, null));
     }
 
-//    public FastBoard getBoard() {
-//        return board;
-//    }
-//
-//    public void setBoard(FastBoard board) {
-//        this.board = board;
-//    }
+    public PlayerIncognito getPlayerIncognito() {
+        return playerIncognito;
+    }
+
 }

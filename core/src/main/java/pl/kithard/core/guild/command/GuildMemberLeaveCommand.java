@@ -12,11 +12,11 @@ import pl.kithard.core.guild.log.GuildLogType;
 import pl.kithard.core.util.TextUtil;
 
 @FunnyComponent
-public class GuildLeaveCommand {
+public class GuildMemberLeaveCommand {
 
     private final CorePlugin plugin;
 
-    public GuildLeaveCommand(CorePlugin plugin) {
+    public GuildMemberLeaveCommand(CorePlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -34,7 +34,7 @@ public class GuildLeaveCommand {
 
         GuildMember member = guild.findMemberByUuid(player.getUniqueId());
         if (guild.isDeputy(player.getUniqueId())) {
-            guild.getDeputies().remove(member.getUuid());
+            guild.getDeputies().remove(player.getUniqueId());
         }
 
         GuildLog guildLog = new GuildLog(
@@ -45,7 +45,10 @@ public class GuildLeaveCommand {
         guild.addLog(guildLog);
         this.plugin.getServer()
                 .getScheduler()
-                .runTaskAsynchronously(this.plugin, () -> this.plugin.getGuildRepository().insertLog(guildLog));
+                .runTaskAsynchronously(this.plugin, () -> {
+                    this.plugin.getGuildRepository().insertLog(guildLog);
+                    this.plugin.getGuildRepository().deleteMember(member);
+                });
 
         guild.getMembers().remove(member);
         guild.setNeedSave(true);

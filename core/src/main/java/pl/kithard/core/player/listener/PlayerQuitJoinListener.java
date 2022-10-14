@@ -1,6 +1,5 @@
 package pl.kithard.core.player.listener;
 
-import dev.triumphteam.gui.builder.item.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -11,14 +10,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import pl.kithard.core.api.util.TimeUtil;
-import pl.kithard.core.player.nametag.PlayerNameTagService;
-import pl.kithard.core.player.ranking.PlayerRankingService;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.api.util.TimeUtil;
 import pl.kithard.core.guild.Guild;
-import pl.kithard.core.guild.GuildCache;
 import pl.kithard.core.player.CorePlayer;
-import pl.kithard.core.player.CorePlayerCache;
 import pl.kithard.core.player.backup.PlayerBackupType;
 import pl.kithard.core.safe.Safe;
 import pl.kithard.core.util.InventoryUtil;
@@ -28,11 +23,11 @@ import pl.kithard.core.util.TextUtil;
 
 import java.util.Arrays;
 
-public class PlayerDataListener implements Listener {
+public class PlayerQuitJoinListener implements Listener {
 
     private final CorePlugin plugin;
 
-    public PlayerDataListener(CorePlugin plugin) {
+    public PlayerQuitJoinListener(CorePlugin plugin) {
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -42,7 +37,6 @@ public class PlayerDataListener implements Listener {
         Player player = event.getPlayer();
         this.plugin.getAntiMacroCache().getUuidClicksPerSecondMap().put(player.getUniqueId(), 0);
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByUuid(player.getUniqueId());
-        event.setJoinMessage(null);
 
         if (corePlayer == null) {
             corePlayer = new CorePlayer(
@@ -54,24 +48,18 @@ public class PlayerDataListener implements Listener {
             this.plugin.getCorePlayerCache().add(corePlayer);
             this.plugin.getPlayerRankingService().add(corePlayer);
 
+            Safe safe = this.plugin.getSafeCache().create(player.getUniqueId(), player.getName());
+            CorePlayer finalCorePlayer = corePlayer;
+            this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
+                this.plugin.getCorePlayerRepository().insert(finalCorePlayer);
+                this.plugin.getSafeRepository().insert(safe);
+            });
+
             player.getInventory().clear();
             player.getInventory().setArmorContents(null);
             player.setGameMode(GameMode.SURVIVAL);
             player.setAllowFlight(false);
             player.teleport(LocationUtil.getRadnomLocation());
-
-            Safe safe = this.plugin.getSafeCache().create(player.getUniqueId(), player.getName());
-            CorePlayer finalCorePlayer = corePlayer;
-            this.plugin.getServer()
-                    .getScheduler()
-                    .runTaskAsynchronously(
-                            this.plugin,
-                            () -> {
-                                this.plugin.getCorePlayerRepository().insert(finalCorePlayer);
-                                this.plugin.getSafeRepository().insert(safe);
-                            }
-                    );
-
             InventoryUtil.addItem(
                     player,
                     Arrays.asList(
@@ -112,6 +100,7 @@ public class PlayerDataListener implements Listener {
         }
 
         this.plugin.getPlayerNameTagService().createDummy(corePlayer);
+        this.plugin.getPlayerIncognitoSerivce().changeSkin(corePlayer);
         corePlayer.setLastTimeMeasurement(System.currentTimeMillis());
     }
 
@@ -125,10 +114,6 @@ public class PlayerDataListener implements Listener {
         }
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
-//        if (corePlayer.getBoard() != null) {
-//            corePlayer.getBoard().delete();
-//            corePlayer.setBoard(null);
-//        }
         if (corePlayer.getTeleport() != null) {
             corePlayer.setTeleport(null);
         }
@@ -136,10 +121,7 @@ public class PlayerDataListener implements Listener {
         if (corePlayer.getCombat().hasFight()) {
             player.setHealth(0);
             Bukkit.broadcastMessage(TextUtil.color("&8(&4&l!&8) &cGracz &4" + player.getName() + " &cwylogowal sie podczas walki!"));
-            return;
         }
-
-        this.plugin.getPlayerBackupFactory().create(player, PlayerBackupType.QUIT, "null", 0);
     }
 
 }

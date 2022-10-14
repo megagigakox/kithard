@@ -12,6 +12,9 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.generator.Generator;
 import pl.kithard.core.guild.Guild;
+import pl.kithard.core.guild.GuildMember;
+import pl.kithard.core.player.actionbar.ActionBarNotice;
+import pl.kithard.core.player.actionbar.ActionBarNoticeType;
 import pl.kithard.core.recipe.CustomRecipe;
 import pl.kithard.core.settings.ServerSettings;
 import pl.kithard.core.settings.ServerSettingsType;
@@ -60,7 +63,14 @@ public class GuildTntExplosionListener implements Listener {
             }
 
             guild.setLastExplodeTime(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1));
-            guild.sendMessageToOnlineMembers("&8(&4&l!&8) &cNa terenie twojej gildi wybuchlo &4&lTNT&c!");
+            for (GuildMember onlineMember : guild.getOnlineMembers()) {
+                this.plugin.getActionBarNoticeCache().add(onlineMember.getUuid(), ActionBarNotice
+                        .builder()
+                        .expireTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(5))
+                        .type(ActionBarNoticeType.TNT)
+                        .text("&cNa terenie gildii wybuchlo &4TNT&c!")
+                        .build());
+            }
         }
 
         if (!destroyedBlocks.isEmpty()) {
@@ -77,37 +87,45 @@ public class GuildTntExplosionListener implements Listener {
         for (Location location : sphere) {
 
             Guild a = this.plugin.getGuildCache().findByLocation(location);
-            if (a != null) {
-                if (a.getRegion().isInHeart(location)) {
-                    return;
-                }
+            if (a == null) {
+                continue;
+            }
+
+            if (a.getRegion().isInHeart(location)) {
+                continue;
             }
 
             if (location.getBlock().getType() == Material.OBSIDIAN) {
-                if (RandomUtil.getChance(36)) {
+                if (RandomUtil.getChance(15)) {
                     location.getBlock().setType(Material.AIR);
                 }
-            } else if (location.getBlock().getType() == Material.STATIONARY_WATER) {
+            }
+            if (location.getBlock().getType() == Material.STATIONARY_WATER) {
                 if (RandomUtil.getChance(20)) {
                     location.getBlock().setType(Material.AIR);
                 }
-            } else if (location.getBlock().getType() == Material.STATIONARY_LAVA) {
+            }
+            if (location.getBlock().getType() == Material.STATIONARY_LAVA) {
                 if (RandomUtil.getChance(20)) {
                     location.getBlock().setType(Material.AIR);
                 }
-            } else if (location.getBlock().getType() == Material.WATER) {
+            }
+            if (location.getBlock().getType() == Material.WATER) {
                 if (RandomUtil.getChance(50)) {
                     location.getBlock().setType(Material.AIR);
                 }
-            } else if (location.getBlock().getType() == Material.LAVA) {
+            }
+            if (location.getBlock().getType() == Material.LAVA) {
                 if (RandomUtil.getChance(50)) {
                     location.getBlock().setType(Material.AIR);
                 }
-            } else if (location.getBlock().getType() == Material.ENDER_CHEST) {
+            }
+            if (location.getBlock().getType() == Material.ENDER_CHEST) {
                 if (RandomUtil.getChance(50)) {
                     location.getBlock().setType(Material.AIR);
                 }
-            } else if (location.getBlock().getType() == Material.ENCHANTMENT_TABLE) {
+            }
+            if (location.getBlock().getType() == Material.ENCHANTMENT_TABLE) {
                 if (RandomUtil.getChance(50)) {
                     location.getBlock().setType(Material.AIR);
                 }

@@ -45,7 +45,7 @@ public class ShopGui {
 
             CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
 
-            gui.setItem(3, 3, ItemBuilder.from(new ItemStack(425, 1, (short) 2))
+            gui.setItem(3, 4, ItemBuilder.from(new ItemStack(425, 1, (short) 2))
                     .name(TextUtil.component("   &a&lKupno Itemkow"))
                     .enchant(Enchantment.DURABILITY, 3)
                     .lore(TextUtil.component(Arrays.asList(
@@ -72,7 +72,7 @@ public class ShopGui {
                     .glow(true)
                     .asGuiItem(inventoryClickEvent -> openSell(player)));
 
-            gui.setItem(3, 7, ItemBuilder.from(new ItemStack(383, 1, (short) 120))
+            gui.setItem(3, 6, ItemBuilder.from(new ItemStack(383, 1, (short) 120))
                     .name(TextUtil.component("   &2&lVillager"))
                     .enchant(Enchantment.DURABILITY, 3)
                     .lore(TextUtil.component(Arrays.asList(

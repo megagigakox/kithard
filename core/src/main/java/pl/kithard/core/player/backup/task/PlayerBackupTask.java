@@ -11,7 +11,7 @@ public class PlayerBackupTask extends BukkitRunnable {
 
     public PlayerBackupTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimer(this.plugin, 20 * 2700, 20 * 2700);
+        this.runTaskTimerAsynchronously(this.plugin, 0L, 20 * 2700L);
     }
 
     @Override

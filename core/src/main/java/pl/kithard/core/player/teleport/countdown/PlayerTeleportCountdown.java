@@ -30,6 +30,9 @@ public class PlayerTeleportCountdown extends BukkitRunnable {
             }
 
             CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+            if (corePlayer == null) {
+                continue;
+            }
             PlayerTeleport playerTeleport = corePlayer.getTeleport();
 
             if (playerTeleport != null) {

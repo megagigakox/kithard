@@ -9,10 +9,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.border.util.BorderUtil;
 import pl.kithard.core.guild.Guild;
@@ -31,20 +35,25 @@ public class GuildTerrainActionsListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
-        event.setCancelled(cancelAction(event.getPlayer(), event.getBlock().getLocation()));
+        Player player = event.getPlayer();
+        Block block = event.getBlock();
+        boolean cancel = cancelAction(event.getPlayer(), block.getLocation());
+        event.setCancelled(cancel);
+        if (cancel && block.getType() != Material.SPONGE) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 5, 2));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onLavaEmpty(PlayerBucketEmptyEvent event) {
+        if (event.getBucket() == Material.LAVA_BUCKET) {
+            event.setCancelled(cancelAction(event.getPlayer(), event.getBlockClicked().getLocation()));
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
         event.setCancelled(cancelAction(event.getPlayer(), event.getBlock().getLocation()));
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void water2(PlayerBucketFillEvent event) {
-        Guild guild = this.plugin.getGuildCache().findByLocation(event.getBlockClicked().getLocation());
-        if (guild != null && !guild.isMember(event.getPlayer().getUniqueId())) {
-            event.setCancelled(true);
-        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -71,20 +80,27 @@ public class GuildTerrainActionsListener implements Listener {
         }
 
         else if (!guild.isMember(player.getUniqueId())) {
-            event.setCancelled(true);
+            if (player.getItemInHand().getType() != Material.BUCKET) {
+                event.setCancelled(true);
+            }
 
             clickedBlock.setType(Material.STATIONARY_WATER);
             player.getItemInHand().setType(Material.BUCKET);
             player.updateInventory();
+            TextUtil.message(player, "&8(&3&l!&8) &7Postawiles wode na terenie &3wrogiej gildi&7, jezeli jej nie zabierzesz w ciagu &f10 sekund - zniknie!");
 
             Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
                 clickedBlock.setType(Material.AIR);
-                player.getInventory().remove(Material.BUCKET);
-                player.getInventory().addItem(new ItemStack(Material.WATER_BUCKET, 1));
-                player.updateInventory();
-            }, 20 * 5);
+            }, 20 * 10);
         }
 
+        else if (guild.isMember(player.getUniqueId()) && clickedBlock.getLocation().getBlockY() >= 70) {
+            event.setCancelled(true);
+            clickedBlock.setType(Material.STATIONARY_WATER);
+            player.getItemInHand().setType(Material.BUCKET);
+            player.updateInventory();
+
+        }
     }
 
     public boolean cancelAction(Player player, Location location) {

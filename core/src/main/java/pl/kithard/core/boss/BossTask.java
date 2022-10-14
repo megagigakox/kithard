@@ -2,23 +2,21 @@ package pl.kithard.core.boss;
 
 import fr.minuskube.netherboard.Netherboard;
 import fr.minuskube.netherboard.bukkit.BPlayerBoard;
-import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.util.MathUtil;
 import pl.kithard.core.util.TextUtil;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class BossTask extends BukkitRunnable {
 
     private final CorePlugin plugin;
 
+
     public BossTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimerAsynchronously(plugin, 0L, 50L);
+        this.runTaskTimerAsynchronously(plugin, 0L, 40L);
     }
 
     @Override
@@ -41,18 +39,20 @@ public class BossTask extends BukkitRunnable {
             bPlayerBoard.setName(TextUtil.color("&b&lEVENT BOSS"));
         }
 
-        IronGolem zombie = this.plugin.getBossService().getBoss();
-        List<String> a = TextUtil.color(Arrays.asList(
-                "",
-                "&7Aktualnie na mapie zrespiono",
-                "&7poteznego &3wujka Władka&7!",
-                "",
-                "&7Pokonaj go aby...",
-                "&7Zdobyc &fcenne &7nagrody!",
-                "",
-                "&7Zycie&8: &c" + MathUtil.round(zombie.getHealth(), 2) + "HP",
-                "&7Kordy bossa&8:", "&7x&8: &f" + zombie.getLocation().getBlockX() + " &7z&8: &f" + zombie.getLocation().getBlockZ()));
-        bPlayerBoard.setAll(a.toArray(a.toArray(new String[0])));
+        Zombie zombie = this.plugin.getBossService().getBoss();
+        bPlayerBoard.set(TextUtil.color("&7Aktualnie na mapie zrespiono"), 9);
+        bPlayerBoard.set(TextUtil.color("&7poteznego &3wujka Władka&7!"), 8);
+        bPlayerBoard.set(TextUtil.color("&7Za pokonanie go..."), 7);
+        bPlayerBoard.set(TextUtil.color("&7Zdobedziesz &fcenne &7nagrody!"), 6);
+        bPlayerBoard.set(" ", 5);
+        bPlayerBoard.set(TextUtil.color("    &7Boss aktualnie posiada&8: &c"), 4);
+        bPlayerBoard.set(TextUtil.color("            &c" + MathUtil.round(zombie.getHealth(), 2) + " HP!"), 3);
+        bPlayerBoard.set(TextUtil.color("    &7Aktualne kordy bossa&8:"), 2);
+        bPlayerBoard.set(
+                TextUtil.color("        &7x&8: &b{COORDSX} &7z&8: &b{COORDSZ}")
+                        .replace("{COORDSX}", String.valueOf(zombie.getLocation().getBlockX()))
+                        .replace("{COORDSZ}", String.valueOf(zombie.getLocation().getBlockZ())),
+                1);
 
     }
 }

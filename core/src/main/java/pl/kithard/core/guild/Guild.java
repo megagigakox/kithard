@@ -92,7 +92,7 @@ public class Guild extends DatabaseEntry {
         this.expireTime = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(3);
         this.lastAttackTime = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24);
 
-        this.points = 500;
+        this.points = 1000;
         this.kills = 0;
         this.deaths = 0;
         this.lives = 3;

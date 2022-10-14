@@ -1,16 +1,8 @@
 package pl.kithard.core.itemshop;
 
 import eu.okaeri.configs.OkaeriConfig;
-import eu.okaeri.configs.annotation.Exclude;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import pl.kithard.core.CorePlugin;
-import pl.kithard.core.player.CorePlayer;
-import pl.kithard.core.player.settings.PlayerSettings;
 import pl.kithard.core.recipe.CustomRecipe;
 import pl.kithard.core.util.ItemStackBuilder;
-import pl.kithard.core.util.TextUtil;
 
 import java.util.*;
 
@@ -21,195 +13,187 @@ public class ItemShopServiceConfiguration extends OkaeriConfig {
     public ItemShopServiceConfiguration() {
         this.services.add(new ItemShopService(
                 "vip",
+                false,
                 Collections.singletonList("lp user {PLAYER} parent set vip"),
                 Arrays.asList(
                         "",
                         "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
                         " &7Gracz &f{PLAYER} &7zakupil range &eVIP &7na zawsze!",
-                        " &7Nasz itemshop serwerowy: &bhttps://kithard.pl/",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
                         ""
                 ),
                 new ArrayList<>()));
 
         this.services.add(new ItemShopService(
                 "vipedycja",
+                false,
                 Collections.singletonList("lp user {PLAYER} parent addtemp vip 21d"),
                 Arrays.asList(
                         "",
                         "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
                         " &7Gracz &f{PLAYER} &7zakupil range &eVIP &7na edycje!",
-                        " &7Nasz itemshop serwerowy: &bhttps://kithard.pl/",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
                         ""
                 ),
                 new ArrayList<>()));
 
         this.services.add(new ItemShopService(
                 "svip",
+                false,
                 Collections.singletonList("lp user {PLAYER} parent set svip"),
                 Arrays.asList(
                         "",
                         "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
                         " &7Gracz &f{PLAYER} &7zakupil range &6SVIP &7na zawsze!",
-                        " &7Nasz itemshop serwerowy: &bhttps://kithard.pl/",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
                         ""
                 ),
                 new ArrayList<>()));
 
         this.services.add(new ItemShopService(
                 "svipedycja",
+                false,
                 Collections.singletonList("lp user {PLAYER} parent addtemp svip 21d"),
                 Arrays.asList(
                         "",
                         "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
                         " &7Gracz &f{PLAYER} &7zakupil range &6SVIP &7na edycje!",
-                        " &7Nasz itemshop serwerowy: &bhttps://kithard.pl/",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
                         ""
                 ),
                 new ArrayList<>()));
 
         this.services.add(new ItemShopService(
                 "sponsor",
+                false,
                 Collections.singletonList("lp user {PLAYER} parent set sponsor"),
                 Arrays.asList(
                         "",
                         "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
                         " &7Gracz &f{PLAYER} &7zakupil range &bSponsor &7na zawsze!",
-                        " &7Nasz itemshop serwerowy: &bhttps://kithard.pl/",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
                         ""
                 ),
                 new ArrayList<>()));
 
         this.services.add(new ItemShopService(
                 "sponsoredycja",
+                false,
                 Collections.singletonList("lp user {PLAYER} parent addtemp sponsor 21d"),
                 Arrays.asList(
                         "",
                         "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
                         " &7Gracz &f{PLAYER} &7zakupil range &bSponsor &7na edycje!",
-                        " &7Nasz itemshop serwerowy: &bhttps://kithard.pl/",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
                         ""
                 ),
                 new ArrayList<>()));
 
         this.services.add(new ItemShopService(
                 "hard",
+                false,
                 Collections.singletonList("lp user {PLAYER} parent set hard"),
                 Arrays.asList(
                         "",
                         "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
                         " &7Gracz &f{PLAYER} &7zakupil range &3HARD &7na zawsze!",
-                        " &7Nasz itemshop serwerowy: &bhttps://kithard.pl/",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
                         ""
                 ),
                 new ArrayList<>()));
 
         this.services.add(new ItemShopService(
                 "hardedycja",
+                false,
                 Collections.singletonList("lp user {PLAYER} parent addtemp hard 21d"),
                 Arrays.asList(
                         "",
                         "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
                         " &7Gracz &f{PLAYER} &7zakupil range &3HARD &7na edycje!",
-                        " &7Nasz itemshop serwerowy: &bhttps://kithard.pl/",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
                         ""
                 ),
                 new ArrayList<>()));
 
         this.services.add(new ItemShopService(
-                "case32",
-                new ArrayList<>(),
+                "case",
+                true,
+                Collections.singletonList("chestgive {PLAYER} {AMOUNT}"),
                 Arrays.asList(
                         "",
                         "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
-                        " &7Gracz &f{PLAYER} &7zakupil &b&l32x Magiczne Skrzynki",
-                        " &7Nasz itemshop serwerowy: &bhttps://kithard.pl/",
+                        " &7Gracz &f{PLAYER} &7zakupil &b&l{AMOUNT}x Magiczne Skrzynki!",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
                         ""
                 ),
-                Collections.singletonList(ItemStackBuilder.of(CustomRecipe.MAGIC_CHEST.getItem().clone())
-                        .amount(32)
-                        .asItemStack())));
+                new ArrayList<>()));
 
         this.services.add(new ItemShopService(
-                "case64",
-                new ArrayList<>(),
+                "key",
+                true,
+                Collections.singletonList("crates give physical basic {AMOUNT} {PLAYER}"),
                 Arrays.asList(
                         "",
                         "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
-                        " &7Gracz &f{PLAYER} &7zakupil &b&l64x Magiczne Skrzynki",
-                        " &7Nasz itemshop serwerowy: &bhttps://kithard.pl/",
+                        " &7Gracz &f{PLAYER} &7zakupil &b&l{AMOUNT}x Klucze do legendarnej skrzyni!",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
                         ""
-                        ),
-                Collections.singletonList(ItemStackBuilder.of(CustomRecipe.MAGIC_CHEST.getItem().clone())
-                        .amount(64)
-                        .asItemStack())));
+                ),
+                new ArrayList<>()));
 
         this.services.add(new ItemShopService(
-                "case128",
-                new ArrayList<>(),
+                "lom",
+                true,
+                Collections.singletonList("lom {PLAYER} {AMOUNT}"),
                 Arrays.asList(
                         "",
                         "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
-                        " &7Gracz &f{PLAYER} &7zakupil &b&l128x Magiczne Skrzynki",
-                        " &7Nasz itemshop serwerowy: &bhttps://kithard.pl/",
+                        " &7Gracz &f{PLAYER} &7zakupil &b&l{AMOUNT}x łomy do otworzenia sejfu!",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
                         ""
-                        ),
-                Collections.singletonList(ItemStackBuilder.of(CustomRecipe.MAGIC_CHEST.getItem().clone())
-                        .amount(128)
-                        .asItemStack())));
+                ),
+                new ArrayList<>()));
 
         this.services.add(new ItemShopService(
-                "case256",
-                new ArrayList<>(),
+                "unban",
+                false,
+                Collections.singletonList("unban {PLAYER}"),
                 Arrays.asList(
                         "",
                         "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
-                        " &7Gracz &f{PLAYER} &7zakupil &b&l256x Magiczne Skrzynki",
-                        " &7Nasz itemshop serwerowy: &bhttps://kithard.pl/",
+                        " &7Gracz &f{PLAYER} &7zakupil &b&lunbana!",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
                         ""
-                        ),
-                Collections.singletonList(ItemStackBuilder.of(CustomRecipe.MAGIC_CHEST.getItem().clone())
-                        .amount(256)
-                        .asItemStack())));
+                ),
+                new ArrayList<>()));
+
+        this.services.add(new ItemShopService(
+                "unbanip",
+                false,
+                Collections.singletonList("unbanip {PLAYER}"),
+                Arrays.asList(
+                        "",
+                        "       &8&l&m--[&b&l&m---&b&l ITEMSHOP &b&l&m---&8&l&m]--",
+                        " &7Gracz &f{PLAYER} &7zakupil &b&lunbana ip!",
+                        " &7Dziekujemy za &3wsparcie &7naszego serwera!",
+                        " &7Nasz itemshop serwerowy&8: &fhttps://kithard.pl/",
+                        ""
+                ),
+                new ArrayList<>()));
     }
 
-//    public void init() {
-//        this.services.clear();
-//        Configuration config = this.plugin.getItemShopServiceConfiguration().getCustomConfig();
-//
-//        for (String name : config.getConfigurationSection("services").getKeys(false)) {
-//            ItemShopService itemShopService = new ItemShopService(name,
-//                    config.getStringList("services." + name + ".commands"),
-//                    config.getStringList("services." + name + ".messages"));
-//
-//            this.services.put(name, itemShopService);
-//
-//            if (config.getConfigurationSection("services." + name + ".items") != null) {
-//                for (String item : config.getConfigurationSection("services." + name + ".items").getKeys(false)) {
-//
-//                    List<String> enchantList = config.getStringList("services." + name + ".items." + item + ".enchantments");
-//                    String[] split = config.getString("services." + name + ".items." + item + ".type").split(":");
-//
-//                    ItemStack itemStack = ItemBuilder.from(new ItemStack(Material.getMaterial(split[0]), Integer.parseInt(split[1])))
-//                            .name(TextUtil.component(config.getString("services." + name + ".items." + item + ".name")))
-//                            .lore(TextUtil.component(config.getStringList("services." + name + ".items." + item + ".lore")))
-//                            .build();
-//
-//                    if (enchantList.size() > 0) {
-//                        for (String enchant : enchantList) {
-//
-//                            String[] enchantArray = enchant.split(":");
-//                            String enchantment = enchantArray[0];
-//                            int enchantMultiplier = Integer.parseInt(enchantArray[1]);
-//
-//                            itemStack.addUnsafeEnchantment(Enchantment.getByName(enchantment), enchantMultiplier);
-//                        }
-//                    }
-//
-//                    itemShopService.getItems().add(itemStack);
-//                }
-//            }
-//        }
-//    }
 
     public ItemShopService findByKey(String key) {
         for (ItemShopService itemShopService : this.services) {

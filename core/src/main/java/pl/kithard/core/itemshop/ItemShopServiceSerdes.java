@@ -16,6 +16,7 @@ public class ItemShopServiceSerdes implements ObjectSerializer<ItemShopService> 
     @Override
     public void serialize(@NotNull ItemShopService object, @NotNull SerializationData data, @NotNull GenericsDeclaration generics) {
         data.add("name", object.getName());
+        data.add("amountable", object.isAmountable());
         data.addCollection("messages", object.getMessages(), String.class);
         data.addCollection("commands", object.getCommands(), String.class);
         data.addCollection("items", object.getItems(), ItemStack.class);
@@ -25,6 +26,7 @@ public class ItemShopServiceSerdes implements ObjectSerializer<ItemShopService> 
     public ItemShopService deserialize(@NotNull DeserializationData data, @NotNull GenericsDeclaration generics) {
         return new ItemShopService(
                 data.get("name", String.class),
+                data.get("amountable", Boolean.class),
                 data.getAsList("commands", String.class),
                 data.getAsList("messages", String.class),
                 data.getAsList("items", ItemStack.class));

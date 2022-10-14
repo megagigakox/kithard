@@ -27,11 +27,11 @@ public class DepositTask extends BukkitRunnable {
                 continue;
             }
 
-            if (LocationUtil.isInSpawn(player.getLocation())) {
+            CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
+            if (corePlayer == null) {
                 continue;
             }
 
-            CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
             for (DepositItem depositItem : this.plugin.getDepositItemConfiguration().getDepositItems()) {
                 int itemToRemove = InventoryUtil.countItemsIgnoreItemMeta(player, depositItem.getItem());
 

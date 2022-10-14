@@ -126,6 +126,7 @@ public class PlayerDamageListener implements Listener {
         if (player.isBlocking()) {
             ItemStack itemInHand = player.getItemInHand();
             player.setItemInHand(null);
+            player.updateInventory();
             player.setItemInHand(itemInHand);
             player.updateInventory();
         }

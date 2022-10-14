@@ -7,12 +7,14 @@ import java.util.List;
 public class ItemShopService {
 
     private final String name;
+    private final boolean amountable;
     private final List<String> commands;
     private final List<String> messages;
     private final List<ItemStack> items;
 
-    public ItemShopService(String name, List<String> commands, List<String> messages, List<ItemStack> items) {
+    public ItemShopService(String name, boolean amountable, List<String> commands, List<String> messages, List<ItemStack> items) {
         this.name = name;
+        this.amountable = amountable;
         this.commands = commands;
         this.messages = messages;
         this.items = items;
@@ -32,5 +34,9 @@ public class ItemShopService {
 
     public List<ItemStack> getItems() {
         return items;
+    }
+
+    public boolean isAmountable() {
+        return amountable;
     }
 }

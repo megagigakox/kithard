@@ -1,8 +1,10 @@
 package pl.kithard.core.warp;
 
+import eu.okaeri.configs.OkaeriConfig;
+
 import java.util.*;
 
-public class WarpCache {
+public class WarpCache extends OkaeriConfig {
 
     private final Map<String, Warp> warps = new HashMap<>();
 

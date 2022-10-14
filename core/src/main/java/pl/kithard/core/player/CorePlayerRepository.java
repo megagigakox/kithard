@@ -38,7 +38,6 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
                     "spend_time BIGINT, " +
                     "protection BIGINT, " +
                     "vanish BOOLEAN, " +
-                    "incognito BOOLEAN, " +
                     "rank_reset_cooldown BIGINT, " +
                     "kit_cooldowns TEXT, " +
                     "ignored_players TEXT, " +
@@ -56,15 +55,15 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
     private final static String INSERT =
             "INSERT INTO kithard_core_players (" +
                     "uuid, name, ip, money, earned_money, spend_money, points, kills, deaths, assists, kill_streak, " +
-                    "turbo_drop, spend_time, protection, vanish, incognito, rank_reset_cooldown, kit_cooldowns, " +
+                    "turbo_drop, spend_time, protection, vanish, rank_reset_cooldown, kit_cooldowns, " +
                     "ignored_players, disabled_sell_items, disabled_settings, disabled_drop_items, guild_history, claimed_achievements, " +
                     "homes, mined_drops, deposit_items, achievement_progress, ender_chest) " +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private final static String UPDATE =
             "UPDATE kithard_core_players SET" +
                     "`name` = ?, `ip` = ?, `money` = ?, `earned_money` = ?, `spend_money` = ?, `points` = ?, `kills` = ?, `deaths` = ?, `assists` = ?, `kill_streak` = ?, " +
-                    "`turbo_drop` = ?, `spend_time` = ?, `protection` = ?, `vanish` = ?, `incognito` = ?, `rank_reset_cooldown` = ?, `kit_cooldowns` = ?, " +
+                    "`turbo_drop` = ?, `spend_time` = ?, `protection` = ?, `vanish` = ?, `rank_reset_cooldown` = ?, `kit_cooldowns` = ?, " +
                     "`ignored_players` = ?, `disabled_sell_items` = ?, `disabled_settings` = ?, `disabled_drop_items` = ?, `guild_history` = ?, `claimed_achievements` = ?, " +
                     "`homes` = ?,  `mined_drops` = ?, `deposit_items` = ?, `achievement_progress` = ?, `ender_chest` = ? WHERE `uuid` = ?";
 
@@ -109,8 +108,8 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
             preparedStatement.setDouble(13, data.getSpendTime());
             preparedStatement.setDouble(14, data.getProtection());
             preparedStatement.setBoolean(15, data.isVanish());
-            preparedStatement.setBoolean(16, data.isIncognito());
-            preparedStatement.setLong(17, data.getCooldown().getRankResetCooldown());
+            preparedStatement.setLong(16, data.getCooldown().getRankResetCooldown());
+            preparedStatement.setString(17, null);
             preparedStatement.setString(18, null);
             preparedStatement.setString(19, null);
             preparedStatement.setString(20, null);
@@ -121,8 +120,7 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
             preparedStatement.setString(25, null);
             preparedStatement.setString(26, null);
             preparedStatement.setString(27, null);
-            preparedStatement.setString(28, null);
-            preparedStatement.setString(29, ItemStackSerializer.itemStackArrayToBase64(data.getEnderChest().getContents()));
+            preparedStatement.setString(28, ItemStackSerializer.itemStackArrayToBase64(data.getEnderChest().getContents()));
 
             preparedStatement.execute();
         }
@@ -174,7 +172,6 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
                         resultSet.getLong("spend_time"),
                         resultSet.getLong("protection"),
                         resultSet.getBoolean("vanish"),
-                        resultSet.getBoolean("incognito"),
                         ignoredPlayers,
                         CollectionSerializer.deserializeCollection(resultSet.getString("disabled_sell_items")),
                         CollectionSerializer.deserializeCollection(resultSet.getString("disabled_settings")),
@@ -232,20 +229,19 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
                 preparedStatement.setDouble(12, corePlayer.getSpendTime());
                 preparedStatement.setDouble(13, corePlayer.getProtection());
                 preparedStatement.setBoolean(14, corePlayer.isVanish());
-                preparedStatement.setBoolean(15, corePlayer.isIncognito());
-                preparedStatement.setLong(16, corePlayer.getCooldown().getRankResetCooldown());
-                preparedStatement.setString(17, CollectionSerializer.serializeMapLong(corePlayer.getCooldown().getKitCooldowns()));
+                preparedStatement.setLong(15, corePlayer.getCooldown().getRankResetCooldown());
+                preparedStatement.setString(16, CollectionSerializer.serializeMapLong(corePlayer.getCooldown().getKitCooldowns()));
 
-                preparedStatement.setString(18, CollectionSerializer.serializeCollection(corePlayer.getIgnoredPlayers()
+                preparedStatement.setString(17, CollectionSerializer.serializeCollection(corePlayer.getIgnoredPlayers()
                         .stream()
                         .map(UUID::toString)
                         .collect(Collectors.toSet())));
 
-                preparedStatement.setString(19, CollectionSerializer.serializeCollection(corePlayer.getDisabledSellItems()));
-                preparedStatement.setString(20, CollectionSerializer.serializeCollection(corePlayer.getDisabledSettings()));
-                preparedStatement.setString(21, CollectionSerializer.serializeCollection(corePlayer.getDisabledDropItems()));
-                preparedStatement.setString(22, CollectionSerializer.serializeCollection(corePlayer.getGuildHistory()));
-                preparedStatement.setString(23, CollectionSerializer.serializeCollection(corePlayer.getClaimedAchievements()));
+                preparedStatement.setString(18, CollectionSerializer.serializeCollection(corePlayer.getDisabledSellItems()));
+                preparedStatement.setString(19, CollectionSerializer.serializeCollection(corePlayer.getDisabledSettings()));
+                preparedStatement.setString(20, CollectionSerializer.serializeCollection(corePlayer.getDisabledDropItems()));
+                preparedStatement.setString(21, CollectionSerializer.serializeCollection(corePlayer.getGuildHistory()));
+                preparedStatement.setString(22, CollectionSerializer.serializeCollection(corePlayer.getClaimedAchievements()));
 
                 Map<Integer, String> homeIdLocationMap = new HashMap<>();
                 for (PlayerHome playerHome : corePlayer.getHomes()) {
@@ -256,12 +252,12 @@ public class CorePlayerRepository implements DatabaseRepository<CorePlayer> {
                     homeIdLocationMap.put(playerHome.getId(), LocationSerializer.serialize(playerHome.getLocation().clone()));
                 }
 
-                preparedStatement.setString(24, CollectionSerializer.serializeMapInteger(homeIdLocationMap));
-                preparedStatement.setString(25, CollectionSerializer.serializeMap(corePlayer.getMinedDrops()));
-                preparedStatement.setString(26, CollectionSerializer.serializeMap(corePlayer.getDepositItems()));
-                preparedStatement.setString(27, CollectionSerializer.serializeMapLong(corePlayer.getAchievementProgress()));
-                preparedStatement.setString(28, ItemStackSerializer.itemStackArrayToBase64(corePlayer.getEnderChest().getContents()));
-                preparedStatement.setString(29, corePlayer.getUuid().toString());
+                preparedStatement.setString(23, CollectionSerializer.serializeMapInteger(homeIdLocationMap));
+                preparedStatement.setString(24, CollectionSerializer.serializeMap(corePlayer.getMinedDrops()));
+                preparedStatement.setString(25, CollectionSerializer.serializeMap(corePlayer.getDepositItems()));
+                preparedStatement.setString(26, CollectionSerializer.serializeMapLong(corePlayer.getAchievementProgress()));
+                preparedStatement.setString(27, ItemStackSerializer.itemStackArrayToBase64(corePlayer.getEnderChest().getContents()));
+                preparedStatement.setString(28, corePlayer.getUuid().toString());
 
                 corePlayer.setNeedSave(false);
                 preparedStatement.addBatch();

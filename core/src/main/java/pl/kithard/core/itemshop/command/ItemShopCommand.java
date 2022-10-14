@@ -45,7 +45,18 @@ public class ItemShopCommand {
             return;
         }
 
-        this.plugin.getItemShopServiceExecutor().execute(args[0], itemShopService);
+        if (!itemShopService.isAmountable()) {
+            this.plugin.getItemShopServiceExecutor().execute(args[0], itemShopService, 0);
+        }
+        else {
+            if (args.length < 3) {
+                TextUtil.correctUsage(sender, "/is (gracz) (usluga) (ilosc)");
+                return;
+            }
+
+            this.plugin.getItemShopServiceExecutor().execute(args[0], itemShopService, Integer.parseInt(args[2]));
+        }
+
         TextUtil.message(sender, "&8(&3&l!&8) &7Pomyslnie nadano usluge &b" + itemShopService.getName() + " &7dla gracza &f" + args[0]);
     }
 }

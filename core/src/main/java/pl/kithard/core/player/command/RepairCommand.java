@@ -23,7 +23,7 @@ public class RepairCommand {
         if (args.length < 1) {
             if (itemInHand.getType().getMaxDurability() > 0) {
                 itemInHand.setDurability((short) 0);
-                TextUtil.message(player, "&aNaprawiono przedmiot.");
+                TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie naprawiono item.");
             } else {
                 TextUtil.message(player,"&8(&4&l!&8) &cNie możesz naprawic tego przedmiotu.");
             }
@@ -55,7 +55,7 @@ public class RepairCommand {
             }
         }
 
-        TextUtil.message(player, "&aNaprawiono przedmioty.");
+        TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie naprawiono wszystkie itemki.");
     }
 
 }

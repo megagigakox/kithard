@@ -73,7 +73,6 @@ public class GuildMemberInviteCommand {
                 .getScheduler()
                 .runTaskAsynchronously(this.plugin, () -> this.plugin.getGuildRepository().insertLog(guildLog));
 
-
         guild.getMemberInvites().add(targetPlayer.getUniqueId());
         TextUtil.message(targetPlayer, " &7Zostales zaproszony do gildii &8[&b" + guild.getTag() + "&8] &7przez &b" + player.getName() + "&7.");
         TextUtil.message(targetPlayer, " &7Wpisz &b/g dolacz " + guild.getTag() + " &7aby dolaczyc do gildii.");
