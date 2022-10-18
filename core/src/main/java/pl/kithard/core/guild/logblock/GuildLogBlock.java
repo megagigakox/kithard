@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 
 public class GuildLogBlock {
+
     private final GuildLogBlockType type;
     private final String player;
     private final Material material;

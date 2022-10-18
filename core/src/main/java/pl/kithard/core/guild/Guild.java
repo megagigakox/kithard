@@ -1,7 +1,6 @@
 package pl.kithard.core.guild;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
-import com.google.gson.annotations.SerializedName;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -11,9 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.guild.log.GuildLog;
 import pl.kithard.core.guild.log.GuildLogType;
 import pl.kithard.core.guild.permission.GuildPermissionScheme;
-import pl.kithard.core.guild.regen.GuildRegenBlock;
+import pl.kithard.core.guild.war.GuildWar;
 import pl.kithard.core.player.CorePlayer;
-import pl.kithard.core.api.database.entity.DatabaseEntity;
 import pl.kithard.core.api.database.entry.DatabaseEntry;
 import pl.kithard.core.util.MathUtil;
 import pl.kithard.core.util.TextUtil;
@@ -44,12 +42,14 @@ public class Guild extends DatabaseEntry {
     private boolean friendlyFire, allyFire;
 
     private final Map<GuildLogType, List<GuildLog>> logs = new HashMap<>();
-    private final Set<GuildMember> members = new HashSet<>();
-    private final List<GuildPermissionScheme> permissionSchemes = new ArrayList<>();
+    private final Map<UUID, GuildMember> membersByUuid = new HashMap<>();
+    private final Map<String, GuildMember> membersByName = new HashMap<>();
+    private final Map<String, GuildPermissionScheme> permissionSchemes = new HashMap<>();
     private Set<UUID> deputies = new HashSet<>();
     private Set<String> allies = new HashSet<>();
     private ItemStack[] warehouseContents;
     private Inventory warehouse;
+    private List<GuildWar> guildWars = new ArrayList<>();
 
     private long guildWarCooldown;
     private Set<UUID> memberInvites;
@@ -258,33 +258,34 @@ public class Guild extends DatabaseEntry {
         this.allyFire = allyFire;
     }
 
-    public Set<GuildMember> getMembers() {
-        return members;
+    public Collection<GuildMember> getGuildMemebrs() {
+        return membersByUuid.values();
+    }
+
+    public void addMember(GuildMember guildMember) {
+        this.membersByUuid.put(guildMember.getUuid(), guildMember);
+        this.membersByName.put(guildMember.getName().toLowerCase(), guildMember);
+    }
+
+    public void removeMember(GuildMember guildMember) {
+        this.membersByUuid.remove(guildMember.getUuid());
+        this.membersByName.remove(guildMember.getName().toLowerCase());
     }
 
     public Set<GuildMember> getOnlineMembers() {
-        return this.members.stream()
+        return this.membersByUuid.values().stream()
                 .filter(guildMember -> Bukkit.getPlayer(guildMember.getUuid()) != null)
                 .collect(Collectors.toSet());
     }
 
     public GuildMember findMemberByName(String name) {
-        for (GuildMember guildMember : this.getMembers()) {
-            if (guildMember.getName().equalsIgnoreCase(name)) {
-                return guildMember;
-            }
-        }
-        return null;
+        return this.membersByName.get(name.toLowerCase());
     }
 
     public GuildMember findMemberByUuid(UUID uuid) {
-        for (GuildMember guildMember : this.getMembers()) {
-            if (guildMember.getUuid().equals(uuid)) {
-                return guildMember;
-            }
-        }
-        return null;
+        return this.membersByUuid.get(uuid);
     }
+
     public boolean isMember(UUID uuid) {
         return this.findMemberByUuid(uuid) != null;
     }
@@ -317,17 +318,20 @@ public class Guild extends DatabaseEntry {
         return allyInvites;
     }
 
-    public List<GuildPermissionScheme> getPermissionSchemes() {
+    public Map<String, GuildPermissionScheme> getPermissionSchemes() {
         return permissionSchemes;
     }
 
+    public void addScheme(GuildPermissionScheme guildPermissionScheme) {
+        this.permissionSchemes.put(guildPermissionScheme.getName(), guildPermissionScheme);
+    }
+
+    public void removeScheme(GuildPermissionScheme guildPermissionScheme) {
+        this.permissionSchemes.remove(guildPermissionScheme.getName());
+    }
+
     public GuildPermissionScheme findPermissionSchemeByName(String name) {
-        for (GuildPermissionScheme guildPermissionScheme : this.getPermissionSchemes()) {
-            if (guildPermissionScheme.getName().equals(name)) {
-                return guildPermissionScheme;
-            }
-        }
-        return null;
+        return this.permissionSchemes.get(name);
     }
 
     public Hologram getHologram() {
@@ -339,18 +343,9 @@ public class Guild extends DatabaseEntry {
     }
 
     public void sendMessageToOnlineMembers(String message) {
-
-        for (GuildMember guildMember : this.members) {
-
-            Player player = Bukkit.getPlayer(guildMember.getUuid());
-            if (player == null) {
-                continue;
-            }
-
-            TextUtil.message(player, message);
-
+        for (GuildMember guildMember : this.getOnlineMembers()) {
+            TextUtil.message(Bukkit.getPlayer(guildMember.getUuid()), message);
         }
-
     }
 
     public List<GuildLog> getLogsByType(GuildLogType type) {
@@ -402,4 +397,34 @@ public class Guild extends DatabaseEntry {
     public void setHp(int hp) {
         this.hp = hp;
     }
+
+    public List<GuildWar> getGuildWars() {
+        return guildWars;
+    }
+
+    public void addWar(GuildWar guildWar) {
+        this.guildWars.add(guildWar);
+    }
+
+    public GuildWar findWar(String tag) {
+        for (GuildWar guildWar : this.guildWars) {
+            if (guildWar.getEnemyGuild().equalsIgnoreCase(tag)) {
+                return guildWar;
+            }
+        }
+        return null;
+    }
+
+    public boolean canDeclareWar() {
+        for (GuildWar guildWar : this.guildWars) {
+
+            if (guildWar.getExpireTime() > System.currentTimeMillis()) {
+                return false;
+            }
+
+        }
+
+        return true;
+    }
+
 }

@@ -56,6 +56,15 @@ public class GuildTerrainActionsListener implements Listener {
         event.setCancelled(cancelAction(event.getPlayer(), event.getBlock().getLocation()));
     }
 
+
+
+    @EventHandler
+    public void onBlockFromTo(BlockFromToEvent event) {
+        if (event.getBlock().getType() == Material.STATIONARY_WATER || event.getBlock().getType() == Material.WATER) {
+            event.setCancelled(true);
+        }
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void water(PlayerBucketEmptyEvent event) {
         if (LocationUtil.isInSpawn(event.getBlockClicked().getLocation())) {
@@ -71,36 +80,12 @@ public class GuildTerrainActionsListener implements Listener {
         Guild guild = this.plugin.getGuildCache().findByLocation(event.getBlockClicked().getLocation());
         Block clickedBlock = event.getBlockClicked().getRelative(event.getBlockFace());
 
-        if (guild == null) {
-            event.setCancelled(true);
 
-            clickedBlock.setType(Material.STATIONARY_WATER);
-            player.getItemInHand().setType(Material.BUCKET);
-            player.updateInventory();
-        }
-
-        else if (!guild.isMember(player.getUniqueId())) {
-            if (player.getItemInHand().getType() != Material.BUCKET) {
-                event.setCancelled(true);
-            }
-
-            clickedBlock.setType(Material.STATIONARY_WATER);
-            player.getItemInHand().setType(Material.BUCKET);
-            player.updateInventory();
+        if (guild != null && !guild.isMember(player.getUniqueId())) {
             TextUtil.message(player, "&8(&3&l!&8) &7Postawiles wode na terenie &3wrogiej gildi&7, jezeli jej nie zabierzesz w ciagu &f10 sekund - zniknie!");
-
-            Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-                clickedBlock.setType(Material.AIR);
-            }, 20 * 10);
+            Bukkit.getScheduler().runTaskLater(this.plugin, () -> clickedBlock.setType(Material.AIR), 20 * 10);
         }
 
-        else if (guild.isMember(player.getUniqueId()) && clickedBlock.getLocation().getBlockY() >= 70) {
-            event.setCancelled(true);
-            clickedBlock.setType(Material.STATIONARY_WATER);
-            player.getItemInHand().setType(Material.BUCKET);
-            player.updateInventory();
-
-        }
     }
 
     public boolean cancelAction(Player player, Location location) {

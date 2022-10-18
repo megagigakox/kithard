@@ -42,14 +42,16 @@ public class PlayerMoveListener implements Listener {
 
         PlayerCombat combat = corePlayer.getCombat();
         if (combat.hasFight() && !player.hasPermission("kithard.antilogout.bypass")) {
-            if (LocationUtil.loc(61, -61, -61, 61, to)) {
-                event.setCancelled(true);
+            if (player.getWorld().getName().equals("world")) {
+                if (LocationUtil.loc(61, -61, -61, 61, to)) {
+                    event.setCancelled(true);
 
-                Location l = player.getWorld().getSpawnLocation().subtract(player.getLocation());
-                double distance = player.getLocation().distance(player.getWorld().getSpawnLocation());
+                    Location l = player.getWorld().getSpawnLocation().subtract(player.getLocation());
+                    double distance = player.getLocation().distance(player.getWorld().getSpawnLocation());
 
-                Vector vector = l.toVector().add(new Vector(0, 5, 0)).multiply(1.25 / distance);
-                player.setVelocity(vector.multiply(-1.5));
+                    Vector vector = l.toVector().add(new Vector(0, 5, 0)).multiply(1.25 / distance);
+                    player.setVelocity(vector.multiply(-1.5));
+                }
             }
         }
 

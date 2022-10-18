@@ -6,7 +6,7 @@ import java.util.*;
 
 public class WarpCache extends OkaeriConfig {
 
-    private final Map<String, Warp> warps = new HashMap<>();
+    private Map<String, Warp> warps = new HashMap<>();
 
     public void add(Warp warp) {
         this.warps.put(warp.getName(), warp);

@@ -77,15 +77,15 @@ public class GuildKickMemberCommand {
                     this.plugin.getGuildRepository().deleteMember(guildMember);
                 });
 
-        guild.getMembers().remove(guildMember);
+        guild.removeMember(guildMember);
         guild.setNeedSave(true);
 
         Bukkit.broadcastMessage(TextUtil.color(
                 "&8(&3&l!&8) &7Gracz &f" +
                         targetCorePlayer.getName() +
-                        " &7zostal wyrzucony z gildii &8[&b" +
+                        " &7zostal wyrzucony z gildii &b[" +
                         guild.getTag() +
-                        "&8] &7przez &f" +
+                        "] &3" + guild.getName() + " &7przez &f" +
                         player.getName() +
                         "&7!"
         ));

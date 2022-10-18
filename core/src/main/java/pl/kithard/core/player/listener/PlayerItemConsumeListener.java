@@ -37,7 +37,7 @@ public class PlayerItemConsumeListener implements Listener {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     player.removePotionEffect(PotionEffectType.REGENERATION);
                     player.removePotionEffect(PotionEffectType.ABSORPTION);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 3));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 2));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1));
                 }, 1L);
 

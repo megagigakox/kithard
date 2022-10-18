@@ -35,17 +35,17 @@ public class ItemDropListener implements Listener {
         this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-
+        Block block = event.getBlock();
         if (player.getGameMode() != GameMode.SURVIVAL) {
             return;
         }
 
         ServerSettings serverSettings = this.plugin.getServerSettings();
         ItemStack itemInHand = player.getItemInHand();
-        Block block = event.getBlock();
+
         List<ItemStack> drops = new ArrayList<>();
         if (block.getType() != Material.STONE) {
             drops.addAll(block.getDrops(itemInHand));
@@ -60,8 +60,7 @@ public class ItemDropListener implements Listener {
 
         CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
         if (!corePlayer.isDisabledSetting(PlayerSettings.COBBLE_DROP)) {
-            drops.add(new ItemStack(
-                    itemInHand.containsEnchantment(Enchantment.SILK_TOUCH) ? Material.STONE : Material.COBBLESTONE, 1));
+            drops.add(new ItemStack(itemInHand.containsEnchantment(Enchantment.SILK_TOUCH) ? Material.STONE : Material.COBBLESTONE, 1));
         }
 
         for (DropItem dropItem : this.plugin.getDropItemConfiguration().getDropItems()) {
@@ -73,7 +72,14 @@ public class ItemDropListener implements Listener {
 
             int amount = 1;
             if (dropItem.isFortune() && itemInHand.getType().toString().contains("PICKAXE")) {
-                amount = ItemUtil.getFortuneLevel(itemInHand) == 0 ? 1 : RandomUtil.getRandInt(1, ItemUtil.getFortuneLevel(itemInHand));
+
+                if (dropItem.getItem().getEnchantmentLevel(Enchantment.DIG_SPEED) == 6) {
+                    amount = ItemUtil.getFortuneLevel(itemInHand) == 0 ? 1 : RandomUtil.getRandInt(1, 2);
+                }
+                else {
+                    amount = ItemUtil.getFortuneLevel(itemInHand) == 0 ? 1 : RandomUtil.getRandInt(1, ItemUtil.getFortuneLevel(itemInHand));
+                }
+
             }
 
             if (!corePlayer.isDisabledDropItem(dropItem)) {

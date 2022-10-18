@@ -17,8 +17,6 @@ import pl.kithard.core.util.SchematicPaster;
 import pl.kithard.core.util.TextUtil;
 import pl.kithard.core.api.util.TimeUtil;
 
-import java.util.Arrays;
-
 public class GuildFactory {
 
     private final CorePlugin plugin;
@@ -38,16 +36,16 @@ public class GuildFactory {
 
         Guild guild = new Guild(tag, name, owner, home);
         GuildMember guildMember = new GuildMember(guild.getTag(), owner.getUuid(), owner.getName());
-        guild.getMembers().add(guildMember);
+        guild.addMember(guildMember);
 
         GuildPermissionScheme scheme1 = new GuildPermissionScheme(guild.getTag(), "REKRUT");
         GuildPermissionScheme scheme2 = new GuildPermissionScheme(guild.getTag(), "CZLONEK");
         GuildPermissionScheme scheme3 = new GuildPermissionScheme(guild.getTag(), "ZAUFANY");
-        GuildPermissionScheme scheme4 =new GuildPermissionScheme(guild.getTag(), "MISTRZ");
-        guild.getPermissionSchemes().add(scheme1);
-        guild.getPermissionSchemes().add(scheme2);
-        guild.getPermissionSchemes().add(scheme3);
-        guild.getPermissionSchemes().add(scheme4);
+        GuildPermissionScheme scheme4 = new GuildPermissionScheme(guild.getTag(), "MISTRZ");
+        guild.addScheme(scheme1);
+        guild.addScheme(scheme2);
+        guild.addScheme(scheme3);
+        guild.addScheme(scheme4);
         guild.setNeedSave(true);
 
         Bukkit.getScheduler().runTask(this.plugin, () -> this.buildHeartRoom(home));

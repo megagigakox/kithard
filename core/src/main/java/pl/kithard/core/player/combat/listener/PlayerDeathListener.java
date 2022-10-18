@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.grouptp.GroupTeleport;
 import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.CorePlayer;
@@ -43,6 +44,7 @@ public class PlayerDeathListener implements Listener {
         Player killer = loser.getKiller();
         CorePlayer loserPlayer = this.plugin.getCorePlayerCache().findByPlayer(loser);
         PlayerCombat loserCombat = loserPlayer.getCombat();
+        loserPlayer.setKillStreak(0);
         loserPlayer.addDeaths(1);
         loserPlayer.addAchievementProgress(AchievementType.DEATHS, 1);
 
@@ -64,8 +66,15 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
-        killer.getWorld().strikeLightningEffect(loser.getLocation());
         CorePlayer killerPlayer = this.plugin.getCorePlayerCache().findByPlayer(killer);
+        killer.getWorld().strikeLightningEffect(loser.getLocation());
+        GroupTeleport groupTeleport = this.plugin.getGroupTeleportCache().find(killer);
+        if (groupTeleport != null) {
+            groupTeleport.setCloseCountdownTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(45));
+            killerPlayer.getCombat().setLastAttackTime(0L);
+            this.plugin.getGroupTeleportCache().remove(loser, groupTeleport);
+            loser.teleport(Bukkit.getWorld("world").getSpawnLocation());
+        }
 
         Guild killerGuild = this.plugin.getGuildCache().findByPlayer(killer);
         if (loserPlayer.getCooldown().getLastKillersCooldown().containsKey(killerPlayer.getUuid()) && loserPlayer.getCooldown().getLastKillersCooldown().get(killerPlayer.getUuid()) + TimeUnit.MINUTES.toMillis(30) > System.currentTimeMillis()) {
@@ -133,7 +142,6 @@ public class PlayerDeathListener implements Listener {
         }
 
         loserPlayer.removePoints(toRemove);
-        loserPlayer.setKillStreak(0);
         loserPlayer.getCooldown()
                 .getLastKillersCooldown()
                 .put(killerPlayer.getUuid(), System.currentTimeMillis());
@@ -168,6 +176,7 @@ public class PlayerDeathListener implements Listener {
             killerGuild.addPoints(toAdd / 2);
             killerGuild.setNeedSave(true);
         }
+
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

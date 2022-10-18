@@ -92,7 +92,7 @@ public class ServerSettingsListeners implements Listener {
                     return;
                 }
 
-                if (itemStack.getType() == Material.IRON_SWORD) {
+                if (itemStack.getType().toString().contains("SWORD")) {
                     if (itemMeta.getEnchants().get(Enchantment.DAMAGE_ALL) != null && itemMeta.getEnchants().get(Enchantment.DAMAGE_ALL) > 4) {
                         itemMeta.removeEnchant(Enchantment.DAMAGE_ALL);
                         itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 4, true);
@@ -106,7 +106,7 @@ public class ServerSettingsListeners implements Listener {
                 }
 
                 if (itemStack.getType() == Material.BOW) {
-                    if (itemMeta.getEnchants().get(Enchantment.ARROW_DAMAGE) != null && itemMeta.getEnchants().get(Enchantment.ARROW_DAMAGE) > 3) {
+                    if (itemMeta.getEnchants().get(Enchantment.ARROW_DAMAGE) != null && itemMeta.getEnchants().get(Enchantment.ARROW_DAMAGE) > 4) {
                         itemMeta.removeEnchant(Enchantment.ARROW_DAMAGE);
                         itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 3, true);
                         itemStack.setItemMeta(itemMeta);

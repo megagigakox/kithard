@@ -31,6 +31,10 @@ public class GuildCreateCommand {
             acceptsExceeded = true
     )
     public void handle(Player player, String[] args) {
+        if (!player.getWorld().getName().equals("world")) {
+            return;
+        }
+
         GuildCache guildCache = this.plugin.getGuildCache();
         Guild playerGuild = guildCache.findByPlayer(player);
         if (playerGuild != null) {
@@ -96,13 +100,13 @@ public class GuildCreateCommand {
         owner.getGuildHistory().add(tag);
         Guild newGuild = this.plugin.getGuildFactory().create(tag, name, owner);
 
-        Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gracz &f" + player.getName() + " &7zalożyl gildie &8[&3" + tag + "&8] &b" + name + "&7!"));
+        Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &f" + player.getName() + " &7zalożyl gildie &b[" + tag + "] &3" + name + "&7!"));
         TitleUtil.title(player,
                 "&3&lZalożyles gildie " +
-                        "&8[&f" +
+                        "&8[&b" +
                         newGuild.getTag()
                         + "&8]",
-                "&fUprawnienia czlonkow znajdziesz pod &b/g panel",
+                "&fUprawnienia czlonkow znajdziesz pod&8: /&3g panel",
                 20, 60, 20);
     }
 }

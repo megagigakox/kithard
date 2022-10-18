@@ -87,19 +87,15 @@ public class GuildInfoCommand {
 
         info.add("&8» &7Sojusze: &f" + allies + " &8(&b" + guild.getAllies().size() + "&8/&b1&8)");
 
-        Set<GuildMember> onlineMembers =
-                guild.getMembers().stream()
-                        .filter(guildMember -> plugin.getServer().getPlayer(guildMember.getUuid()) != null)
-                        .collect(Collectors.toSet());
-
-        String members = guild.getMembers().isEmpty()
+        Set<GuildMember> onlineMembers = guild.getOnlineMembers();
+        String members = guild.getGuildMemebrs().isEmpty()
                 ? "&fBrak."
-                : guild.getMembers()
+                : guild.getGuildMemebrs()
                 .stream()
                 .map(guildMember -> (onlineMembers.contains(guildMember) ? "&a" : "&c") + guildMember.getName())
                 .collect(Collectors.joining("&8, "));
 
-        info.add("&8» &7Czlonkowie: " + members + " &8(&a" + onlineMembers.size() + "&8/&7" + guild.getMembers().size() + "&8)");
+        info.add("&8» &7Czlonkowie: " + members + " &8(&a" + onlineMembers.size() + "&8/&7" + guild.getGuildMemebrs().size() + "&8)");
         return info;
     }
 

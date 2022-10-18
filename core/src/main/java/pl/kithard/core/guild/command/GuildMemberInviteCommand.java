@@ -58,8 +58,8 @@ public class GuildMemberInviteCommand {
 
         if (guild.getMemberInvites().contains(targetPlayer.getUniqueId())) {
             guild.getMemberInvites().remove(targetPlayer.getUniqueId());
-            TextUtil.message(targetPlayer, "&8(&3&l!&8) &7Zaproszenie do gildii &8[&b" + guild.getTag() + "&7] &7zostalo cofniete przez &b" + player.getName() + "&7.");
-            TextUtil.message(player, "&8(&3&l!&8) &7Cofnales zaproszenie do gildii dla gracza &b" + targetPlayer.getName() + "&7.");
+            TextUtil.message(targetPlayer, "&8(&3&l!&8) &7Zaproszenie do gildii &b[" + guild.getTag() + "] &7zostalo cofniete przez &f" + player.getName() + "&7.");
+            TextUtil.message(player, "&8(&3&l!&8) &7Cofnales zaproszenie do gildii dla gracza &f" + targetPlayer.getName() + "&7.");
             return;
         }
 
@@ -74,9 +74,9 @@ public class GuildMemberInviteCommand {
                 .runTaskAsynchronously(this.plugin, () -> this.plugin.getGuildRepository().insertLog(guildLog));
 
         guild.getMemberInvites().add(targetPlayer.getUniqueId());
-        TextUtil.message(targetPlayer, " &7Zostales zaproszony do gildii &8[&b" + guild.getTag() + "&8] &7przez &b" + player.getName() + "&7.");
+        TextUtil.message(targetPlayer, " &7Zostales zaproszony do gildii &b[" + guild.getTag() + "] &3" + guild.getName() + " &7przez &b" + player.getName() + "&7.");
         TextUtil.message(targetPlayer, " &7Wpisz &b/g dolacz " + guild.getTag() + " &7aby dolaczyc do gildii.");
-        TextUtil.message(player, "&8(&3&l!&8) &7Wyslales zaproszenie do gildii dla gracza &b" + targetPlayer.getName() + "&7.");
+        TextUtil.message(player, "&8(&3&l!&8) &7Wyslales zaproszenie do gildii dla gracza &f" + targetPlayer.getName() + "&7.");
     }
 
 }

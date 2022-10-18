@@ -28,9 +28,9 @@ import pl.kithard.core.antigrief.AntiGriefTask;
 import pl.kithard.core.antimacro.AntiMacroCache;
 import pl.kithard.core.antimacro.AntiMacroListener;
 import pl.kithard.core.antimacro.AntiMacroTask;
-import pl.kithard.core.api.database.RedisService;
 import pl.kithard.core.api.database.config.DatabaseConfig;
 import pl.kithard.core.api.database.mysql.DatabaseService;
+import pl.kithard.core.api.reward.RewardRepository;
 import pl.kithard.core.automessage.config.AutoMessageConfiguration;
 import pl.kithard.core.automessage.task.AutoMessageTask;
 import pl.kithard.core.border.command.BorderCommand;
@@ -63,6 +63,10 @@ import pl.kithard.core.generator.GeneratorCache;
 import pl.kithard.core.generator.GeneratorFactory;
 import pl.kithard.core.generator.GeneratorRepository;
 import pl.kithard.core.generator.listener.GeneratorListener;
+import pl.kithard.core.grouptp.GroupTeleportCache;
+import pl.kithard.core.grouptp.GroupTeleportListener;
+import pl.kithard.core.grouptp.GroupTeleportTask;
+import pl.kithard.core.grouptp.GroupTeleportCommand;
 import pl.kithard.core.guild.GuildCache;
 import pl.kithard.core.guild.GuildFactory;
 import pl.kithard.core.guild.GuildRepository;
@@ -78,6 +82,7 @@ import pl.kithard.core.guild.listener.GuildChatListener;
 import pl.kithard.core.guild.listener.GuildHeartListener;
 import pl.kithard.core.guild.listener.GuildTerrainActionsListener;
 import pl.kithard.core.guild.listener.GuildTntExplosionListener;
+import pl.kithard.core.guild.logblock.GuildLogBlockListener;
 import pl.kithard.core.guild.panel.command.GuildPanelCommand;
 import pl.kithard.core.guild.periscope.listener.GuildPeriscopeListener;
 import pl.kithard.core.guild.permission.listener.GuildPermissionListener;
@@ -86,6 +91,11 @@ import pl.kithard.core.guild.regen.GuildRegenBlockSaveTask;
 import pl.kithard.core.guild.regen.GuildRegenCache;
 import pl.kithard.core.guild.regen.command.GuildRegenCommand;
 import pl.kithard.core.guild.regen.listener.GuildRegenListener;
+import pl.kithard.core.guild.report.GuildAdminReportCommand;
+import pl.kithard.core.guild.report.GuildReport;
+import pl.kithard.core.guild.report.GuildReportCache;
+import pl.kithard.core.guild.report.GuildReportCommand;
+import pl.kithard.core.guild.report.GuildReportGui;
 import pl.kithard.core.guild.task.GuildExpireTask;
 import pl.kithard.core.guild.task.GuildHologramTask;
 import pl.kithard.core.guild.task.GuildShadowBlockProtectionTask;
@@ -115,8 +125,8 @@ import pl.kithard.core.player.backup.command.PlayerBackupCommand;
 import pl.kithard.core.player.backup.task.PlayerBackupTask;
 import pl.kithard.core.player.chat.command.ChatManageCommand;
 import pl.kithard.core.player.chat.listener.AsyncPlayerChatListener;
-import pl.kithard.core.player.combat.listener.BlockCombatPlaceListener;
 import pl.kithard.core.player.combat.listener.BlockCombatInteractionsListener;
+import pl.kithard.core.player.combat.listener.BlockCombatPlaceListener;
 import pl.kithard.core.player.combat.listener.PlayerDamageListener;
 import pl.kithard.core.player.combat.listener.PlayerDeathListener;
 import pl.kithard.core.player.command.*;
@@ -124,8 +134,8 @@ import pl.kithard.core.player.command.bind.CorePlayerBind;
 import pl.kithard.core.player.enderchest.command.EnderChestCommand;
 import pl.kithard.core.player.enderchest.listener.EnderChestListener;
 import pl.kithard.core.player.home.command.PlayerHomeCommand;
-import pl.kithard.core.player.incognito.command.IncognitoCommand;
 import pl.kithard.core.player.incognito.PlayerIncognitoSerivce;
+import pl.kithard.core.player.incognito.command.IncognitoCommand;
 import pl.kithard.core.player.listener.*;
 import pl.kithard.core.player.nametag.PlayerNameTagService;
 import pl.kithard.core.player.nametag.task.PlayerNameTagRefreshTask;
@@ -136,6 +146,7 @@ import pl.kithard.core.player.punishment.listener.PlayerLoginListener;
 import pl.kithard.core.player.ranking.PlayerRankingCommand;
 import pl.kithard.core.player.ranking.PlayerRankingService;
 import pl.kithard.core.player.reward.RewardCommand;
+import pl.kithard.core.player.reward.RewardTask;
 import pl.kithard.core.player.settings.command.PlayerSettingsCommand;
 import pl.kithard.core.player.task.PlayerSpentTimeTask;
 import pl.kithard.core.player.teleport.countdown.PlayerTeleportCountdown;
@@ -156,6 +167,7 @@ import pl.kithard.core.settings.ServerSettingsSerdes;
 import pl.kithard.core.settings.command.ServerSettingsCommand;
 import pl.kithard.core.settings.listener.ServerSettingsListeners;
 import pl.kithard.core.shop.ShopConfiguration;
+import pl.kithard.core.shop.command.AdminShopCommand;
 import pl.kithard.core.shop.command.SellCommand;
 import pl.kithard.core.shop.command.ShopCommand;
 import pl.kithard.core.shop.item.ShopItemSerdes;
@@ -181,7 +193,6 @@ public final class CorePlugin extends JavaPlugin {
 
     private Gson gson;
     private DatabaseService databaseService;
-    private RedisService redisService;
 
     private CorePlayerCache corePlayerCache;
     private CorePlayerRepository corePlayerRepository;
@@ -191,12 +202,14 @@ public final class CorePlugin extends JavaPlugin {
     private PlayerBackupFactory playerBackupFactory;
     private PlayerBackupRepository playerBackupRepository;
     private PlayerIncognitoSerivce playerIncognitoSerivce;
+    private RewardRepository rewardRepository;
 
     private GuildCache guildCache;
     private GuildRepository guildRepository;
     private GuildFactory guildFactory;
     private GuildRankingService guildRankingService;
     private GuildRegenCache regenCache;
+    private GuildReportCache guildReportCache;
 
     private CustomEffectCache customEffectCache;
     private CustomEffectConfiguration customEffectConfiguration;
@@ -239,6 +252,7 @@ public final class CorePlugin extends JavaPlugin {
     private BossService bossService;
     private TradeCache tradeCache;
     private AntiGriefCache antiGriefCache;
+    private GroupTeleportCache groupTeleportCache;
 
     @Override
     public void onEnable() {
@@ -252,7 +266,6 @@ public final class CorePlugin extends JavaPlugin {
                 .serializeNulls()
                 .create();
 
-        this.redisService = new RedisService(DatabaseConfig.REDIS_URI);
         this.databaseService = new DatabaseService("mysql.titanaxe.com",3306, "srv235179", "srv235179", "CbccNpZ8");
 
         this.customEffectConfiguration = new CustomEffectConfiguration(this);
@@ -364,6 +377,7 @@ public final class CorePlugin extends JavaPlugin {
         this.guildRepository.prepareTable();
         this.guildFactory = new GuildFactory(this);
         this.guildFactory.loadAll();
+        this.guildReportCache = new GuildReportCache();
 
         this.regenCache = new GuildRegenCache();
 
@@ -400,10 +414,13 @@ public final class CorePlugin extends JavaPlugin {
         this.achievementCache = new AchievementCache();
         this.achievementCache.init();
 
+        this.rewardRepository = new RewardRepository(this.databaseService);
         this.antiMacroCache = new AntiMacroCache();
         this.bossService = new BossService();
         this.tradeCache = new TradeCache(this);
         this.antiGriefCache = new AntiGriefCache();
+        this.groupTeleportCache = new GroupTeleportCache();
+        this.groupTeleportCache.prepareWorld();
 
         this.initTabList();
         this.initCommands();
@@ -422,11 +439,16 @@ public final class CorePlugin extends JavaPlugin {
         }
 
         for (Player player : getServer().getOnlinePlayers()) {
+
             CorePlayer corePlayer = this.corePlayerCache.findByPlayer(player);
             corePlayer.getCombat().setLastAttackTime(0L);
             corePlayer.getCombat().setLastAssistTime(0L);
             corePlayer.getCombat().setLastAssistPlayer(null);
             corePlayer.getCombat().setLastAttackPlayer(null);
+
+            if (player.getWorld().getName().equals("gtp")) {
+                player.teleport(Bukkit.getWorld("world").getSpawnLocation());
+            }
         }
 
         this.guildRepository.updateAll(this.guildCache.getValues());
@@ -528,14 +550,18 @@ public final class CorePlugin extends JavaPlugin {
                         new GuildMemberNeedHelpCommand(this),
                         new RewardCommand(this),
                         new BlocksCommand(),
-                        new GuildWarCommand(),
+                        new GuildFightCommand(),
                         new SaveAllCommand(this),
                         new GuildHeartCommand(),
                         new BossCommand(this),
                         new FreeTurboCommand(this),
                         new GuildInviteAllCommand(this),
                         new SafeCommand(),
-                        new RepairPickaxeCommand(this)
+                        new RepairPickaxeCommand(this),
+                        new AdminShopCommand(this),
+                        new GroupTeleportCommand(this),
+                        new GuildAdminReportCommand(this),
+                        new GuildReportCommand(this)
                 ))
                 .completer("itemShopServices", (context, prefix, limit) -> CommandUtils.collectCompletions(
                         this.itemShopServiceConfiguration.getServices(),
@@ -566,11 +592,12 @@ public final class CorePlugin extends JavaPlugin {
         new FreezeTask(this);
         new AntiMacroTask(this);
         new AbbysTask(this);
-//        new RewardTask(this);
+        new RewardTask(this);
         new GuildShadowBlockProtectionTask(this);
         new GuildRegenBlockSaveTask(this);
         new BossTask(this);
         new AntiGriefTask(this);
+        new GroupTeleportTask(this);
     }
 
     private void initListeners() {
@@ -610,6 +637,8 @@ public final class CorePlugin extends JavaPlugin {
         new BossListener(this);
         new TradeListener(this);
         new AntiGriefListener(this);
+        new GuildLogBlockListener(this);
+        new GroupTeleportListener(this);
     }
 
     private void initRecipes() {
@@ -798,10 +827,6 @@ public final class CorePlugin extends JavaPlugin {
         return customEnchantConfiguration;
     }
 
-    public RedisService getRedisService() {
-        return redisService;
-    }
-
     public ItemShopServiceExecutor getItemShopServiceExecutor() {
         return itemShopServiceExecutor;
     }
@@ -848,5 +873,17 @@ public final class CorePlugin extends JavaPlugin {
 
     public AntiGriefCache getAntiGriefCache() {
         return antiGriefCache;
+    }
+
+    public GroupTeleportCache getGroupTeleportCache() {
+        return groupTeleportCache;
+    }
+
+    public RewardRepository getRewardRepository() {
+        return rewardRepository;
+    }
+
+    public GuildReportCache getGuildReportCache() {
+        return guildReportCache;
     }
 }

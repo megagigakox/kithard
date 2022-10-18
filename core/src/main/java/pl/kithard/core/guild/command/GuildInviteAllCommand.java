@@ -45,7 +45,7 @@ public class GuildInviteAllCommand {
                 continue;
             }
 
-            TextUtil.message(it, " &7Zostales zaproszony do gildii &8[&b" + guild.getTag() + "&8] &7przez &b" + player.getName() + "&7.");
+            TextUtil.message(it, " &7Zostales zaproszony do gildii &b[" + guild.getTag() + "] &3" + guild.getName() + " &7przez &f" + player.getName() + "&7.");
             TextUtil.message(it, " &7Wpisz &b/g dolacz " + guild.getTag() + " &7aby dolaczyc do gildii.");
             nearbyPlayers.add(it);
         }

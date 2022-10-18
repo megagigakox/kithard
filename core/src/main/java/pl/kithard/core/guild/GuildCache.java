@@ -1,7 +1,6 @@
 package pl.kithard.core.guild;
 
 import org.bukkit.Location;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import pl.kithard.core.guild.permission.GuildPermission;
 import pl.kithard.core.player.CorePlayer;
@@ -17,22 +16,22 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GuildCache {
     private final CorePlugin plugin;
 
-    private final Map<String, Guild> guildCache = new ConcurrentHashMap<>();
+    private final Map<String, Guild> guildsByTag = new ConcurrentHashMap<>();
 
     public GuildCache(CorePlugin plugin) {
         this.plugin = plugin;
     }
 
     public void add(Guild guild) {
-        this.guildCache.put(guild.getTag().toLowerCase(Locale.ROOT), guild);
+        this.guildsByTag.put(guild.getTag().toLowerCase(Locale.ROOT), guild);
     }
 
     public void remove(Guild guild) {
-        this.guildCache.remove(guild.getTag().toLowerCase(Locale.ROOT));
+        this.guildsByTag.remove(guild.getTag().toLowerCase(Locale.ROOT));
     }
 
     public Guild findByTag(String tag) {
-        return this.guildCache.get(tag.toLowerCase(Locale.ROOT));
+        return this.guildsByTag.get(tag.toLowerCase(Locale.ROOT));
     }
 
     public Guild findByName(String name) {
@@ -150,6 +149,6 @@ public class GuildCache {
     }
 
     public Collection<Guild> getValues() {
-        return this.guildCache.values();
+        return this.guildsByTag.values();
     }
 }

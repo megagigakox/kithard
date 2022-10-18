@@ -1,15 +1,11 @@
 package pl.kithard.core.guild.periscope.task;
 
-import net.minecraft.server.v1_8_R3.PacketPlayOutGameStateChange;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.guild.GuildMember;
-import pl.kithard.core.player.actionbar.ActionBarNotice;
 import pl.kithard.core.player.actionbar.ActionBarNoticeType;
 
 public class GuildPeriscopeTask extends BukkitRunnable {

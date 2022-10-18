@@ -9,7 +9,7 @@ public class AntiGriefTask extends BukkitRunnable {
 
     public AntiGriefTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimer(this.plugin, 0L, 20 * 60L);
+        this.runTaskTimer(this.plugin, 0L, 20 * 10L);
     }
 
     @Override

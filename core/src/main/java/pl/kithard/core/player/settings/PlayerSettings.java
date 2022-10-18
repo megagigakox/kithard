@@ -10,7 +10,8 @@ public enum PlayerSettings {
     AUTO_MESSAGES("Automatyczne wiadomosci", true),
     TELEPORT_REQUESTS("Prosby o teleportacje", true),
     PRIVATE_MESSAGES("Prywatne wiadomosci", true),
-    ACHIEVEMENTS_CLAIMING_MESSAGES("Powiadomienia o odebranych osiagnieciach", true);
+    ACHIEVEMENTS_CLAIMING_MESSAGES("Powiadomienia o odebranych osiagnieciach", true),
+    REWARDS("Powiadomienia o odbieraniu nagrod", true);
 
     private final String name;
     private final boolean gui;

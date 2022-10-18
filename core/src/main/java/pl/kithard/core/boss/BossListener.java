@@ -15,6 +15,7 @@ import pl.kithard.core.drop.special.SpecialDropItemType;
 import pl.kithard.core.util.InventoryUtil;
 import pl.kithard.core.util.RandomUtil;
 import pl.kithard.core.util.TextUtil;
+import pl.kithard.core.util.TitleUtil;
 
 public class BossListener implements Listener {
 
@@ -34,7 +35,6 @@ public class BossListener implements Listener {
             }
 
             this.plugin.getBossService().setBoss(null);
-
             Player player = zombie.getKiller();
             if (player == null) {
                 return;
@@ -56,10 +56,13 @@ public class BossListener implements Listener {
                         i++;
                         ItemStack itemStack = dropItem.getItem().clone();
                         itemStack.setAmount(RandomUtil.getRandInt(dropItem.getMin(), dropItem.getMax()));
-                        Bukkit.getWorld("world").dropItemNaturally(zombie.getLocation(), itemStack);
+                        InventoryUtil.addItem(player, itemStack);
                         for (Player it : Bukkit.getOnlinePlayers()) {
+
+                            TitleUtil.title(it, "&3&lBOSS", "&b&7Gracz &f" + player.getName() + " &7zabił &b&lbossa&7!", 20, 80, 20);
+
                             TextUtil.message(it, "");
-                            TextUtil.message(it, "&8(&3&l!&8) &7Gracz &3" + player.getName() + " &7zabil &3&lbossa &7i wylosowal: &3" + dropItem.getName() + " &7(&f" + itemStack.getAmount() + "x&7)");
+                            TextUtil.message(it, "&8(&3&l!&8) &7Gracz &3" + player.getName() + " &7zabil &b&lbossa &7i wylosowal: &3" + dropItem.getName() + " &7(&f" + itemStack.getAmount() + "x&7)");
                             TextUtil.message(it, "");
                         }
                     }

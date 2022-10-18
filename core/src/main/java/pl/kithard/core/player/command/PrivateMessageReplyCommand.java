@@ -47,8 +47,8 @@ public class PrivateMessageReplyCommand {
             return;
         }
 
-        String message = ChatColor.stripColor(StringUtils.join(args, " ", 0, args.length));
-
+        String message = StringUtils.join(args, " ", 0, args.length)
+                .replace("&", "");
         TextUtil.message(targetCorePlayer.source(), "&3{NICK} &8-> &3Ja&8: &f{MESSAGE}"
                 .replace("{NICK}", player.getName())
                 .replace("{MESSAGE}", message));

@@ -18,7 +18,4 @@ public final class BorderUtil {
         return (borderXDistance(location) <= distance || borderZDistance(location) <= distance);
     }
 
-    public static int getDistanceToBorder(Location location) {
-        return Math.min(borderXDistance(location), borderZDistance(location));
-    }
 }

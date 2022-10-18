@@ -45,7 +45,7 @@ public class GuildDeleteCommand {
                 .name(TextUtil.component("&cPotwierdz usuniecie gildii"))
                 .asGuiItem(inventoryClickEvent -> {
 
-                    Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gildia &8[&b" + guild.getTag() + "&8] &7zostala usunieta przez &f" + player.getName() + "&7!"));
+                    Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gildia &b[" + guild.getTag() + "] &3" + guild.getName() + " &7zostala usunieta przez &f" + player.getName() + "&7!"));
                     this.plugin.getGuildFactory().delete(guild);
                     player.closeInventory();
 

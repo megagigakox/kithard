@@ -19,6 +19,6 @@ public class AntiGriefBlock {
     }
 
     public boolean hasExpired() {
-        return System.currentTimeMillis() - this.timeStamp > TimeUnit.MINUTES.toMillis(10);
+        return System.currentTimeMillis() - this.timeStamp > (block.getWorld().getName().equals("world") ? TimeUnit.MINUTES.toMillis(30) : TimeUnit.SECONDS.toMillis(10));
     }
 }

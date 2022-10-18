@@ -35,7 +35,7 @@ public class SpawnProtectionListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         if (LocationUtil.isInProtectionArea(event.getBlock().getLocation()) && !player.hasPermission("kithard.spawn.build")) {

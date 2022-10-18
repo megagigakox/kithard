@@ -40,7 +40,8 @@ public class GuildCommand {
                 "&8» &f/g wolnemiejsce &8- &7Znajduje wolny teren.",
                 "&8» &f/g alert (wiadomosc) &8- &7Wiadomosc do czlonkow gildii.",
                 "&8» &f/g pp &8- &7Wysyla wiadomosc z prosba o pomoc do gildii.",
-                "&8» &f/g walka &8- &7Wysyla kordy twojej gildii na chacie."
+                "&8» &f/g walka &8- &7Wysyla kordy twojej gildii na chacie.",
+                "&8» &f/g zglos (tag) (powod) &8- &7Zglos gildie jezeli lamie regulamin cuboidow."
         ));
     }
 }

@@ -66,7 +66,7 @@ public class GuildAdminCommand {
                 this.plugin.getGuildFactory().delete(guild2);
             }
             else {
-                guild2.getMembers().remove(guild2.findMemberByUuid(corePlayer.getUuid()));
+                guild2.removeMember(guild2.findMemberByUuid(corePlayer.getUuid()));
             }
         }
 
@@ -103,11 +103,11 @@ public class GuildAdminCommand {
                 this.plugin.getGuildFactory().delete(guild2);
             }
             else {
-                guild2.getMembers().remove(guild2.findMemberByUuid(corePlayer.getUuid()));
+                guild2.removeMember(guild2.findMemberByUuid(corePlayer.getUuid()));
             }
         }
 
-        guild.getMembers().add(new GuildMember(guild.getTag(), corePlayer.getUuid(), corePlayer.getName()));
+        guild.addMember(new GuildMember(guild.getTag(), corePlayer.getUuid(), corePlayer.getName()));
         guild.setNeedSave(true);
         TextUtil.message(sender, "&aDodano gracza: &b" + corePlayer.getName());
     }
@@ -134,7 +134,7 @@ public class GuildAdminCommand {
             return;
         }
 
-        guild.getMembers().remove(member);
+        guild.removeMember(member);
         guild.setNeedSave(true);
         TextUtil.message(sender, "&aWyrzucono gracza: &b" + member.getName());
     }

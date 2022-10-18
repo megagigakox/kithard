@@ -52,7 +52,7 @@ public class GuildJoinCommand {
 
         GuildMember guildMember = new GuildMember(guild.getTag(), player.getUniqueId(), player.getName());
         guild.getMemberInvites().remove(player.getUniqueId());
-        guild.getMembers().add(guildMember);
+        guild.addMember(guildMember);
         GuildLog guildLog = guild.addLog(new GuildLog(
                 guild.getTag(),
                 GuildLogType.MEMBER_JOIN,
@@ -68,7 +68,7 @@ public class GuildJoinCommand {
 
         corePlayer.getGuildHistory().add(guild.getTag());
         guild.setNeedSave(true);
-        Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &7Gracz &f" + player.getName() + " &7dolaczyl do gildii &8[&b" + guild.getTag() + "&8]&7!"));
+        Bukkit.broadcastMessage(TextUtil.color("&8(&3&l!&8) &f" + player.getName() + " &7dolaczyl do gildii &b[" + guild.getTag() + "] &3" + guild.getName() + "&7!"));
 
     }
 

@@ -5,7 +5,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public final class RandomStringUtil {
 
     private RandomStringUtil() {
-
     }
 
     private static final char[] alphabetLowerCase = "abcdefghijklmnopqrstuwxyz".toCharArray();

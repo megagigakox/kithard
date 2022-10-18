@@ -31,17 +31,17 @@ public class RewardGui {
                         " &8Instrukcja odbierania:",
                         "  &8- &7Dolacz na naszego discorda&8: &fdc.kithard.pl",
                         "  &8- &7Wejdz na kanal tesktowy o nazwie&8: &fnagroda",
-                        "  &8- &7Po wejsciu na kanal wpisz komende &f!nagroda " + player.getName(),
+                        "  &8- &7Po wejsciu na kanal wpisz komende &f/nagroda " + player.getName(),
                         " &8(Pamietaj, ze nagrode mozesz odebrac tylko raz!)",
                         "",
                         " &8Po odebraniu nagrody otrzymasz...",
-                        "  &8- &7Ranga &eVIP &7na cala edycje.",
+                        "  &8- &73x &b&lMagiczne Skrzynki.",
                         "",
                         "&7Kliknij &flewym &7aby otrzymac zaproszenie do &bdiscorda&7."
                 )
                 .asGuiItem(inventoryClickEvent -> {
 
-                    TextUtil.message(player, "&7Zaproszenie na discorda: &fhttps://discord.gg/Gsh6fcsAuq");
+                    TextUtil.message(player, "&7Discord: &fhttps://discord.gg/JGxumR4bGJ");
 
                 }));
 

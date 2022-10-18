@@ -86,7 +86,4 @@ public class CustomEnchantConfiguration extends OkaeriConfig {
         return null;
     }
 
-    public Set<CustomEnchantWrapper> getCustomEnchants() {
-        return customEnchants;
-    }
 }

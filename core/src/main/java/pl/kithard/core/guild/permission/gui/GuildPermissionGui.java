@@ -46,7 +46,7 @@ public class GuildPermissionGui {
         gui.setItem(6,5, ItemBuilder.from(GuiHelper.BACK_ITEM)
                 .asGuiItem(inventoryClickEvent -> new GuildPanelGui(plugin).openPanel(player, guild)));
 
-        for (GuildMember guildMember : guild.getMembers()) {
+        for (GuildMember guildMember : guild.getGuildMemebrs()) {
 
             ItemStack skull = ItemBuilder.skull().owner(Bukkit.getOfflinePlayer(guildMember.getUuid()))
                     .name(TextUtil.component("&b&l" + guildMember.getName()))
@@ -172,7 +172,7 @@ public class GuildPermissionGui {
         gui.setItem(3, 5, ItemBuilder.from(GuiHelper.BACK_ITEM)
                 .asGuiItem(inventoryClickEvent -> new GuildPanelGui(plugin).openPanel(player, guild)));
 
-        for (GuildPermissionScheme scheme : guild.getPermissionSchemes()) {
+        for (GuildPermissionScheme scheme : guild.getPermissionSchemes().values()) {
             gui.addItem(ItemBuilder.from(Material.ITEM_FRAME)
                     .name(TextUtil.component("&7Schemat&8: &b" + scheme.getName()))
                     .lore(TextUtil.component(Arrays.asList(
@@ -209,7 +209,7 @@ public class GuildPermissionGui {
                                 }
 
                                 GuildPermissionScheme scheme = new GuildPermissionScheme(guild.getTag(), text.toUpperCase());
-                                guild.getPermissionSchemes().add(scheme);
+                                guild.addScheme(scheme);
                                 this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin,
                                         () -> this.plugin.getGuildRepository().insertScheme(scheme));
 
@@ -245,7 +245,7 @@ public class GuildPermissionGui {
         gui.setItem(1, 5, ItemBuilder.from(Material.BARRIER)
                 .name(TextUtil.component("&cUsun schemat"))
                 .asGuiItem(inventoryClickEvent -> {
-                    guild.getPermissionSchemes().remove(scheme);
+                    guild.removeScheme(scheme);
                     this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin,
                             () -> this.plugin.getGuildRepository().deleteScheme(scheme));
 
@@ -301,7 +301,7 @@ public class GuildPermissionGui {
         gui.setItem(3, 5, ItemBuilder.from(GuiHelper.BACK_ITEM)
                 .asGuiItem(inventoryClickEvent -> openMembersList(player, guild)));
 
-        for (GuildPermissionScheme scheme : guild.getPermissionSchemes()) {
+        for (GuildPermissionScheme scheme : guild.getPermissionSchemes().values()) {
             gui.addItem(ItemBuilder.from(Material.ITEM_FRAME)
                     .name(TextUtil.component("&7Schemat&8: &b" + scheme.getName()))
                     .lore(TextUtil.component(Arrays.asList(

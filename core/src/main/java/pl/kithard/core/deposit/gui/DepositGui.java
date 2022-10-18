@@ -47,7 +47,8 @@ public class DepositGui {
 
                         if (event.getClick() == ClickType.DROP) {
 
-                            if (corePlayer.getAmountOfDepositItem(depositItem.getName()) <= 0) {
+                            int amount = corePlayer.getAmountOfDepositItem(depositItem.getName());
+                            if (amount <= 0) {
                                 return;
                             }
 
@@ -63,11 +64,16 @@ public class DepositGui {
 
                         else if (event.getClick() == ClickType.CONTROL_DROP) {
 
-                            if (corePlayer.getAmountOfDepositItem(depositItem.getName()) <= 0) {
+                            int amount = corePlayer.getAmountOfDepositItem(depositItem.getName());
+                            if (amount <= 0) {
                                 return;
                             }
 
                             int i = depositItem.getLimit();
+                            if (amount - i < 0) {
+                                return;
+                            }
+
                             corePlayer.removeFromDeposit(depositItem, i);
                             open(player, corePlayer);
 

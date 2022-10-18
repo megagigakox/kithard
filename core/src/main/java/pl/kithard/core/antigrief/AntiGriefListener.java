@@ -1,5 +1,6 @@
 package pl.kithard.core.antigrief;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,7 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import pl.kithard.core.CorePlugin;
-import pl.kithard.core.util.TextUtil;
+import pl.kithard.core.util.LocationUtil;
 
 public class AntiGriefListener implements Listener {
 
@@ -20,15 +21,25 @@ public class AntiGriefListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
-
         Player player = event.getPlayer();
         Block block = event.getBlockPlaced();
 
-        if (block.getY() < 60 || !block.getType().isSolid() || player.isSneaking() || this.plugin.getGuildCache().findByLocation(block.getLocation()) != null) {
+        if (player.getItemInHand() == null && player.getItemInHand().getType() == Material.AIR) {
+            return;
+        }
+
+        if (player.getItemInHand().getType() == Material.ENDER_STONE) {
+            return;
+        }
+
+        if (LocationUtil.isInProtectionArea(player.getLocation())) {
+            return;
+        }
+
+        if ((player.getWorld().getName().equals("world") && block.getY() < 60) || !block.getType().isSolid() || player.isSneaking() || this.plugin.getGuildCache().findByLocation(block.getLocation()) != null) {
             return;
         }
 
         this.plugin.getAntiGriefCache().getAntiGriefBlocks().add(new AntiGriefBlock(block));
-        TextUtil.message(player, "&b&lANTI-GRIEF &cTen blok zniknie za 10 minut, aby tego uniknac postaw blok trzymajac &c&lSHIFT&c.");
     }
 }

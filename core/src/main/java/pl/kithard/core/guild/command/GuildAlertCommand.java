@@ -37,7 +37,7 @@ public class GuildAlertCommand {
         }
 
         String message = ChatColor.stripColor(StringUtils.join(args, " ", 0, args.length));
-        for (GuildMember guildMember : guild.getMembers()) {
+        for (GuildMember guildMember : guild.getGuildMemebrs()) {
             Player other = Bukkit.getPlayer(guildMember.getUuid());
             if (other == null) {
                 continue;

@@ -28,6 +28,7 @@ public class BossService {
         boss.setHealth(hp);
         boss.setRemoveWhenFarAway(false);
         boss.setCanPickupItems(false);
+        boss.setBaby(false);
         boss.getEquipment()
                 .setArmorContents(new ItemStack[] {
                         ItemStackBuilder.of(Material.DIAMOND_BOOTS)
@@ -63,7 +64,7 @@ public class BossService {
         List<PotionEffect> potionEffectList = Arrays.asList(
                 new PotionEffect(PotionEffectType.SPEED, 1999999, 3),
                 new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 1999999, 2),
-                new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1999999, 2),
+                new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1999999, 4),
                 new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 1999999, 2)
         );
         potionEffectList.forEach(boss::addPotionEffect);

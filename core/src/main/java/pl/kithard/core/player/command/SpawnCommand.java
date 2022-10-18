@@ -2,6 +2,7 @@ package pl.kithard.core.player.command;
 
 import net.dzikoysk.funnycommands.stereotypes.FunnyCommand;
 import net.dzikoysk.funnycommands.stereotypes.FunnyComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import pl.kithard.core.CorePlugin;
@@ -23,7 +24,9 @@ public class SpawnCommand {
             acceptsExceeded = true
     )
     public void handle(Player player, CorePlayer corePlayer, String[] args) {
-        Location spawnLocation = player.getWorld().getSpawnLocation().add(0.5, 0.5, 0.5);
+        Location spawnLocation = Bukkit.getWorld("world")
+                .getSpawnLocation()
+                .add(0.5, 0.5, 0.5);
 
         if (args.length == 1 && player.hasPermission("kithard.commands.spawn.other")) {
             Player target = this.plugin.getServer().getPlayerExact(args[0]);
@@ -35,7 +38,12 @@ public class SpawnCommand {
             TextUtil.message(player, "&aPrzeteleportowano!");
         }
 
-        corePlayer.teleport(player.getWorld().getSpawnLocation(), 10);
+        if (player.getWorld().getName().equals("gtp")) {
+            corePlayer.teleport(spawnLocation, 3);
+            return;
+        }
+
+        corePlayer.teleport(spawnLocation, 10);
 
     }
 

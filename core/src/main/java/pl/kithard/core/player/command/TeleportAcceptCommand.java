@@ -32,6 +32,10 @@ public class TeleportAcceptCommand {
             return;
         }
 
+        if (!player.getWorld().getName().equals("world")) {
+            return;
+        }
+
         if (args[0].equalsIgnoreCase("*") || args[0].equalsIgnoreCase("all")) {
 
             List<UUID> all = new ArrayList<>();

@@ -5,6 +5,7 @@ import pl.kithard.core.api.database.mysql.DatabaseRepository;
 import pl.kithard.core.api.database.mysql.DatabaseService;
 import pl.kithard.core.guild.log.GuildLog;
 import pl.kithard.core.guild.log.GuildLogType;
+import pl.kithard.core.guild.logblock.GuildLogBlock;
 import pl.kithard.core.guild.permission.GuildPermission;
 import pl.kithard.core.guild.permission.GuildPermissionScheme;
 import pl.kithard.core.guild.regen.GuildRegenBlock;
@@ -73,6 +74,15 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                     "action TEXT NOT NULL, " +
                     "date LONG NOT NULL)";
 
+    private final static String PREPARE_TABLE_LOG_BLOCKS =
+            "CREATE TABLE IF NOT EXISTS kithard_guild_logblocks (" +
+                    "type TEXT NOT NULL, " +
+                    "player VARCHAR(16) NOT NULL, " +
+                    "material TEXT NOT NULL, " +
+                    "data INT NOT NULL, " +
+                    "location TEXT NOT NULL, " +
+                    "date BIGINT NOT NULL)";
+
     private final static String INSERT_GUILD =
             "INSERT INTO kithard_guilds (" +
                     "tag, name, owner, guild_region_center, guild_region_size, home, hp, lives, points, kills, deaths, expire_time, " +
@@ -87,6 +97,10 @@ public class GuildRepository implements DatabaseRepository<Guild> {
 
     private final static String INSERT_LOG =
             "INSERT INTO kithard_guild_logs (guild, type, action, date) VALUES(?, ?, ?, ?)";
+
+    private final static String INSERT_LOG_BLOCK =
+            "INSERT INTO kithard_guild_logblocks (type, player, material, data, location, date) VALUES(?, ?, ?, ?, ?, ?)";
+
 
     private final static String UPDATE_GUILD =
             "UPDATE kithard_guilds SET" +
@@ -156,6 +170,27 @@ public class GuildRepository implements DatabaseRepository<Guild> {
         }
     }
 
+    public void insertLogBlock(GuildLogBlock logBlock) {
+        try (
+                Connection connection = this.databaseService.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(INSERT_LOG_BLOCK)
+        ) {
+
+            preparedStatement.setString(1, logBlock.getType().toString());
+            preparedStatement.setString(2, logBlock.getPlayer());
+            preparedStatement.setString(3, logBlock.getMaterial().toString());
+            preparedStatement.setInt(4, logBlock.getData());
+            preparedStatement.setString(5, LocationSerializer.serialize(logBlock.getLocation()));
+            preparedStatement.setLong(6, logBlock.getDate());
+
+            preparedStatement.execute();
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void deleteScheme(GuildPermissionScheme scheme) {
         try (
                 Connection connection = this.databaseService.getConnection();
@@ -200,6 +235,7 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                 PreparedStatement schemeStatement = connection.prepareStatement(PREPARE_TABLE_SCHEMES);
                 PreparedStatement regenBlockStatement = connection.prepareStatement(PREPARE_TABLE_REGEN_BLOCKS);
                 PreparedStatement logsStatement = connection.prepareStatement(PREPARE_TABLE_LOGS);
+                PreparedStatement logBlockStatement = connection.prepareStatement(PREPARE_TABLE_LOG_BLOCKS)
         ) {
 
             guildStatement.execute();
@@ -207,6 +243,7 @@ public class GuildRepository implements DatabaseRepository<Guild> {
             schemeStatement.execute();
             regenBlockStatement.execute();
             logsStatement.execute();
+            logBlockStatement.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -302,7 +339,7 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                         .stream()
                         .map(GuildPermission::valueOf)
                         .collect(Collectors.toSet()));
-                guild.getMembers().add(guildMember);
+                guild.addMember(guildMember);
             }
 
         }
@@ -345,7 +382,7 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                         .stream()
                         .map(GuildPermission::valueOf)
                         .collect(Collectors.toSet()));
-                guild.getPermissionSchemes().add(guildPermissionScheme);
+                guild.addScheme(guildPermissionScheme);
             }
 
         }
@@ -498,7 +535,7 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                 guildStatement.setString(19, data.getTag());
                 guildStatement.addBatch();
 
-                for (GuildMember guildMember : data.getMembers()) {
+                for (GuildMember guildMember : data.getGuildMemebrs()) {
 
                     memberStatement.setString(1, guildMember.getName());
                     memberStatement.setString(2, CollectionSerializer.serializeCollection(guildMember.getAllowedPermissions()
@@ -510,7 +547,7 @@ public class GuildRepository implements DatabaseRepository<Guild> {
 
                 }
 
-                for (GuildPermissionScheme guildPermissionScheme : data.getPermissionSchemes()) {
+                for (GuildPermissionScheme guildPermissionScheme : data.getPermissionSchemes().values()) {
 
                     schemeStatement.setString(1, CollectionSerializer.serializeCollection(guildPermissionScheme.getAllowedPermissions()
                             .stream()

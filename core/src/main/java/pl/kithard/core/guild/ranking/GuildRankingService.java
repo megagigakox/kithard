@@ -18,10 +18,10 @@ public class GuildRankingService {
 
     public void sort() {
         for (Guild guild : this.plugin.getGuildCache().getValues()) {
-            if (guild.getMembers().size() < 3) {
+            if (guild.getGuildMemebrs().size() < 3) {
                 this.guildPointsRanking.remove(guild);
             }
-            else if (guild.getMembers().size() >= 3 && !this.guildPointsRanking.contains(guild))  {
+            else if (guild.getGuildMemebrs().size() >= 3 && !this.guildPointsRanking.contains(guild))  {
                 this.guildPointsRanking.add(guild);
             }
         }

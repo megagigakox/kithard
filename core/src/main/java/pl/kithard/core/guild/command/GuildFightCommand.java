@@ -11,11 +11,10 @@ import pl.kithard.core.util.TextUtil;
 import java.util.concurrent.TimeUnit;
 
 @FunnyComponent
-public class GuildWarCommand {
+public class GuildFightCommand {
 
     @FunnyCommand(
             name = "g walka",
-            aliases = "g war",
             playerOnly = true,
             acceptsExceeded = true
     )

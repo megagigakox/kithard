@@ -33,8 +33,8 @@ public class PlayerTeleportCountdown extends BukkitRunnable {
             if (corePlayer == null) {
                 continue;
             }
-            PlayerTeleport playerTeleport = corePlayer.getTeleport();
 
+            PlayerTeleport playerTeleport = corePlayer.getTeleport();
             if (playerTeleport != null) {
                 int time = (int) TimeUnit.MILLISECONDS.toSeconds(playerTeleport.getTime() - currentTimeMillis);
 

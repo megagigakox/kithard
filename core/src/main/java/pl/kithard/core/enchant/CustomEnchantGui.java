@@ -43,7 +43,14 @@ public class CustomEnchantGui {
                     )
                     .asGuiItem(event -> {
 
-                        if (player.getLevel() >= customEnchant.getCost() || player.getGameMode() == GameMode.CREATIVE) {
+                        if (player.getGameMode() == GameMode.CREATIVE) {
+                            player.getItemInHand().addEnchantment(enchantment, customEnchant.getLevel());
+                            player.closeInventory();
+                            TextUtil.message(player, "&8(&2&l!&8) &aPomyslnie zenchantowano!");
+                            return;
+                        }
+
+                        if (player.getLevel() >= customEnchant.getCost()) {
                             player.getItemInHand().addEnchantment(enchantment, customEnchant.getLevel());
                             player.setLevel(player.getLevel() - customEnchant.getCost());
                             player.closeInventory();
@@ -54,8 +61,6 @@ public class CustomEnchantGui {
                         }
 
                     }));
-
-
 
         }
 
