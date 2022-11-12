@@ -16,35 +16,28 @@ public final class CoreConstants {
     public final static int PROTECTION_AREA_DISTANCE = 150;
 
     public final static List<ItemStack> PLAYER_GUILD_ITEMS = Arrays.asList(
-            new ItemStack(Material.COBBLESTONE,16)
+            new ItemStack(Material.SLIME_BLOCK,24),
+            new ItemStack(Material.ENDER_CHEST,32),
+            new ItemStack(Material.RAILS,64),
+            new ItemStack(Material.GOLD_BLOCK,64),
+            new ItemStack(Material.ENCHANTMENT_TABLE,48),
+            new ItemStack(Material.ANVIL,48),
+            new ItemStack(Material.TNT,48),
+            new ItemStack(Material.BOOKSHELF,32),
+            new ItemStack(Material.REDSTONE_BLOCK,64)
+
     );
 
     public final static List<ItemStack> PREMIUM_GUILD_ITEMS = Arrays.asList(
-            new ItemStack(Material.COBBLESTONE,16)
-
-//    public final static List<ItemStack> PLAYER_GUILD_ITEMS = Arrays.asList(
-//            new ItemStack(Material.SLIME_BLOCK,24),
-//            new ItemStack(Material.NOTE_BLOCK,48),
-//            new ItemStack(Material.RAILS,64),
-//            new ItemStack(Material.GOLD_BLOCK,64),
-//            new ItemStack(Material.ENCHANTMENT_TABLE,48),
-//            new ItemStack(Material.ANVIL,48),
-//            new ItemStack(Material.TNT,48),
-//            new ItemStack(Material.BOOKSHELF,32),
-//            new ItemStack(Material.REDSTONE_BLOCK,64)
-//
-//    );
-//
-//    public final static List<ItemStack> PREMIUM_GUILD_ITEMS = Arrays.asList(
-//            new ItemStack(Material.SLIME_BLOCK,16),
-//            new ItemStack(Material.NOTE_BLOCK,32),
-//            new ItemStack(Material.RAILS,32),
-//            new ItemStack(Material.GOLD_BLOCK,32),
-//            new ItemStack(Material.ENCHANTMENT_TABLE,24),
-//            new ItemStack(Material.ANVIL,24),
-//            new ItemStack(Material.TNT,24),
-//            new ItemStack(Material.BOOKSHELF,24),
-//            new ItemStack(Material.REDSTONE_BLOCK,32)
+            new ItemStack(Material.SLIME_BLOCK,12),
+            new ItemStack(Material.ENDER_CHEST,16),
+            new ItemStack(Material.RAILS,32),
+            new ItemStack(Material.GOLD_BLOCK,32),
+            new ItemStack(Material.ENCHANTMENT_TABLE,24),
+            new ItemStack(Material.ANVIL,24),
+            new ItemStack(Material.TNT,24),
+            new ItemStack(Material.BOOKSHELF,24),
+            new ItemStack(Material.REDSTONE_BLOCK,32)
     );
 
     public static final File CENTER_SCHEMATIC =

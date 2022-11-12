@@ -20,6 +20,8 @@ import pl.kithard.core.util.GuiHelper;
 import pl.kithard.core.util.InventoryUtil;
 import pl.kithard.core.util.TextUtil;
 
+import java.util.Arrays;
+
 public class SafeListener implements Listener {
 
     private final CorePlugin plugin;
@@ -53,7 +55,7 @@ public class SafeListener implements Listener {
                 return;
             }
 
-            if (!safe.getOwnerUUID().equals(player.getUniqueId())) {
+            if (!safe.getOwnerUUID().equals(player.getUniqueId()) && !player.hasPermission("kithard.safe.bypass")) {
                 TextUtil.message(player, "&8(&4&l!&8) &cNie mozesz otworzyc tego sejfu poniewaz nie nalezy on do Ciebie! Jezeli chcesz przejac ten sejf musisz posiadać &b&lŁOM&c!");
                 event.setCancelled(true);
                 return;
@@ -115,6 +117,7 @@ public class SafeListener implements Listener {
                     inventory.setItem(13, new ItemStack(Material.AIR));
                     safe.setOwnerUUID(player.getUniqueId());
                     safe.setOwnerName(player.getName());
+                    safe.setNeedSave(true);
                     ItemStack itemStack = safe.item();
                     InventoryUtil.addItem(player, itemStack);
                     InventoryUtil.removeItem(player, CustomRecipe.CROWBAR.getItem().clone());
@@ -135,8 +138,13 @@ public class SafeListener implements Listener {
         }
 
         if (event.getInventory().getContents() != null) {
-            safe.setContents(event.getInventory().getContents());
-            safe.setNeedSave(true);
+            ItemStack[] current = event.getInventory().getContents();
+            ItemStack[] last = safe.getContents();
+            if (!Arrays.equals(current, last)) {
+                safe.setContents(event.getInventory().getContents());
+                safe.setNeedSave(true);
+            }
+
         }
     }
 
@@ -149,7 +157,7 @@ public class SafeListener implements Listener {
         }
 
         if (itemStack.getItemMeta().getDisplayName().contains("SEJF")) {
-            TextUtil.message(player, "&8(&4&l!&8) &cNie mozesz wyrzucic sejfu!");
+            TextUtil.message(player, "&8(&4&l!&8) &cNie mozesz wyrzucic sejfu, aby przekazac innemu graczowi uzyj bezpieczna wymiane na spawnie!");
             event.setCancelled(true);
         }
     }

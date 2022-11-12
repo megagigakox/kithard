@@ -96,17 +96,17 @@ public class GuildTntExplosionListener implements Listener {
             }
 
             if (location.getBlock().getType() == Material.OBSIDIAN) {
-                if (RandomUtil.getChance(15)) {
+                if (RandomUtil.getChance(11.5)) {
                     location.getBlock().setType(Material.AIR);
                 }
             }
             if (location.getBlock().getType() == Material.STATIONARY_WATER) {
-                if (RandomUtil.getChance(20)) {
+                if (RandomUtil.getChance(25)) {
                     location.getBlock().setType(Material.AIR);
                 }
             }
             if (location.getBlock().getType() == Material.STATIONARY_LAVA) {
-                if (RandomUtil.getChance(20)) {
+                if (RandomUtil.getChance(25)) {
                     location.getBlock().setType(Material.AIR);
                 }
             }
@@ -121,12 +121,12 @@ public class GuildTntExplosionListener implements Listener {
                 }
             }
             if (location.getBlock().getType() == Material.ENDER_CHEST) {
-                if (RandomUtil.getChance(50)) {
+                if (RandomUtil.getChance(30)) {
                     location.getBlock().setType(Material.AIR);
                 }
             }
             if (location.getBlock().getType() == Material.ENCHANTMENT_TABLE) {
-                if (RandomUtil.getChance(50)) {
+                if (RandomUtil.getChance(30)) {
                     location.getBlock().setType(Material.AIR);
                 }
             }

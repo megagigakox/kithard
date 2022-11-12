@@ -1,9 +1,6 @@
 package pl.kithard.core;
 
 import codecrafter47.bungeetablistplus.api.bukkit.BungeeTabListPlusBukkitAPI;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.LongSerializationPolicy;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
@@ -13,12 +10,9 @@ import net.dzikoysk.funnycommands.resources.completers.OnlinePlayersCompleter;
 import net.dzikoysk.funnycommands.resources.types.PlayerType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.kithard.core.abyss.AbbysTask;
@@ -28,7 +22,6 @@ import pl.kithard.core.antigrief.AntiGriefTask;
 import pl.kithard.core.antimacro.AntiMacroCache;
 import pl.kithard.core.antimacro.AntiMacroListener;
 import pl.kithard.core.antimacro.AntiMacroTask;
-import pl.kithard.core.api.database.config.DatabaseConfig;
 import pl.kithard.core.api.database.mysql.DatabaseService;
 import pl.kithard.core.api.reward.RewardRepository;
 import pl.kithard.core.automessage.config.AutoMessageConfiguration;
@@ -64,16 +57,16 @@ import pl.kithard.core.generator.GeneratorFactory;
 import pl.kithard.core.generator.GeneratorRepository;
 import pl.kithard.core.generator.listener.GeneratorListener;
 import pl.kithard.core.grouptp.GroupTeleportCache;
+import pl.kithard.core.grouptp.GroupTeleportCommand;
 import pl.kithard.core.grouptp.GroupTeleportListener;
 import pl.kithard.core.grouptp.GroupTeleportTask;
-import pl.kithard.core.grouptp.GroupTeleportCommand;
 import pl.kithard.core.guild.GuildCache;
-import pl.kithard.core.guild.GuildFactory;
+import pl.kithard.core.guild.GuildCreator;
 import pl.kithard.core.guild.GuildRepository;
+import pl.kithard.core.guild.bucket.BucketInteractionListener;
+import pl.kithard.core.guild.bucket.BucketWaterDeleteTask;
 import pl.kithard.core.guild.command.*;
 import pl.kithard.core.guild.command.admin.GuildAdminCommand;
-import pl.kithard.core.guild.command.admin.GuildAdminGiveItemsCommand;
-import pl.kithard.core.guild.command.admin.GuildAdminTeleportCommand;
 import pl.kithard.core.guild.command.bind.GuildBind;
 import pl.kithard.core.guild.freespace.FreeSpaceCache;
 import pl.kithard.core.guild.freespace.command.FreeSpaceCommand;
@@ -92,10 +85,8 @@ import pl.kithard.core.guild.regen.GuildRegenCache;
 import pl.kithard.core.guild.regen.command.GuildRegenCommand;
 import pl.kithard.core.guild.regen.listener.GuildRegenListener;
 import pl.kithard.core.guild.report.GuildAdminReportCommand;
-import pl.kithard.core.guild.report.GuildReport;
 import pl.kithard.core.guild.report.GuildReportCache;
 import pl.kithard.core.guild.report.GuildReportCommand;
-import pl.kithard.core.guild.report.GuildReportGui;
 import pl.kithard.core.guild.task.GuildExpireTask;
 import pl.kithard.core.guild.task.GuildHologramTask;
 import pl.kithard.core.guild.task.GuildShadowBlockProtectionTask;
@@ -122,7 +113,6 @@ import pl.kithard.core.player.backup.PlayerBackupFactory;
 import pl.kithard.core.player.backup.PlayerBackupRepository;
 import pl.kithard.core.player.backup.PlayerBackupService;
 import pl.kithard.core.player.backup.command.PlayerBackupCommand;
-import pl.kithard.core.player.backup.task.PlayerBackupTask;
 import pl.kithard.core.player.chat.command.ChatManageCommand;
 import pl.kithard.core.player.chat.listener.AsyncPlayerChatListener;
 import pl.kithard.core.player.combat.listener.BlockCombatInteractionsListener;
@@ -141,6 +131,7 @@ import pl.kithard.core.player.nametag.PlayerNameTagService;
 import pl.kithard.core.player.nametag.task.PlayerNameTagRefreshTask;
 import pl.kithard.core.player.punishment.PunishmentCache;
 import pl.kithard.core.player.punishment.PunishmentFactory;
+import pl.kithard.core.player.punishment.PunishmentRepository;
 import pl.kithard.core.player.punishment.command.PunishmentCommand;
 import pl.kithard.core.player.punishment.listener.PlayerLoginListener;
 import pl.kithard.core.player.ranking.PlayerRankingCommand;
@@ -178,9 +169,6 @@ import pl.kithard.core.task.RankingsRefreshTask;
 import pl.kithard.core.trade.TradeCache;
 import pl.kithard.core.trade.TradeListener;
 import pl.kithard.core.util.TextUtil;
-import pl.kithard.core.util.adapters.ConfigurationSerializableAdapter;
-import pl.kithard.core.util.adapters.InventoryAdapter;
-import pl.kithard.core.util.adapters.ItemStackArrayAdapter;
 import pl.kithard.core.warp.WarpCache;
 import pl.kithard.core.warp.WarpFactory;
 import pl.kithard.core.warp.WarpSerdes;
@@ -191,7 +179,6 @@ import java.util.Arrays;
 
 public final class CorePlugin extends JavaPlugin {
 
-    private Gson gson;
     private DatabaseService databaseService;
 
     private CorePlayerCache corePlayerCache;
@@ -206,7 +193,7 @@ public final class CorePlugin extends JavaPlugin {
 
     private GuildCache guildCache;
     private GuildRepository guildRepository;
-    private GuildFactory guildFactory;
+    private GuildCreator guildFactory;
     private GuildRankingService guildRankingService;
     private GuildRegenCache regenCache;
     private GuildReportCache guildReportCache;
@@ -237,6 +224,7 @@ public final class CorePlugin extends JavaPlugin {
 
     private PunishmentCache punishmentCache;
     private PunishmentFactory punishmentFactory;
+    private PunishmentRepository punishmentRepository;
 
     private KitConfiguration kitConfiguration;
 
@@ -257,14 +245,6 @@ public final class CorePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
-
-        this.gson = new GsonBuilder()
-                .registerTypeHierarchyAdapter(ConfigurationSerializable.class, new ConfigurationSerializableAdapter())
-                .registerTypeHierarchyAdapter(ItemStack[].class, new ItemStackArrayAdapter())
-                .registerTypeHierarchyAdapter(Inventory.class, new InventoryAdapter())
-                .setLongSerializationPolicy(LongSerializationPolicy.STRING)
-                .serializeNulls()
-                .create();
 
         this.databaseService = new DatabaseService("mysql.titanaxe.com",3306, "srv235179", "srv235179", "CbccNpZ8");
 
@@ -375,7 +355,7 @@ public final class CorePlugin extends JavaPlugin {
         this.guildCache = new GuildCache(this);
         this.guildRepository = new GuildRepository(getLogger(), this.databaseService, guildCache);
         this.guildRepository.prepareTable();
-        this.guildFactory = new GuildFactory(this);
+        this.guildFactory = new GuildCreator(this);
         this.guildFactory.loadAll();
         this.guildReportCache = new GuildReportCache();
 
@@ -405,6 +385,8 @@ public final class CorePlugin extends JavaPlugin {
         });
         this.warpFactory = new WarpFactory(this);
 
+        this.punishmentRepository = new PunishmentRepository(this.databaseService);
+        this.punishmentRepository.prepareTables();
         this.punishmentCache = new PunishmentCache();
         this.punishmentFactory = new PunishmentFactory(this);
         this.punishmentFactory.load();
@@ -453,6 +435,8 @@ public final class CorePlugin extends JavaPlugin {
 
         this.guildRepository.updateAll(this.guildCache.getValues());
         this.corePlayerRepository.updateAll(this.corePlayerCache.getValues());
+        this.safeRepository.updateAll(this.safeCache.values());
+
         this.databaseService.shutdown();
         System.out.println("Zapisano gildie i userow podczas offania serwera!");
     }
@@ -510,7 +494,6 @@ public final class CorePlugin extends JavaPlugin {
                         new PlayerGuideCommand(),
                         new GuildPanelCommand(this),
                         new GuildAdminCommand(this),
-                        new GuildAdminGiveItemsCommand(this),
                         new GuildMemberInviteCommand(this),
                         new GuildJoinCommand(this),
                         new GuildKickMemberCommand(this),
@@ -532,7 +515,6 @@ public final class CorePlugin extends JavaPlugin {
                         new GuildFriendlyFireCommand(this),
                         new GuildAllyFireCommand(this),
                         new ServerSettingsCommand(this),
-                        new GuildAdminTeleportCommand(this),
                         new WhoIsCommand(this),
                         new GuildWarehouseCommand(this),
                         new RankingResetCommand(),
@@ -561,7 +543,9 @@ public final class CorePlugin extends JavaPlugin {
                         new AdminShopCommand(this),
                         new GroupTeleportCommand(this),
                         new GuildAdminReportCommand(this),
-                        new GuildReportCommand(this)
+                        new GuildReportCommand(this),
+                        new KickCommand(this),
+                        new CorePlayerCommand(this)
                 ))
                 .completer("itemShopServices", (context, prefix, limit) -> CommandUtils.collectCompletions(
                         this.itemShopServiceConfiguration.getServices(),
@@ -586,8 +570,7 @@ public final class CorePlugin extends JavaPlugin {
         new RankingsRefreshTask(this);
         new GuildExpireTask(this);
         new GuildHologramTask(this);
-        new FreeSpaceTask(this).run();
-        new PlayerBackupTask(this);
+        new FreeSpaceTask(this, this.getServer().getWorld("world")).run();
         new PlayerSpentTimeTask(this);
         new FreezeTask(this);
         new AntiMacroTask(this);
@@ -598,6 +581,7 @@ public final class CorePlugin extends JavaPlugin {
         new BossTask(this);
         new AntiGriefTask(this);
         new GroupTeleportTask(this);
+        new BucketWaterDeleteTask(this);
     }
 
     private void initListeners() {
@@ -639,28 +623,31 @@ public final class CorePlugin extends JavaPlugin {
         new AntiGriefListener(this);
         new GuildLogBlockListener(this);
         new GroupTeleportListener(this);
+        new BucketInteractionListener(this);
+        new PlayerPickupListener(this);
     }
 
     private void initRecipes() {
         Bukkit.addRecipe(new ShapedRecipe(CustomRecipe.BOY_FARMER.getItem())
                 .shape("aaa", "aba", "aaa")
                 .setIngredient('a', Material.OBSIDIAN)
-                .setIngredient('b', Material.EMERALD_BLOCK));
+                .setIngredient('b', Material.DIAMOND_BLOCK));
 
         Bukkit.addRecipe(new ShapedRecipe(CustomRecipe.SAND_FARMER.getItem())
                 .shape("aaa", "aba", "aaa")
                 .setIngredient('a', Material.SAND)
-                .setIngredient('b', Material.EMERALD_BLOCK));
+                .setIngredient('b', Material.DIAMOND_BLOCK));
 
         Bukkit.addRecipe(new ShapedRecipe(CustomRecipe.AIR_FARMER.getItem())
-                .shape("aaa", "aba", "aaa")
+                .shape("cac", "cbc", "cac")
                 .setIngredient('a', Material.EMERALD_BLOCK)
-                .setIngredient('b', Material.DIAMOND_PICKAXE));
+                .setIngredient('b', Material.DIAMOND_BLOCK)
+                .setIngredient('c', Material.COBBLESTONE));
 
         Bukkit.addRecipe(new ShapedRecipe(CustomRecipe.STONE_GENERATOR.getItem())
                 .shape("aaa", "aba", "aaa")
                 .setIngredient('a', Material.COBBLESTONE)
-                .setIngredient('b', Material.EMERALD_BLOCK));
+                .setIngredient('b', Material.DIAMOND_BLOCK));
 
         Bukkit.addRecipe(new ShapedRecipe(CustomRecipe.COBBLEX.getItem())
                 .shape("aaa", "aaa", "aaa")
@@ -701,10 +688,6 @@ public final class CorePlugin extends JavaPlugin {
         for (int i = 1; i < 17; ++i) {
             BungeeTabListPlusBukkitAPI.registerVariable(this, new GuildPointsTopVariable("guild-points-top" + i, i, this));
         }
-    }
-
-    public Gson getGson() {
-        return gson;
     }
 
     public CorePlayerCache getCorePlayerCache() {
@@ -751,7 +734,7 @@ public final class CorePlugin extends JavaPlugin {
         return guildCache;
     }
 
-    public GuildFactory getGuildFactory() {
+    public GuildCreator getGuildFactory() {
         return guildFactory;
     }
 
@@ -885,5 +868,9 @@ public final class CorePlugin extends JavaPlugin {
 
     public GuildReportCache getGuildReportCache() {
         return guildReportCache;
+    }
+
+    public PunishmentRepository getPunishmentRepository() {
+        return punishmentRepository;
     }
 }

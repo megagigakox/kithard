@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.player.home.PlayerHome;
 import pl.kithard.core.util.GuiHelper;
@@ -90,6 +91,13 @@ public class PlayerHomeGui {
                                 open(player);
                             }
                             else if (event.getClick() == ClickType.LEFT) {
+
+                                Guild guild = this.plugin.getGuildCache().findByLocation(home.getLocation());
+                                if (guild != null && !guild.isMember(player.getUniqueId())) {
+                                    TextUtil.message(player, "&8(&4&l!&8) &cTen dom jest na terenie innej gildii!");
+                                    return;
+                                }
+
                                 corePlayer.teleport(home.getLocation(), 5);
                             }
 

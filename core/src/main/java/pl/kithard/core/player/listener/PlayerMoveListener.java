@@ -44,7 +44,6 @@ public class PlayerMoveListener implements Listener {
         if (combat.hasFight() && !player.hasPermission("kithard.antilogout.bypass")) {
             if (player.getWorld().getName().equals("world")) {
                 if (LocationUtil.loc(61, -61, -61, 61, to)) {
-                    event.setCancelled(true);
 
                     Location l = player.getWorld().getSpawnLocation().subtract(player.getLocation());
                     double distance = player.getLocation().distance(player.getWorld().getSpawnLocation());

@@ -17,6 +17,8 @@ public class GuildRankingService {
     }
 
     public void sort() {
+        this.guildPointsRanking.removeIf(guild -> this.plugin.getGuildCache().findByTag(guild.getTag()) == null);
+
         for (Guild guild : this.plugin.getGuildCache().getValues()) {
             if (guild.getGuildMemebrs().size() < 3) {
                 this.guildPointsRanking.remove(guild);

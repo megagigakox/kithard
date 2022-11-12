@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import pl.kithard.core.drop.special.SpecialDropItem;
 import pl.kithard.core.drop.special.SpecialDropItemType;
+import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.settings.PlayerSettings;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.drop.DropItem;
@@ -89,7 +90,7 @@ public class DropGui {
                 .create();
 
         GuiHelper.fillColorGui6(gui);
-
+        Guild guild = this.plugin.getGuildCache().findByPlayer(player);
         gui.setItem(6, 5, ItemBuilder.from(GuiHelper.BACK_ITEM)
                 .asGuiItem(inventoryClickEvent -> open(player)));
 
@@ -99,7 +100,7 @@ public class DropGui {
         for (DropItem dropItem : this.plugin.getDropItemConfiguration().getDropItems()) {
             boolean status = corePlayer.isDisabledDropItem(dropItem);
             boolean fortune = dropItem.isFortune();
-            double chance = DropUtil.calculateChanceFromStone(dropItem, corePlayer, serverSettings);
+            double chance = DropUtil.calculateChanceFromStone(dropItem, corePlayer, serverSettings, guild);
             int numberOfMinedDrops = corePlayer.getNumberOfMinedDropItem(dropItem.getName());
 
             gui.addItem(ItemBuilder.from(dropItem.getItem().getType())
@@ -182,13 +183,16 @@ public class DropGui {
 
         boolean globalTurboDrop = serverSettings.getTurboDrop() > System.currentTimeMillis();
         boolean playerTurboDrop = corePlayer.getTurboDrop() > System.currentTimeMillis();
+        boolean guildTurboDrop = guild != null && guild.getTurboDrop() > System.currentTimeMillis();
         gui.setItem(5, 6, ItemBuilder.from(Material.EXP_BOTTLE)
                 .name(TextUtil.component("&bTURBODROP"))
                 .lore(TextUtil.component(Arrays.asList(
+                        " ",
+                        " &7Serwerowy&8: " + (globalTurboDrop ? "&a✔ &7(&a" + TimeUtil.formatTimeMillis(serverSettings.getTurboDrop() - System.currentTimeMillis()) + "&7)" : "&c✖"),
+                        " &7Dla ciebie&8: " + (playerTurboDrop ? "&a✔ &7(&a" + TimeUtil.formatTimeMillis(corePlayer.getTurboDrop() - System.currentTimeMillis()) + "&7)" : "&c✖"),
+                        " &7Gildyjny&8: " + (guildTurboDrop ? "&a✔ &7(&a" + TimeUtil.formatTimeMillis(guild.getTurboDrop() - System.currentTimeMillis()) + "&7)" : "&c✖"),
                         "",
-                        " &8» &7Serwerowy TurboDrop: " + (globalTurboDrop ? "&a✔ &7(&a" + TimeUtil.formatTimeMillis(serverSettings.getTurboDrop() - System.currentTimeMillis()) + "&7)" : "&c✖"),
-                        " &8» &7Twoj TurboDrop: " + (playerTurboDrop ? "&a✔ &7(&a" + TimeUtil.formatTimeMillis(corePlayer.getTurboDrop() - System.currentTimeMillis()) + "&7)" : "&c✖"),
-                        ""
+                        "&8Pamietaj ze turbodrop z voucherow oraz se sklepu sie sumuje!"
                         )))
                 .glow(messagesStatus)
                 .asGuiItem(inventoryClickEvent -> {

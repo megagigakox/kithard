@@ -54,8 +54,10 @@ public class Safe extends DatabaseEntry {
                 .asItemStack();
     }
 
+
     public void open(Player player) {
         Inventory inventory = Bukkit.createInventory(null, 54, TextUtil.color(this.item.getItemMeta().getDisplayName()));
+        player.closeInventory();
 
         if (this.contents != null) {
             inventory.setContents(this.contents);

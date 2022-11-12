@@ -80,7 +80,7 @@ public class PlayerIncognitoGui {
                 .asGuiItem(event -> {
 
                     playerIncognito.setSkinIncognito(!playerIncognito.isSkinIncognito());
-                    this.plugin.getPlayerIncognitoSerivce().changeSkin(corePlayer);
+//                    this.plugin.getPlayerIncognitoSerivce().changeSkin(corePlayer);
                     open(player, corePlayer);
 
                 }));

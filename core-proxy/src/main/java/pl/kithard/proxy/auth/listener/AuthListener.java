@@ -34,12 +34,12 @@ public class AuthListener implements Listener {
         event.registerIntent(plugin);
         this.plugin.getProxy().getScheduler().runAsync(plugin, () -> {
 
-            if (MojangUtil.isLimited()) {
-                event.setCancelReason(TextUtil.component("&CSprobuj ponownie za chwile."));
-                event.setCancelled(true);
-                event.completeIntent(plugin);
-                return;
-            }
+//            if (MojangUtil.isLimited()) {
+//                event.setCancelReason(TextUtil.component("&CSprobuj ponownie za chwile."));
+//                event.setCancelled(true);
+//                event.completeIntent(plugin);
+//                return;
+//            }
 
             if (this.plugin.getProxy().getPlayer(name) != null) {
                 event.setCancelReason(TextUtil.component("&cTen gracz jest juz online!"));

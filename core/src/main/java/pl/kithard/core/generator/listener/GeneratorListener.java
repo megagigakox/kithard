@@ -67,6 +67,10 @@ public class GeneratorListener implements Listener {
             return;
         }
 
+        if (event.getPlayer().getWorld().getName().equals("gtp")) {
+            return;
+        }
+
         Player player = event.getPlayer();
         ItemStack itemInHand = player.getItemInHand();
         if (itemInHand.getItemMeta() == null || itemInHand.getItemMeta().getDisplayName() == null) {

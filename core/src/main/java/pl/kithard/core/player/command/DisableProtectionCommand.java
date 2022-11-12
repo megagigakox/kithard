@@ -16,6 +16,16 @@ public class DisableProtectionCommand {
         this.plugin = plugin;
     }
 
+
+    @FunnyCommand(
+            name = "ochrona",
+            aliases = "protection",
+            acceptsExceeded = true
+    )
+    public void handle0(Player player) {
+        TextUtil.message(player, "&8(&3&l!&8) &7Aby wylaczyc ochrone uzyj komendy&8: /&fwylaczochrone");
+    }
+
     @FunnyCommand(
             name = "wylaczochrone",
             aliases = "disableprotection",

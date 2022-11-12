@@ -13,7 +13,7 @@ public class GuildShadowBlockProtectionTask extends BukkitRunnable {
 
     public GuildShadowBlockProtectionTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimer(plugin, 0L, 20 * 5L);
+        this.runTaskTimerAsynchronously(plugin, 0L, 20L);
     }
 
     @Override
@@ -33,8 +33,11 @@ public class GuildShadowBlockProtectionTask extends BukkitRunnable {
                 continue;
             }
 
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 5, 2));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 20 * 5, 0));
+            this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 5, 2));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 20 * 5, 0));
+            });
+
         }
     }
 }

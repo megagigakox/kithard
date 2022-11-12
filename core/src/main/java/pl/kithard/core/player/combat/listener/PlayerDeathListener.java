@@ -66,14 +66,16 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
+        killer.setFireTicks(0);
         CorePlayer killerPlayer = this.plugin.getCorePlayerCache().findByPlayer(killer);
-        killer.getWorld().strikeLightningEffect(loser.getLocation());
         GroupTeleport groupTeleport = this.plugin.getGroupTeleportCache().find(killer);
         if (groupTeleport != null) {
             groupTeleport.setCloseCountdownTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(45));
             killerPlayer.getCombat().setLastAttackTime(0L);
-            this.plugin.getGroupTeleportCache().remove(loser, groupTeleport);
-            loser.teleport(Bukkit.getWorld("world").getSpawnLocation());
+            this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
+                loser.teleport(Bukkit.getWorld("world").getSpawnLocation());
+                this.plugin.getGroupTeleportCache().remove(loser, groupTeleport);
+            });
         }
 
         Guild killerGuild = this.plugin.getGuildCache().findByPlayer(killer);
@@ -148,7 +150,6 @@ public class PlayerDeathListener implements Listener {
         loserPlayer.setNeedSave(true);
         loserCombat.reset();
 
-        this.plugin.getPlayerNameTagService().updateDummy(loserPlayer);
         PlayerBackup playerBackup = this.plugin.getPlayerBackupFactory().create(loser, PlayerBackupType.DEATH, killer.getName(), toRemove);
         this.plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> this.plugin.getPlayerBackupRepository().insert(playerBackup));
 
@@ -165,17 +166,20 @@ public class PlayerDeathListener implements Listener {
         killerPlayer.addAchievementProgress(AchievementType.KILLS, 1);
         killerPlayer.setNeedSave(true);
 
-        this.plugin.getPlayerNameTagService().updateDummy(killerPlayer);
-
         ItemStack itemStack = SkullCreator.itemFromUuid(loserPlayer.getUuid());
         InventoryUtil.addItem(killer, itemStack);
-        killer.setFireTicks(0);
 
         if (killerGuild != null) {
             killerGuild.addKills(1);
             killerGuild.addPoints(toAdd / 2);
             killerGuild.setNeedSave(true);
         }
+
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
+            this.plugin.getPlayerNameTagService().updateDummy(killerPlayer);
+            this.plugin.getPlayerNameTagService().updateDummy(loserPlayer);
+        });
+
 
     }
 

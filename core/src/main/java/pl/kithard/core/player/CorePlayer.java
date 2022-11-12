@@ -27,7 +27,6 @@ public class CorePlayer extends DatabaseEntry {
 
     private final UUID uuid;
     private String name;
-    private final String ip;
 
     private double money, earnedMoney, spendMoney;
     private int points;
@@ -59,10 +58,9 @@ public class CorePlayer extends DatabaseEntry {
     private PlayerTeleport teleport;
     private UUID reply;
 
-    public CorePlayer(UUID uuid, String name, String ip) {
+    public CorePlayer(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
-        this.ip = ip;
 
         this.points = 1000;
 
@@ -80,10 +78,9 @@ public class CorePlayer extends DatabaseEntry {
         init();
     }
 
-    public CorePlayer(UUID uuid, String name, String ip, double money, double earnedMoney, double spendMoney, int points, int kills, int deaths, int assists, int killStreak, long turboDrop, long spendTime, long protection, boolean vanish, Set<UUID> ignoredPlayers, Set<String> disabledSellItems, Set<String> disabledSettings, Set<String> disabledDropItems, Set<String> guildHistory, Set<String> claimedAchievements, Map<String, Integer> minedDrops, Map<String, Integer> depositItems, Map<String, Long> achievementProgress, PlayerEnderChest enderChest) {
+    public CorePlayer(UUID uuid, String name, double money, double earnedMoney, double spendMoney, int points, int kills, int deaths, int assists, int killStreak, long turboDrop, long spendTime, long protection, boolean vanish, Set<String> disabledSellItems, Set<String> disabledSettings, Set<String> disabledDropItems, Set<String> guildHistory, Set<String> claimedAchievements, Map<String, Integer> minedDrops, Map<String, Integer> depositItems, Map<String, Long> achievementProgress, PlayerEnderChest enderChest) {
         this.uuid = uuid;
         this.name = name;
-        this.ip = ip;
         this.money = money;
         this.earnedMoney = earnedMoney;
         this.spendMoney = spendMoney;
@@ -96,7 +93,7 @@ public class CorePlayer extends DatabaseEntry {
         this.spendTime = spendTime;
         this.protection = protection;
         this.vanish = vanish;
-        this.ignoredPlayers = ignoredPlayers;
+        this.ignoredPlayers = new HashSet<>();
         this.disabledSellItems = disabledSellItems;
         this.disabledSettings = disabledSettings;
         this.disabledDropItems = disabledDropItems;
@@ -124,10 +121,6 @@ public class CorePlayer extends DatabaseEntry {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getIp() {
-        return ip;
     }
 
     public double getMoney() {

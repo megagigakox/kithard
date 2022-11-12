@@ -38,7 +38,8 @@ public class Guild extends DatabaseEntry {
             expireTime,
             createTime,
             lastAttackTime,
-            lastExplodeTime;
+            lastExplodeTime,
+            turboDrop;
     private boolean friendlyFire, allyFire;
 
     private final Map<GuildLogType, List<GuildLog>> logs = new HashMap<>();
@@ -56,7 +57,7 @@ public class Guild extends DatabaseEntry {
     private Set<String> allyInvites;
     private Hologram hologram;
 
-    public Guild(String tag, String name, UUID owner, GuildRegion region, Location home, int hp, int lives, int points, int kills, int deaths, long expireTime, long createTime, long lastAttackTime, long lastExplodeTime, boolean friendlyFire, boolean allyFire, Set<UUID> deputies, Set<String> allies, ItemStack[] warehouseContents) {
+    public Guild(String tag, String name, UUID owner, GuildRegion region, Location home, int hp, int lives, int points, int kills, int deaths, long expireTime, long createTime, long lastAttackTime, long lastExplodeTime, long turboDrop, boolean friendlyFire, boolean allyFire, Set<UUID> deputies, Set<String> allies, ItemStack[] warehouseContents) {
         this.tag = tag;
         this.name = name;
         this.owner = owner;
@@ -71,6 +72,7 @@ public class Guild extends DatabaseEntry {
         this.createTime = createTime;
         this.lastAttackTime = lastAttackTime;
         this.lastExplodeTime = lastExplodeTime;
+        this.turboDrop = turboDrop;
         this.friendlyFire = friendlyFire;
         this.allyFire = allyFire;
         this.deputies = deputies;
@@ -96,7 +98,7 @@ public class Guild extends DatabaseEntry {
         this.kills = 0;
         this.deaths = 0;
         this.lives = 3;
-        this.hp = 500;
+        this.hp = 150;
 
         this.initialize();
     }
@@ -359,6 +361,7 @@ public class Guild extends DatabaseEntry {
     }
 
     public void openWarehouse(Player player) {
+        player.closeInventory();
         if (this.warehouseContents != null) {
             this.warehouse.setContents(warehouseContents);
         }
@@ -427,4 +430,11 @@ public class Guild extends DatabaseEntry {
         return true;
     }
 
+    public long getTurboDrop() {
+        return turboDrop;
+    }
+
+    public void setTurboDrop(long turboDrop) {
+        this.turboDrop = turboDrop;
+    }
 }

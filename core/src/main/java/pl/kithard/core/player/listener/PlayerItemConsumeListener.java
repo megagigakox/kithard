@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 import pl.kithard.core.CorePlugin;
 import pl.kithard.core.player.achievement.AchievementType;
 import pl.kithard.core.player.CorePlayer;
+import pl.kithard.core.util.TextUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,21 +31,28 @@ public class PlayerItemConsumeListener implements Listener {
         ItemStack item = event.getItem();
 
         if (item != null && item.getType() == Material.GOLDEN_APPLE) {
-            CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
 
+            CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByPlayer(player);
             if (item.getDurability() == 0) {
                 corePlayer.addAchievementProgress(AchievementType.EATEN_GOLDEN_APPLES, 1);
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     player.removePotionEffect(PotionEffectType.REGENERATION);
                     player.removePotionEffect(PotionEffectType.ABSORPTION);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, 2));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 0));
                 }, 1L);
 
             } else if (item.getDurability() == 1) {
+
+                if (player.getWorld().getName().equals("gtp")) {
+                    TextUtil.message(player, "&8(&4&l!&8) &cJedzenie koksów na arenach zostało wyłączone!");
+                    event.setCancelled(true);
+                    return;
+                }
+
                 corePlayer.addAchievementProgress(AchievementType.EATEN_ENCHANTED_GOLDEN_APPLES, 1);
 
-                Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
+                this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
                     player.removePotionEffect(PotionEffectType.REGENERATION);
                     player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
                     player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);

@@ -6,14 +6,13 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class GroupTeleport {
 
     private final GroupTeleportBorder groupTeleportBorder;
     private final Location location;
-    private final List<Player> players = new ArrayList<>();
+    private final Set<Player> players = new HashSet<>();
     private long closeCountdownTime = 0L;
 
     public GroupTeleport(Location location) {
@@ -41,7 +40,7 @@ public class GroupTeleport {
         return groupTeleportBorder;
     }
 
-    public List<Player> getPlayers() {
+    public Set<Player> getPlayers() {
         return players;
     }
 

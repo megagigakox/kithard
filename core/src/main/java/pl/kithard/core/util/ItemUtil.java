@@ -1,6 +1,7 @@
 package pl.kithard.core.util;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -21,33 +22,26 @@ public final class ItemUtil {
     }
 
     public static void calculateDurability(Player player) {
-        ItemStack itemInMainHand = player.getItemInHand();
-
-        if (itemInMainHand == null || itemInMainHand.getType() == Material.AIR) {
+        ItemStack item = player.getItemInHand();
+        if (item.getType().getMaxDurability() == 0) {
             return;
         }
-
-        String tool = itemInMainHand.getType().name().toUpperCase(Locale.ROOT);
-
-        if (!(tool.endsWith("_PICKAXE")
-                || tool.endsWith("_AXE")
-                || tool.endsWith("_SWORD")
-                || tool.endsWith("_SHOVEL"))) return;
-
-        if (itemInMainHand.getType().isBlock()) {
-            return;
-        }
-
-        short currentDamage = itemInMainHand.getDurability();
-        short maxDamage = itemInMainHand.getType().getMaxDurability();
-
-        short newDamage = (short) (currentDamage + 1);
-
-        if (newDamage >= maxDamage) {
-            player.setItemInHand(new ItemStack(Material.AIR));
-            player.updateInventory();
+        int enchantLevel = item.getEnchantmentLevel(Enchantment.DURABILITY);
+        short d = item.getDurability();
+        if (enchantLevel > 0) {
+            if (100 / (enchantLevel + 1) > RandomUtil.getRandInt(0, 100)) {
+                if (d == item.getType().getMaxDurability()) {
+                    player.getInventory().clear(player.getInventory().getHeldItemSlot());
+                    player.playSound(player.getLocation(), Sound.ITEM_BREAK, 1.0f, 1.0f);
+                } else {
+                    item.setDurability((short) (d + 1));
+                }
+            }
+        } else if (d == item.getType().getMaxDurability()) {
+            player.getInventory().clear(player.getInventory().getHeldItemSlot());
+            player.playSound(player.getLocation(), Sound.ITEM_BREAK, 1.0f, 1.0f);
         } else {
-            itemInMainHand.setDurability(newDamage);
+            item.setDurability((short) (d + 1));
         }
     }
 }

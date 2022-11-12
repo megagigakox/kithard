@@ -43,8 +43,13 @@ public class GroupTeleportTask extends BukkitRunnable {
                 );
             }
             else {
-                player.teleport(Bukkit.getWorld("world").getSpawnLocation());
-                this.plugin.getGroupTeleportCache().remove(groupTeleport);
+
+                this.plugin.getServer()
+                        .getScheduler()
+                        .runTask(this.plugin, () -> {
+                            player.teleport(Bukkit.getWorld("world").getSpawnLocation());
+                            this.plugin.getGroupTeleportCache().remove(groupTeleport);
+                        });
 
             }
         } else {

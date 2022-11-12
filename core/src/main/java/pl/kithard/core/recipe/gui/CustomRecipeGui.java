@@ -34,7 +34,7 @@ public class CustomRecipeGui {
 
         gui.setItem(3, 2, ItemBuilder.from(Material.OBSIDIAN)
                 .asGuiItem());
-        gui.setItem(3, 3, ItemBuilder.from(Material.EMERALD_BLOCK)
+        gui.setItem(3, 3, ItemBuilder.from(Material.DIAMOND_BLOCK)
                 .asGuiItem());
         gui.setItem(3, 4, ItemBuilder.from(Material.OBSIDIAN)
                 .asGuiItem());
@@ -59,7 +59,7 @@ public class CustomRecipeGui {
 
                     craft(
                             player,
-                            Arrays.asList(new ItemStack(Material.OBSIDIAN,8), new ItemStack(Material.EMERALD_BLOCK, 1)),
+                            Arrays.asList(new ItemStack(Material.OBSIDIAN,8), new ItemStack(Material.DIAMOND_BLOCK, 1)),
                             CustomRecipe.BOY_FARMER);
 
                 }));
@@ -86,7 +86,7 @@ public class CustomRecipeGui {
 
         gui.setItem(3, 2, ItemBuilder.from(Material.SAND)
                 .asGuiItem());
-        gui.setItem(3, 3, ItemBuilder.from(Material.EMERALD_BLOCK)
+        gui.setItem(3, 3, ItemBuilder.from(Material.DIAMOND_BLOCK)
                 .asGuiItem());
         gui.setItem(3, 4, ItemBuilder.from(Material.SAND)
                 .asGuiItem());
@@ -111,7 +111,7 @@ public class CustomRecipeGui {
 
                     craft(
                             player,
-                            Arrays.asList(new ItemStack(Material.SAND,8), new ItemStack(Material.EMERALD_BLOCK, 1)),
+                            Arrays.asList(new ItemStack(Material.SAND,8), new ItemStack(Material.DIAMOND_BLOCK, 1)),
                             CustomRecipe.SAND_FARMER
                     );
 
@@ -130,25 +130,25 @@ public class CustomRecipeGui {
 
         this.fill(gui, player);
 
-        gui.setItem(2, 2, ItemBuilder.from(Material.EMERALD_BLOCK)
+        gui.setItem(2, 2, ItemBuilder.from(Material.COBBLESTONE)
                 .asGuiItem());
         gui.setItem(2, 3, ItemBuilder.from(Material.EMERALD_BLOCK)
                 .asGuiItem());
-        gui.setItem(2, 4, ItemBuilder.from(Material.EMERALD_BLOCK)
+        gui.setItem(2, 4, ItemBuilder.from(Material.COBBLESTONE)
                 .asGuiItem());
 
-        gui.setItem(3, 2, ItemBuilder.from(Material.EMERALD_BLOCK)
+        gui.setItem(3, 2, ItemBuilder.from(Material.COBBLESTONE)
                 .asGuiItem());
-        gui.setItem(3, 3, ItemBuilder.from(Material.DIAMOND_PICKAXE)
+        gui.setItem(3, 3, ItemBuilder.from(Material.DIAMOND_BLOCK)
                 .asGuiItem());
-        gui.setItem(3, 4, ItemBuilder.from(Material.EMERALD_BLOCK)
+        gui.setItem(3, 4, ItemBuilder.from(Material.COBBLESTONE)
                 .asGuiItem());
 
-        gui.setItem(4, 2, ItemBuilder.from(Material.EMERALD_BLOCK)
+        gui.setItem(4, 2, ItemBuilder.from(Material.COBBLESTONE)
                 .asGuiItem());
         gui.setItem(4, 3, ItemBuilder.from(Material.EMERALD_BLOCK)
                 .asGuiItem());
-        gui.setItem(4, 4, ItemBuilder.from(Material.EMERALD_BLOCK)
+        gui.setItem(4, 4, ItemBuilder.from(Material.COBBLESTONE)
                 .asGuiItem());
 
         gui.setItem(3,6, ItemBuilder.from(CustomRecipe.AIR_FARMER.getItem())
@@ -164,7 +164,7 @@ public class CustomRecipeGui {
 
                     craft(
                             player,
-                            Arrays.asList(new ItemStack(Material.EMERALD_BLOCK,8), new ItemStack(Material.DIAMOND_PICKAXE, 1)),
+                            Arrays.asList(new ItemStack(Material.EMERALD_BLOCK,2), new ItemStack(Material.COBBLESTONE, 6), new ItemStack(Material.DIAMOND_BLOCK, 1)),
                             CustomRecipe.AIR_FARMER
                     );
 
@@ -192,7 +192,7 @@ public class CustomRecipeGui {
 
         gui.setItem(3, 2, ItemBuilder.from(Material.COBBLESTONE)
                 .asGuiItem());
-        gui.setItem(3, 3, ItemBuilder.from(Material.EMERALD_BLOCK)
+        gui.setItem(3, 3, ItemBuilder.from(Material.DIAMOND_BLOCK)
                 .asGuiItem());
         gui.setItem(3, 4, ItemBuilder.from(Material.COBBLESTONE)
                 .asGuiItem());
@@ -206,7 +206,6 @@ public class CustomRecipeGui {
 
         gui.setItem(3,6, ItemBuilder.from(CustomRecipe.STONE_GENERATOR.getItem())
                 .asGuiItem());
-
         gui.setItem(3,7, ItemBuilder.from(Material.WORKBENCH)
                 .name(TextUtil.component("&a&lAuto Crafting"))
                 .lore(TextUtil.component(Arrays.asList(
@@ -216,10 +215,9 @@ public class CustomRecipeGui {
                 .asGuiItem(inventoryClickEvent ->
                         craft(
                                 player,
-                                Arrays.asList(new ItemStack(Material.COBBLESTONE,8), new ItemStack(Material.EMERALD_BLOCK, 1)),
+                                Arrays.asList(new ItemStack(Material.COBBLESTONE,8), new ItemStack(Material.DIAMOND_BLOCK, 1)),
                                 CustomRecipe.STONE_GENERATOR
                 )));
-
 
         gui.setDefaultClickAction(inventoryClickEvent -> inventoryClickEvent.setCancelled(true));
         gui.open(player);

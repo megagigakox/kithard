@@ -88,6 +88,8 @@ public class Trade {
     }
 
     public void openInventory() {
+        this.sender.closeInventory();
+        this.receiver.closeInventory();
         refreshStatus();
 
         this.sender.openInventory(inventory);

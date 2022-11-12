@@ -1,5 +1,6 @@
 package pl.kithard.core.drop.listener;
 
+import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.actionbar.ActionBarNotice;
 import pl.kithard.core.player.actionbar.ActionBarNoticeType;
 import pl.kithard.core.player.settings.PlayerSettings;
@@ -63,8 +65,9 @@ public class ItemDropListener implements Listener {
             drops.add(new ItemStack(itemInHand.containsEnchantment(Enchantment.SILK_TOUCH) ? Material.STONE : Material.COBBLESTONE, 1));
         }
 
+        Guild guild = this.plugin.getGuildCache().findByPlayer(player);
         for (DropItem dropItem : this.plugin.getDropItemConfiguration().getDropItems()) {
-            double chance = DropUtil.calculateChanceFromStone(dropItem, corePlayer, serverSettings);
+            double chance = DropUtil.calculateChanceFromStone(dropItem, corePlayer, serverSettings, guild);
 
             if (!RandomUtil.getChance(chance)) {
                 continue;
@@ -106,7 +109,7 @@ public class ItemDropListener implements Listener {
             }
         }
 
-        player.giveExp(2);
+        player.giveExp(5);
         event.setCancelled(true);
         block.setType(Material.AIR);
 

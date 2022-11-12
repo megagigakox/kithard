@@ -4,10 +4,12 @@ import org.bukkit.Material;
 import org.bukkit.WeatherType;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -16,6 +18,7 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.player.combat.listener.PlayerDamageListener;
 import pl.kithard.core.settings.ServerSettingsType;
 import pl.kithard.core.util.TextUtil;
 
@@ -92,10 +95,19 @@ public class ServerSettingsListeners implements Listener {
                     return;
                 }
 
+                if (itemStack.getType() == Material.IRON_BOOTS) {
+                    if (itemMeta.getEnchants().get(Enchantment.PROTECTION_FALL) != null && itemMeta.getEnchants().get(Enchantment.PROTECTION_FALL) > 2) {
+                        itemMeta.removeEnchant(Enchantment.PROTECTION_FALL);
+                        itemMeta.addEnchant(Enchantment.PROTECTION_FALL, 2, true);
+                        itemStack.setItemMeta(itemMeta);
+                    }
+                    return;
+                }
+
                 if (itemStack.getType().toString().contains("SWORD")) {
-                    if (itemMeta.getEnchants().get(Enchantment.DAMAGE_ALL) != null && itemMeta.getEnchants().get(Enchantment.DAMAGE_ALL) > 4) {
+                    if (itemMeta.getEnchants().get(Enchantment.DAMAGE_ALL) != null && itemMeta.getEnchants().get(Enchantment.DAMAGE_ALL) > 3) {
                         itemMeta.removeEnchant(Enchantment.DAMAGE_ALL);
-                        itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 4, true);
+                        itemMeta.addEnchant(Enchantment.DAMAGE_ALL, 3, true);
                         itemStack.setItemMeta(itemMeta);
                     }
                     if (itemMeta.getEnchants().get(Enchantment.FIRE_ASPECT) != null && itemMeta.getEnchants().get(Enchantment.FIRE_ASPECT) > 1) {
@@ -103,10 +115,11 @@ public class ServerSettingsListeners implements Listener {
                         itemMeta.addEnchant(Enchantment.FIRE_ASPECT, 1, true);
                         itemStack.setItemMeta(itemMeta);
                     }
+                    return;
                 }
 
                 if (itemStack.getType() == Material.BOW) {
-                    if (itemMeta.getEnchants().get(Enchantment.ARROW_DAMAGE) != null && itemMeta.getEnchants().get(Enchantment.ARROW_DAMAGE) > 4) {
+                    if (itemMeta.getEnchants().get(Enchantment.ARROW_DAMAGE) != null && itemMeta.getEnchants().get(Enchantment.ARROW_DAMAGE) > 3) {
                         itemMeta.removeEnchant(Enchantment.ARROW_DAMAGE);
                         itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 3, true);
                         itemStack.setItemMeta(itemMeta);
@@ -122,5 +135,6 @@ public class ServerSettingsListeners implements Listener {
 
         }
     }
+
 
 }

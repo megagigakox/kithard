@@ -82,13 +82,54 @@ public class DiscordBotApplication {
             SlashCommandInteraction slashCommandInteraction = event.getSlashCommandInteraction();
 
             if (slashCommandInteraction.getCommandName().equalsIgnoreCase("xd")) {
-                EmbedBuilder embedBuilder = new EmbedBuilder()
-                        .setTitle("Odbierz nagrode!")
-                        .setDescription("Aby odebrać nagrode: /nagroda (nick z minecrafta)")
-                        .setFooter("Kithard.pl -> Nagroda | " + TimeUtil.formatTimeMillisToDate(System.currentTimeMillis()))
-                        .setColor(Color.decode("#00ff00"));
+//                EmbedBuilder embedBuilder = new EmbedBuilder()
+//                        .setTitle("Odbierz nagrode!")
+//                        .setDescription("Aby odebrać nagrode: /nagroda (nick z minecrafta)")
+//                        .setFooter("Kithard.pl -> Nagroda | " + TimeUtil.formatTimeMillisToDate(System.currentTimeMillis()))
+//                        .setColor(Color.decode("#00ff00"));
 
-                event.getSlashCommandInteraction().getChannel().get().sendMessage(embedBuilder);
+                EmbedBuilder embedBuilder1 = new EmbedBuilder()
+                        .setTitle("Regulamin discorda")
+                        .setDescription("**Zasady ogólne**\n" +
+                                "**1.1** Przebywanie na serwerze jest równoznaczne z znajomością oraz akceptacją regulaminu.\n" +
+                                "**1.2** Zmiana regulaminu może ulec w każdej chwili, gracze nie muszą być poinformowani o zmianie.\n" +
+                                "**1.3** Zakaz podszywania się pod innych użytkowników oraz administrację serwera.\n" +
+                                "**1.4** Tworzenie bez powodu ticketów skutkuje przerwą lub banem.\n" +
+                                "**1.5** Administrator nie ma obowiązku podać powodu bana.\n" +
+                                "\n" +
+                                "**Zasady wypowiedzi**\n" +
+                                "**2.1** Zakaz nadmiernego używania wulgaryzmów\n" +
+                                "**2.2** Zakaz wywoływania spamu na chacie\n" +
+                                "**2.3** Zakaz propagowania rasizmu, faszyzmu oraz komunizmu\n" +
+                                "**2.4** Zakaz reklamowania się  (wysyłania zaproszeń na inne discordy lub bezpośrednio reklamowania swoich serwerów/usług) na serwerze lub w wiadomościach prywatnych\n" +
+                                "**2.5** Zakaz udostępniania danych osobowych innych użytkowników\n" +
+                                "**2.6** Zakaz umieszczania zdjęć oraz filmików 18+\n" +
+                                "**2.7** Zakaz obrażania serwera oraz administracji\n"
+                        )
+                        .setFooter("Kithard.pl -> Regulamin cuboidów | " + TimeUtil.formatTimeMillisToDate(System.currentTimeMillis()))
+                        .setColor(Color.decode("#0066FF"));
+
+                EmbedBuilder embedBuilder2 = new EmbedBuilder()
+                        .setTitle("Regulamin cuboidów")
+                        .setDescription(
+                                "**1.1** Max 1 daszek w fosie, na górze albo na dole\n" +
+                                "**1.2** Zakaz robienia wodnej fosy\n" +
+                                "\n" +
+                                "**1.3** Zakaz stawiania w fosie i na platformie następujących bloków:\n" +
+                                "      *guziki, dźwignie, półpłytki, redstone, pochodnie, dywany, tory, płotki, murki*\n" +
+                                "i innych podobnych bloków, które utrudniają/uniemożliwiają wyjście z fosy lub zrobienie water-skilla.\n" +
+                                "\n" +
+                                "**1.4** Zakaz budowania fosy/beczek z craftingów/piecyków.\n" +
+                                "**1.5** Zakaz tworzenia automatycznych mechanizmów uniemożliwiających wyjście.\n" +
+                                "**1.6** Zakaz tworzenia katakumb w fosie.\n" +
+                                "**1.7** Jeżeli administrator serwera poprosi o usunięcie danej rzeczy na cuboidzie to trzeba to zrobić. Niezastosowanie się do usunięcia będzie skutkowało zbanowaniem!\n" +
+                                "**1.8** Regulamin cuboidów może ulec zmianie w każdej chwili."
+                        )
+                        .setFooter("Kithard.pl -> Regulamin cuboidów | " + TimeUtil.formatTimeMillisToDate(System.currentTimeMillis()))
+                        .setColor(Color.decode("#0066FF"));
+
+                event.getSlashCommandInteraction().getChannel().get().sendMessage(embedBuilder1);
+                event.getSlashCommandInteraction().getChannel().get().sendMessage(embedBuilder2);
 
 
             }

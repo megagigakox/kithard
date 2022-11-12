@@ -41,8 +41,7 @@ public class PlayerQuitJoinListener implements Listener {
         if (corePlayer == null) {
             corePlayer = new CorePlayer(
                     player.getUniqueId(),
-                    player.getName(),
-                    player.getAddress().getHostString()
+                    player.getName()
             );
             corePlayer.setProtection(TimeUtil.timeFromString("5m") + System.currentTimeMillis());
             this.plugin.getCorePlayerCache().add(corePlayer);
@@ -100,7 +99,7 @@ public class PlayerQuitJoinListener implements Listener {
         }
 
         this.plugin.getPlayerNameTagService().createDummy(corePlayer);
-        this.plugin.getPlayerIncognitoSerivce().changeSkin(corePlayer);
+//        this.plugin.getPlayerIncognitoSerivce().changeSkin(corePlayer);
         corePlayer.setLastTimeMeasurement(System.currentTimeMillis());
     }
 

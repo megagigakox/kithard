@@ -29,7 +29,7 @@ public class RewardGui {
                 .lore(
                         "",
                         " &8Instrukcja odbierania:",
-                        "  &8- &7Dolacz na naszego discorda&8: &fdc.kithard.pl",
+                        "  &8- &7Dolacz na naszego discorda&8: &fdsc.gg/kithard",
                         "  &8- &7Wejdz na kanal tesktowy o nazwie&8: &fnagroda",
                         "  &8- &7Po wejsciu na kanal wpisz komende &f/nagroda " + player.getName(),
                         " &8(Pamietaj, ze nagrode mozesz odebrac tylko raz!)",

@@ -40,7 +40,7 @@ public class GuildRegenGui {
                     .asGuiItem(event -> new GuildPanelGui(plugin).openPanel(player, guild)));
 
             LinkedList<GuildRegenBlock> regenBlocks = this.plugin.getGuildRepository().loadRegenBlocks(guild.getTag());
-            int cost = (int) (regenBlocks.size() / 7.7);
+            int cost = (int) (regenBlocks.size() / 9.7);
             ItemStackBuilder itemStackBuilder = ItemStackBuilder.of(Material.LEVER)
                     .name("&3&lRegeneracja");
 

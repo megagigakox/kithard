@@ -22,6 +22,9 @@ public class PlayerHomeCommand {
             acceptsExceeded = true
     )
     public void home(Player player) {
+        if (player.getWorld().getName().equals("gtp")) {
+            return;
+        }
         new PlayerHomeGui(plugin).open(player);
     }
 

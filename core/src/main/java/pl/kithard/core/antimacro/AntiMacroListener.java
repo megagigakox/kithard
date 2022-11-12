@@ -30,10 +30,10 @@ public class AntiMacroListener implements Listener {
             Player player = event.getPlayer();
             int cps = this.plugin.getAntiMacroCache().getUuidClicksPerSecondMap().get(player.getUniqueId());
 
-            if (cps >= 16) {
+            if (cps >= 17) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 5, 0));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 5, 0));
-                TitleUtil.title(player, "&3&lANTI-MACRO", "&cPrzekroczyles limit cps! &cAktualny limit wynosi: &b16", 0, 60, 20);
+                TitleUtil.title(player, "&3&lANTI-MACRO", "&cPrzekroczyles limit cps! &cAktualny limit wynosi: &b15", 0, 60, 20);
             } else {
                 this.plugin.getAntiMacroCache().getUuidClicksPerSecondMap().put(player.getUniqueId(), cps + 1);
             }

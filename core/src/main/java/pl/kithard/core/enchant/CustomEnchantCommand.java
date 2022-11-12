@@ -31,7 +31,7 @@ public class CustomEnchantCommand {
         CustomEnchantType customEnchantType = this.plugin.getCustomEnchantConfiguration().findType(player.getItemInHand().getType().name());
         if (customEnchantType == CustomEnchantType.ARMOR || customEnchantType == CustomEnchantType.BOW || customEnchantType == CustomEnchantType.SWORD || customEnchantType == CustomEnchantType.BOOTS) {
             if (!this.plugin.getServerSettings().isEnabled(ServerSettingsType.ENCHANT)) {
-                TextUtil.message(player, "&cEnchantowanie tych przedmiotow zostalo tymczasowo wylaczone do godziny 12:00 Niedziela");
+                TextUtil.message(player, "&8(&4&l!&8) &cEnchantowanie tych przedmiotow zostalo tymczasowo wylaczone, sprawdz nasz plan edycji na: dsc.gg/kithard aby dowiedziec sie wiecej!");
                 return;
             }
         }

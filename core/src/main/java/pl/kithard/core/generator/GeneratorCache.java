@@ -8,11 +8,12 @@ import pl.kithard.core.CorePlugin;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GeneratorCache {
     private final CorePlugin plugin;
 
-    private final Map<Location, Generator> generators = new HashMap<>();
+    private final Map<Location, Generator> generators = new ConcurrentHashMap<>();
 
     public GeneratorCache(CorePlugin plugin) {
         this.plugin = plugin;

@@ -31,10 +31,12 @@ public class QueueRedirectTask implements Runnable {
 
         QueuePlayer queuePlayer = queuePlayers.get(0);
         Player player = this.plugin.getServer().getPlayer(queuePlayer.getUUID());
+
         if (player == null) {
             return;
         }
 
+        String serverName = queuePlayer.getTransferServer();
         if (queuePlayer.getAttempts() == 3) {
             TextUtil.message(player, "&cPrzekroczono maksymalna ilosc prob polaczenia z serwerem - przenosze na koniec kolejki.");
             this.plugin.getQueuePlayerCache().remove(queuePlayer);
@@ -42,7 +44,7 @@ public class QueueRedirectTask implements Runnable {
             return;
         }
 
-        String serverName = queuePlayer.getTransferServer();
+
         queuePlayer.incrementAttempt();
         TransferUtil.transfer(player, serverName, this.plugin);
 

@@ -1,6 +1,5 @@
 package pl.kithard.core.drop.special.listener;
 
-import dev.triumphteam.gui.builder.item.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -49,6 +48,7 @@ public class SpecialDropsListener implements Listener {
             }
 
             if (!this.plugin.getServerSettings().isEnabled(ServerSettingsType.MAGIC_CHEST)) {
+                TextUtil.message(player, "&8(&4&l!&8) &cOtwieranie &bmagicznych skrzynek &czostalo tymczasowo wylaczone, sprawdz nasz plan edycji na: dsc.gg/kithard aby dowiedziec sie wiecej!");
                 event.setCancelled(true);
                 return;
             }

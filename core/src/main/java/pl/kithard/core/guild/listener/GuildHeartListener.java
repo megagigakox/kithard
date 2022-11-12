@@ -1,6 +1,7 @@
 package pl.kithard.core.guild.listener;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
@@ -29,7 +30,7 @@ public class GuildHeartListener implements Listener {
         this.plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void inHeartBreak(BlockBreakEvent event) {
         Guild guild = this.plugin.getGuildCache().findByLocation(event.getBlock().getLocation());
 
@@ -38,12 +39,15 @@ public class GuildHeartListener implements Listener {
         }
 
         if (guild.getRegion().isInHeart(event.getBlock().getLocation())) {
+            if (event.getPlayer().hasPermission("kitahrd.cuboid.bypass")) {
+                return;
+            }
             event.setCancelled(true);
             TextUtil.message(event.getPlayer(), "&8(&4&l!&8) &cNie możesz niszczyc w sercu gildii!");
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void inHeartPlace(BlockPlaceEvent event) {
         Guild guild = this.plugin.getGuildCache().findByLocation(event.getBlock().getLocation());
 
@@ -51,7 +55,11 @@ public class GuildHeartListener implements Listener {
             return;
         }
 
+
         if (guild.getRegion().isInHeart(event.getBlock().getLocation())) {
+            if (event.getPlayer().hasPermission("kitahrd.cuboid.bypass")) {
+                return;
+            }
             event.setCancelled(true);
             TextUtil.message(event.getPlayer(), "&8(&4&l!&8) &cNie możesz stawiac w sercu gildii!");
         }
@@ -97,7 +105,7 @@ public class GuildHeartListener implements Listener {
             if (playerGuild.getLives() < 5) {
                 playerGuild.setLives(playerGuild.getLives() + 1);
             }
-            playerGuild.setHp(500);
+            playerGuild.setHp(150);
             playerGuild.setNeedSave(true);
 
             if (guild.getLives() == 1) {
@@ -110,7 +118,7 @@ public class GuildHeartListener implements Listener {
             } else {
 
                 guild.setLastAttackTime(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24));
-                guild.setHp(500);
+                guild.setHp(150);
                 guild.setLives(guild.getLives() - 1);
                 guild.setNeedSave(true);
                 Bukkit.broadcastMessage("");
@@ -152,15 +160,15 @@ public class GuildHeartListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onBlockFromTo(BlockFromToEvent event) {
-        Guild guild = this.plugin.getGuildCache().findByLocation(event.getToBlock().getLocation());
-        if (guild == null) {
-            return;
-        }
-
-        if (guild.getRegion().isInHeart(event.getToBlock().getLocation())) {
-            event.setCancelled(true);
+    @EventHandler
+    public void onPistonExtend(BlockPistonExtendEvent event) {
+        for (Block block : event.getBlocks()) {
+            Location location = block.getLocation();
+            Guild guild = this.plugin.getGuildCache().findByLocation(location);
+            if (guild.getRegion().isInHeart(location)) {
+                event.setCancelled(true);
+                break;
+            }
         }
     }
 

@@ -36,7 +36,11 @@ public class AntiGriefListener implements Listener {
             return;
         }
 
-        if ((player.getWorld().getName().equals("world") && block.getY() < 60) || !block.getType().isSolid() || player.isSneaking() || this.plugin.getGuildCache().findByLocation(block.getLocation()) != null) {
+        if ((player.getWorld().getName().equals("world") && block.getY() < 60) || !block.getType().isSolid() || this.plugin.getGuildCache().findByLocation(block.getLocation()) != null) {
+            return;
+        }
+
+        if (player.isSneaking() && player.getWorld().getName().equals("world")) {
             return;
         }
 

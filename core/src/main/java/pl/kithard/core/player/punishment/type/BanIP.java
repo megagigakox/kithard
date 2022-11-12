@@ -5,7 +5,6 @@ import pl.kithard.core.api.database.entity.DatabaseEntity;
 
 public class BanIP {
 
-    @SerializedName("_id")
     private final String punishedIP;
     private final String admin;
     private final String reason;

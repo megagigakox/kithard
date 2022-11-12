@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class RewardTask extends BukkitRunnable {
 
@@ -28,7 +29,8 @@ public class RewardTask extends BukkitRunnable {
     @Override
     public void run() {
 
-        for (String s : this.plugin.getRewardRepository().loadAllWhoNeedClaim()) {
+        List<String> list = this.plugin.getRewardRepository().loadAllWhoNeedClaim();
+        for (String s : list) {
             CorePlayer corePlayer = this.plugin.getCorePlayerCache().findByName(s);
             if (corePlayer == null) {
                 continue;
@@ -59,8 +61,8 @@ public class RewardTask extends BukkitRunnable {
 
             }
 
-
-
         }
+
+        list.clear();
     }
 }

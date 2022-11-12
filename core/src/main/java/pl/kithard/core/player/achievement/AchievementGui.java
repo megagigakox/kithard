@@ -57,6 +57,11 @@ public class AchievementGui {
         long progress = corePlayer.getAchievementProgress(type);
 
         int i = 8;
+
+        if (this.plugin.getAchievementCache().findByType(type) == null || this.plugin.getAchievementCache().findByType(type).isEmpty()) {
+            return;
+        }
+
         for (Achievement achievement : this.plugin.getAchievementCache().findByType(type)) {
             double percentProgress = ((double) progress / (double) achievement.getRequired()) * 100.0;
             long required = achievement.getRequired();

@@ -1,17 +1,14 @@
 package pl.kithard.core.grouptp;
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GroupTeleportCache {
 
-    private final Map<Player, GroupTeleport> groupTeleports = new HashMap<>();
+    private final Map<Player, GroupTeleport> groupTeleports = new ConcurrentHashMap<>();
 
     public GroupTeleport find(Player player) {
         return this.groupTeleports.get(player);
@@ -20,6 +17,19 @@ public class GroupTeleportCache {
     public void add(GroupTeleport groupTeleport) {
         groupTeleport.getPlayers().forEach(player -> this.groupTeleports.put(player, groupTeleport));
     }
+
+    public boolean canCreate(Location location) {
+        final int minDistance = 70 + 80;
+        for (GroupTeleport groupTeleport : this.groupTeleports.values()) {
+            GroupTeleportBorder border = groupTeleport.getGroupTeleportBorder();
+            if (border.isInside(location) || border.getCenterLocation().distanceSquared(location) <= minDistance) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     public void remove(GroupTeleport groupTeleport) {
         groupTeleport.getPlayers().forEach(player -> {

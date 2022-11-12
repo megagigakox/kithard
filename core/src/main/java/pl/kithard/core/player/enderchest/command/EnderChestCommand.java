@@ -23,7 +23,7 @@ public class EnderChestCommand {
     )
     public void handle(CorePlayer corePlayer, String[] args) {
         if (args.length < 1) {
-            corePlayer.getEnderChest().openInventory(corePlayer.source(), corePlayer.source());
+            corePlayer.getEnderChest().openInventory(corePlayer, corePlayer.source());
         }
         else if (corePlayer.source().hasPermission("kithard.commands.enderchest.other")) {
             CorePlayer target = this.plugin.getCorePlayerCache().findByName(args[0]);
@@ -31,11 +31,7 @@ public class EnderChestCommand {
                 return;
             }
 
-            if (target.source() == null) {
-                return;
-            }
-
-            target.getEnderChest().openInventory(target.source(), corePlayer.source());
+            target.getEnderChest().openInventory(target, corePlayer.source());
         }
     }
 }

@@ -70,9 +70,12 @@ public class FreeSpaceGui {
                             }
 
                             InventoryUtil.removeItem(player, Material.EMERALD_BLOCK,distance / 6);
-                            this.plugin.getCorePlayerCache()
-                                    .findByPlayer(player)
-                                    .teleport(Bukkit.getWorld("world").getHighestBlockAt(location).getLocation(), 20);
+                            this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
+                                    this.plugin.getCorePlayerCache()
+                                            .findByPlayer(player)
+                                            .teleport(Bukkit.getWorld("world").getHighestBlockAt(location).getLocation(), 20);
+                            });
+
                         }));
 
             }

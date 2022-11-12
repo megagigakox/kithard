@@ -1,6 +1,5 @@
 package pl.kithard.core.guild.listener;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -9,19 +8,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pl.kithard.core.CorePlugin;
-import pl.kithard.core.border.util.BorderUtil;
 import pl.kithard.core.guild.Guild;
-import pl.kithard.core.guild.permission.GuildPermission;
-import pl.kithard.core.util.LocationUtil;
 import pl.kithard.core.util.TextUtil;
 
 public class GuildTerrainActionsListener implements Listener {
@@ -54,38 +46,6 @@ public class GuildTerrainActionsListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
         event.setCancelled(cancelAction(event.getPlayer(), event.getBlock().getLocation()));
-    }
-
-
-
-    @EventHandler
-    public void onBlockFromTo(BlockFromToEvent event) {
-        if (event.getBlock().getType() == Material.STATIONARY_WATER || event.getBlock().getType() == Material.WATER) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void water(PlayerBucketEmptyEvent event) {
-        if (LocationUtil.isInSpawn(event.getBlockClicked().getLocation())) {
-            event.setCancelled(true);
-            return;
-        }
-
-        if (event.getBucket() != Material.WATER_BUCKET) {
-            return;
-        }
-
-        Player player = event.getPlayer();
-        Guild guild = this.plugin.getGuildCache().findByLocation(event.getBlockClicked().getLocation());
-        Block clickedBlock = event.getBlockClicked().getRelative(event.getBlockFace());
-
-
-        if (guild != null && !guild.isMember(player.getUniqueId())) {
-            TextUtil.message(player, "&8(&3&l!&8) &7Postawiles wode na terenie &3wrogiej gildi&7, jezeli jej nie zabierzesz w ciagu &f10 sekund - zniknie!");
-            Bukkit.getScheduler().runTaskLater(this.plugin, () -> clickedBlock.setType(Material.AIR), 20 * 10);
-        }
-
     }
 
     public boolean cancelAction(Player player, Location location) {

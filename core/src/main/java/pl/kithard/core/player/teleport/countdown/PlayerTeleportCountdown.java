@@ -17,7 +17,7 @@ public class PlayerTeleportCountdown extends BukkitRunnable {
 
     public PlayerTeleportCountdown(CorePlugin plugin) {
         this.plugin = plugin;
-        super.runTaskTimerAsynchronously(plugin, 20L, 20L);
+        super.runTaskTimerAsynchronously(plugin, 0L, 20L);
     }
 
     @Override
@@ -44,7 +44,9 @@ public class PlayerTeleportCountdown extends BukkitRunnable {
                     continue;
                 }
 
-                Bukkit.getScheduler().runTask(plugin, () -> player.teleport(playerTeleport.getTeleportLocation()));
+                this.plugin.getServer()
+                        .getScheduler()
+                        .runTask(plugin, () -> player.teleport(playerTeleport.getTeleportLocation()));
                 TitleUtil.title(player, "", "&aPomyslnie przeteleportowano!", 0, 20, 40);
                 corePlayer.setTeleport(null);
             }

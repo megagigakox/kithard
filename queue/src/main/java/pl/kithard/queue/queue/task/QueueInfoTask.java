@@ -6,6 +6,7 @@ import pl.kithard.queue.QueuePlugin;
 import pl.kithard.queue.queue.QueuePlayer;
 import pl.kithard.queue.util.ActionBarUtil;
 import pl.kithard.queue.util.TitleUtil;
+import pl.kithard.queue.util.TransferUtil;
 
 public class QueueInfoTask implements Runnable {
 
@@ -28,6 +29,11 @@ public class QueueInfoTask implements Runnable {
         int position = this.plugin.getQueuePlayerCache().getPlace(queuePlayer);
         Player player = this.plugin.getServer().getPlayer(queuePlayer.getUUID());
         if (player == null) {
+            return;
+        }
+
+        if (player.hasPermission("bypass.queue")) {
+            TransferUtil.transfer(player, "main", this.plugin);
             return;
         }
 

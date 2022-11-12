@@ -25,7 +25,7 @@ public class ActionBarNoticeShowTask extends BukkitRunnable {
 
     public ActionBarNoticeShowTask(CorePlugin plugin) {
         this.plugin = plugin;
-        this.runTaskTimerAsynchronously(plugin, 10L, 10L);
+        this.runTaskTimerAsynchronously(plugin, 0L, 10L);
     }
 
     @Override

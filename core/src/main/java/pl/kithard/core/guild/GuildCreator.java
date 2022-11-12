@@ -17,11 +17,11 @@ import pl.kithard.core.util.SchematicPaster;
 import pl.kithard.core.util.TextUtil;
 import pl.kithard.core.api.util.TimeUtil;
 
-public class GuildFactory {
+public class GuildCreator {
 
     private final CorePlugin plugin;
 
-    public GuildFactory(CorePlugin plugin) {
+    public GuildCreator(CorePlugin plugin) {
         this.plugin = plugin;
     }
 

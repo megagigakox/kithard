@@ -28,7 +28,7 @@ public class RankingResetCommand {
             return;
         }
 
-        if (!InventoryUtil.hasItem(player, Material.EMERALD_BLOCK, 256)) {
+        if (!InventoryUtil.hasItem(player, Material.EMERALD_BLOCK, 128)) {
             TextUtil.message(player, "&8(&4&l!&8) &cAby zresetowac swoj ranking potrzebujesz &4128 blokow emeraldow&c! Aktualnie posiadasz: &4" +
                     InventoryUtil.countItemsIgnoreItemMeta(player, new ItemStack(Material.EMERALD_BLOCK, 128)) + "&8/&4128&c!");
             return;

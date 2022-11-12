@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.generator.Generator;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.util.LocationUtil;
 import pl.kithard.core.util.TextUtil;
@@ -39,12 +40,18 @@ public class SpawnProtectionListener implements Listener {
     public void onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         if (LocationUtil.isInProtectionArea(event.getBlock().getLocation()) && !player.hasPermission("kithard.spawn.build")) {
+
+            Generator generator = this.plugin.getGeneratorCache().findByLocation(event.getBlock().getLocation());
+            if (generator != null) {
+                return;
+            }
+
             TextUtil.message(player, "&8(&4&l!&8) &cNie mozesz tutaj tego zrobic!");
             event.setCancelled(true);
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         if (LocationUtil.isInProtectionArea(event.getBlock().getLocation()) && !player.hasPermission("kithard.spawn.build")) {

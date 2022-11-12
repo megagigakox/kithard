@@ -63,6 +63,10 @@ public class GuildLogBlockListener implements Listener {
             return;
         }
 
+        if (!guild.isMember(player.getUniqueId())) {
+            return;
+        }
+
         Generator generator = this.plugin.getGeneratorCache().findByLocation(block.getLocation());
         if (generator != null) {
             return;
@@ -88,6 +92,10 @@ public class GuildLogBlockListener implements Listener {
         Block block = event.getBlockPlaced();
         Guild guild = this.plugin.getGuildCache().findByLocation(block.getLocation());
         if (guild == null) {
+            return;
+        }
+
+        if (!guild.isMember(player.getUniqueId())) {
             return;
         }
 

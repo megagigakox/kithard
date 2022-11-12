@@ -4,6 +4,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 import pl.kithard.core.CorePlugin;
@@ -103,7 +104,6 @@ public class PlayerDamageListener implements Listener {
 
         attackedCombat.setLastAttackPlayer(attacker);
         attackerCombat.setLastAttackPlayer(attacked);
-        tryUnblock(attacked);
         tryUnblock(attacker);
 
         if (event.getDamager() instanceof Snowball || event.getDamager() instanceof Arrow) {
@@ -156,11 +156,23 @@ public class PlayerDamageListener implements Listener {
             return;
         }
 
-        if (!event.getDamager().getType().equals(EntityType.ENDER_PEARL)) {
+        if (event.getDamager().getType() != EntityType.ENDER_PEARL) {
             return;
         }
 
         event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onTeleportAfterDeath(PlayerTeleportEvent event) {
+        if (event.getCause() != PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+        if (player.isDead()) {
+            event.setCancelled(true);
+        }
     }
 
 }

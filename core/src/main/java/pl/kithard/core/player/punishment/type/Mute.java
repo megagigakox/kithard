@@ -5,7 +5,6 @@ import pl.kithard.core.api.database.entity.DatabaseEntity;
 
 public class Mute {
 
-    @SerializedName("_id")
     private final String punished;
 
     private final String admin;

@@ -2,6 +2,7 @@ package pl.kithard.core.guild.panel.gui;
 
 import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.entity.Player;
+import pl.kithard.core.api.util.TimeUtil;
 import pl.kithard.core.guild.log.gui.GuildLogGui;
 import pl.kithard.core.guild.permission.gui.GuildPermissionGui;
 import pl.kithard.core.guild.regen.gui.GuildRegenGui;
@@ -72,7 +73,14 @@ public class GuildPanelGui {
                         return;
                     }
 
-                    new GuildRegenGui(plugin).open(player, guild);
+                    int hour = TimeUtil.getHour(System.currentTimeMillis());
+                    if (hour > 18 && hour < 22) {
+                        TextUtil.message(player, "&8(&4&l!&8) &cTa funkcje mozna odpalic tylko w godzinach wolnych od TNT!");
+                        return;
+                    }
+
+                    new GuildRegenGui(this.plugin).open(player, guild);
+
                 }));
 
         gui.setItem(3,7, ItemStackBuilder.of(SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODEyMmE1MDNkN2E2ZjU3ODAyYjAzYWY3NjI0MTk0YTRjNGY1MDc3YTk5YWUyMWRkMjc2Y2U3ZGI4OGJjMzhhZSJ9fX0="))

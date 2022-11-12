@@ -53,7 +53,8 @@ public class    PrivateMessageCommand {
             return;
         }
 
-        String message = ChatColor.stripColor(StringUtils.join(args, " ", 1, args.length));
+        String message = StringUtils.join(args, " ", 1, args.length)
+                .replace("&", "");
         corePlayer.setReply(targetCorePlayer.getUuid());
         targetCorePlayer.setReply(corePlayer.getUuid());
 

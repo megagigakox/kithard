@@ -5,6 +5,7 @@ import net.dzikoysk.funnycommands.stereotypes.FunnyComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import pl.kithard.core.CorePlugin;
+import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.settings.ServerSettings;
 import pl.kithard.core.util.TextUtil;
@@ -64,7 +65,38 @@ public class TurboDropCommand {
                     TimeUtil.formatTimeMillis(corePlayer.getTurboDrop() - System.currentTimeMillis()));
         }
 
+        corePlayer.setNeedSave(true);
         TextUtil.message(player, "&aPomyslnie nadano turbo");
     }
+
+    @FunnyCommand(
+            name = "gturbo",
+            permission = "kithard.commands.turbo",
+            acceptsExceeded = true
+    )
+    public void handleGuild(CommandSender player, String[] args) {
+        if (args.length < 2) {
+            TextUtil.correctUsage(player, "/gturbo (tag) (time)");
+            return;
+        }
+
+        Guild guild = this.plugin.getGuildCache().findByTag(args[0]);
+        if (guild == null) {
+            TextUtil.message(player, "guild null");
+            return;
+        }
+
+        long time = TimeUtil.timeFromString(args[1]);
+        if (guild.getTurboDrop() > System.currentTimeMillis()) {
+            guild.setTurboDrop(guild.getTurboDrop() + time);
+        }
+        else {
+            guild.setTurboDrop(time + System.currentTimeMillis());
+        }
+
+        guild.setNeedSave(true);
+        TextUtil.message(player, "&aPomyslnie nadano turbo");
+    }
+
 
 }

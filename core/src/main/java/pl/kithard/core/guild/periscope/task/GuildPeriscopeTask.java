@@ -21,7 +21,7 @@ public class GuildPeriscopeTask extends BukkitRunnable {
         this.newLocation = location;
         this.player = player;
         this.guildMember = guildMember;
-        this.runTaskTimer(plugin, 20L, 20L);
+        this.runTaskTimer(plugin, 0L, 20L);
     }
 
 

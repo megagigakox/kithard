@@ -2,6 +2,7 @@ package pl.kithard.core.drop.util;
 
 import org.bukkit.entity.Player;
 import pl.kithard.core.drop.DropItem;
+import pl.kithard.core.guild.Guild;
 import pl.kithard.core.player.CorePlayer;
 import pl.kithard.core.settings.ServerSettings;
 
@@ -9,10 +10,11 @@ public final class DropUtil {
 
     private DropUtil() {}
 
-    public static double calculateChanceFromStone(DropItem dropItem, CorePlayer corePlayer, ServerSettings serverSettings) {
+    public static double calculateChanceFromStone(DropItem dropItem, CorePlayer corePlayer, ServerSettings serverSettings, Guild guild) {
         double chance = dropItem.getChance();
 
-        if (corePlayer.getTurboDrop() > System.currentTimeMillis() || serverSettings.getTurboDrop() > System.currentTimeMillis()) {
+        long currentTimeMilis = System.currentTimeMillis();
+        if (corePlayer.getTurboDrop() > currentTimeMilis || serverSettings.getTurboDrop() > currentTimeMilis || (guild != null && guild.getTurboDrop() > currentTimeMilis)) {
             chance *= 1.5;
         }
 

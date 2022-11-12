@@ -21,13 +21,10 @@ public class ServerSettingGui {
 
         PaginatedGui gui = Gui.paginated()
                 .title(TextUtil.component("&3&lZarzadzanie serwerem"))
-                .rows(3)
+                .rows(5)
                 .create();
 
-        GuiHelper.fillColorGui3(gui);
-
-        gui.setItem(3, 3, ItemStackBuilder.of(GuiHelper.BACK_ITEM).asGuiItem(inventoryClickEvent -> gui.previous()));
-        gui.setItem(3, 7, ItemStackBuilder.of(GuiHelper.BACK_ITEM).asGuiItem(inventoryClickEvent -> gui.next()));
+        GuiHelper.fillColorGui5(gui);
 
         for (ServerSettingsType value : ServerSettingsType.values()) {
             boolean status = this.plugin.getServerSettings().isEnabled(value);

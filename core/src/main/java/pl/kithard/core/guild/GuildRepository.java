@@ -41,6 +41,7 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                     "create_time BIGINT, " +
                     "last_attack_time BIGINT, " +
                     "last_explode_time BIGINT, " +
+                    "turbo_drop BIGINT, " +
                     "friendly_fire BOOLEAN, " +
                     "ally_fire BOOLEAN, " +
                     "deputies TEXT, " +
@@ -86,8 +87,8 @@ public class GuildRepository implements DatabaseRepository<Guild> {
     private final static String INSERT_GUILD =
             "INSERT INTO kithard_guilds (" +
                     "tag, name, owner, guild_region_center, guild_region_size, home, hp, lives, points, kills, deaths, expire_time, " +
-                    "create_time, last_attack_time, last_explode_time, friendly_fire, ally_fire, deputies, allies, warehouse) " +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "create_time, last_attack_time, last_explode_time, turbo_drop, friendly_fire, ally_fire, deputies, allies, warehouse) " +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private final static String INSERT_MEMBER =
             "INSERT INTO kithard_guild_members (guild, uuid, name, allowed_permissions) VALUES(?, ?, ?, ?)";
@@ -106,7 +107,7 @@ public class GuildRepository implements DatabaseRepository<Guild> {
             "UPDATE kithard_guilds SET" +
                     "`owner` = ?, `guild_region_center` = ?, `guild_region_size` = ?, `home` = ?, `hp` = ?, `lives` = ?, `points` = ?, " +
                     "`kills` = ?, `deaths` = ?, `expire_time` = ?, `create_time` = ?, " +
-                    "`last_attack_time` = ?, `last_explode_time` = ?, `friendly_fire` = ?, `ally_fire` = ?, " +
+                    "`last_attack_time` = ?, `last_explode_time` = ?, `turbo_drop` = ?, `friendly_fire` = ?, `ally_fire` = ?, " +
                     "`deputies` = ?, `allies` = ?, `warehouse` = ? WHERE `tag` = ?";
 
     private final static String UPDATE_MEMBER =
@@ -272,11 +273,12 @@ public class GuildRepository implements DatabaseRepository<Guild> {
             preparedStatement.setLong(13, data.getCreateTime());
             preparedStatement.setLong(14, data.getLastAttackTime());
             preparedStatement.setLong(15, data.getLastExplodeTime());
-            preparedStatement.setBoolean(16, data.isFriendlyFire());
-            preparedStatement.setBoolean(17, data.isAllyFire());
-            preparedStatement.setString(18, null);
+            preparedStatement.setLong(16, data.getTurboDrop());
+            preparedStatement.setBoolean(17, data.isFriendlyFire());
+            preparedStatement.setBoolean(18, data.isAllyFire());
             preparedStatement.setString(19, null);
-            preparedStatement.setString(20, ItemStackSerializer.itemStackArrayToBase64(data.getWarehouseContents()));
+            preparedStatement.setString(20, null);
+            preparedStatement.setString(21, ItemStackSerializer.itemStackArrayToBase64(data.getWarehouseContents()));
 
             preparedStatement.execute();
 
@@ -482,6 +484,7 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                         resultSet.getLong("create_time"),
                         resultSet.getLong("last_attack_time"),
                         resultSet.getLong("last_explode_time"),
+                        resultSet.getLong("turbo_drop"),
                         resultSet.getBoolean("friendly_fire"),
                         resultSet.getBoolean("ally_fire"),
                         deputies,
@@ -524,15 +527,16 @@ public class GuildRepository implements DatabaseRepository<Guild> {
                 guildStatement.setLong(11, data.getCreateTime());
                 guildStatement.setLong(12, data.getLastAttackTime());
                 guildStatement.setLong(13, data.getLastExplodeTime());
-                guildStatement.setBoolean(14, data.isFriendlyFire());
-                guildStatement.setBoolean(15, data.isAllyFire());
-                guildStatement.setString(16, CollectionSerializer.serializeCollection(data.getDeputies()
+                guildStatement.setLong(14, data.getTurboDrop());
+                guildStatement.setBoolean(15, data.isFriendlyFire());
+                guildStatement.setBoolean(16, data.isAllyFire());
+                guildStatement.setString(17, CollectionSerializer.serializeCollection(data.getDeputies()
                         .stream()
                         .map(UUID::toString)
                         .collect(Collectors.toSet())));
-                guildStatement.setString(17, CollectionSerializer.serializeCollection(data.getAllies()));
-                guildStatement.setString(18, ItemStackSerializer.itemStackArrayToBase64(data.getWarehouseContents()));
-                guildStatement.setString(19, data.getTag());
+                guildStatement.setString(18, CollectionSerializer.serializeCollection(data.getAllies()));
+                guildStatement.setString(19, ItemStackSerializer.itemStackArrayToBase64(data.getWarehouseContents()));
+                guildStatement.setString(20, data.getTag());
                 guildStatement.addBatch();
 
                 for (GuildMember guildMember : data.getGuildMemebrs()) {
